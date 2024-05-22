@@ -1,5 +1,5 @@
-import MainLayout from '@/src/layouts/MainLayout'
+import PostListLayout from '@/src/layouts/PostListLayout'
 
 export default function Blog() {
-  return <MainLayout />
+  return <PostListLayout />
 }
