@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import Theme from '@/src/layouts/Theme'
+import ThemeLayout from '@/src/layouts/ThemeLayout'
 import Header from '@/src/layouts/Header'
 
 export const metadata: Metadata = {
@@ -15,11 +15,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body>
-        <Theme>
+      <body className='flex flex-col'>
+        <ThemeLayout>
           <Header />
           {children}
-        </Theme>
+        </ThemeLayout>
       </body>
     </html>
   )
