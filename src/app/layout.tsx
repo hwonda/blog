@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import Theme from '@/src/layouts/Theme'
+import Header from '@/src/layouts/Header'
 
 export const metadata: Metadata = {
   title: '훤다log',
@@ -13,7 +15,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body>{children}</body>
+      <body>
+        <Theme>
+          <Header />
+          {children}
+        </Theme>
+      </body>
     </html>
   )
 }
