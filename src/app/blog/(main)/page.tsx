@@ -1,5 +1,7 @@
-import PostListLayout from '@/src/layouts/PostListLayout'
+import PostListLayout from '@/src/layouts/PostListLayout';
 
-export default function Blog() {
-  return <PostListLayout />
-}
+const Blog = () => {
+  return <PostListLayout />;
+};
+
+export default Blog;
