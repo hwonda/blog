@@ -1,6 +1,7 @@
 'use client';
 import { Post } from '@/src/types';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface PostCardProps {
   post: Post;
@@ -10,9 +11,17 @@ const PostCard = ({ post }: PostCardProps) => {
   if (!post) return <div>로딩중ㅎㅎ</div>;
   return (
     <Link href={post.url}>
-      <li className='dark:hover:border-white dark:border-slate-400 shadow-sm hover:shadow-xl border rounded-md h-full'>
-        <div className='m-2 border rounded-md aspect-video'>
-          {/* <img src='{post.url}' alt={post.title} /> */}
+      <li className='shadow-md hover:shadow-xl border rounded-md h-full transition dark:border-black dark:hover:border-white'>
+        <div className='relative m-2 w-[calc(100% - 4rem)] aspect-video'>
+          <Image
+            src={post.thumbnail}
+            alt={post.title}
+            // layout='fill'
+            fill={true}
+            sizes='(max-width: 1290px) 100vw, 700px'
+            priority={true}
+            className='rounded-md'
+          />
         </div>
         <div className='flex flex-col px-2'>
           <div className='flex justify-between'>
@@ -20,7 +29,6 @@ const PostCard = ({ post }: PostCardProps) => {
             <span>{post.categoryPublicName}</span>
           </div>
           <span className='font-bold text-lg'>{post.title}</span>
-          <button onClick={() => alert('click!')}>Click me</button>
         </div>
       </li>
     </Link>
