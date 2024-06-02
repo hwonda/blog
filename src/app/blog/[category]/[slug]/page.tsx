@@ -1,5 +1,6 @@
 import { getPostDetail, parsePostAbstract } from '@/src/utils/postUtils';
 import { getPostPaths } from '@/src/utils/fileUtils';
+import PostContent from '@/src/components/post/PostContent';
 
 interface SlugProps {
   params: { category: string; slug: string };
@@ -15,11 +16,13 @@ export async function generateStaticParams() {
 
 const PostDetail = async ({ params }: SlugProps) => {
   const post = await getPostDetail(params.category, params.slug);
+
   return (
-    <>
-      <h1>{post.title}</h1>
-      <p>{post.content}</p>
-    </>
+    <div>
+      <article className='mt-[56px]'>
+        <PostContent post={post} />
+      </article>
+    </div>
   );
 };
 
