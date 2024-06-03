@@ -10,7 +10,6 @@ const Post = ({ post }: PostProps) => {
       <h1>{post.title}</h1>
       <p>{post.dateString}</p>
       <p>{post.desc}</p>
-      <div dangerouslySetInnerHTML={{ __html: post.content }} />
     </div>
   );
 };

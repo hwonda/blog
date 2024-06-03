@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import { useTheme } from 'next-themes'
+import { useEffect, useState } from 'react';
+import { useTheme } from 'next-themes';
 
 const ThemeSwitch = () => {
-  const [mounted, setMounted] = useState(false)
-  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false);
+  const { theme, setTheme } = useTheme();
 
-  useEffect(() => setMounted(true), [])
+  useEffect(() => setMounted(true), []);
 
-  if (!mounted) return null
+  if (!mounted) return null;
 
   return (
     <button
@@ -20,7 +20,7 @@ const ThemeSwitch = () => {
     >
       {theme === 'dark' ? '🌞' : '🌜'}
     </button>
-  )
-}
+  );
+};
 
-export default ThemeSwitch
+export default ThemeSwitch;

@@ -16,10 +16,9 @@ const PostCard = ({ post }: PostCardProps) => {
           <Image
             src={post.thumbnail}
             alt={post.title}
-            // layout='fill'
-            fill={true}
+            fill
             sizes='(max-width: 1290px) 100vw, 700px'
-            priority={true}
+            priority
             className='rounded-md'
           />
         </div>
