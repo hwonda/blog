@@ -1,16 +1,22 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useTheme } from 'next-themes';
+// import { useEffect, useState } from 'react';
+// import { useTheme } from 'next-themes';
+import Image from 'next/image';
 
-const ThemeSwitch = () => {
-  const [mounted, setMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
+interface ThemeSwitchProps {
+  theme: string;
+  setTheme: (theme: string) => void;
+}
 
-  useEffect(() => setMounted(true), []);
 
-  if (!mounted) return null;
+const ThemeSwitch = ({ theme, setTheme}: ThemeSwitchProps) => {
+  // const [mounted, setMounted] = useState(false);
+  // const { theme, setTheme } = useTheme();
 
+  // useEffect(() => setMounted(true), []);
+
+  // if (!mounted) return null;
   return (
     <button
       aria-label='Toggle Dark Mode'
@@ -18,7 +24,10 @@ const ThemeSwitch = () => {
       className='rounded-md p-2'
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
     >
-      {theme === 'dark' ? '🌞' : '🌜'}
+      {theme === 'dark'
+        ? <Image src="/images/light_mode.svg" alt="light" width={20} height={20} />
+        : <Image src="/images/dark_mode.svg" alt="dark" width={20} height={20} />
+      }
     </button>
   );
 };
