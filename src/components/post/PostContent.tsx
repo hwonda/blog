@@ -1,17 +1,33 @@
-import { Post } from '@/src/types';
+import { Post } from '@/src/types/post';
+import { MDXRemote } from 'next-mdx-remote/rsc';
+import rehypePrettyCode from 'rehype-pretty-code';
+import rehypeSlug from 'rehype-slug';
+import remarkGfm from 'remark-gfm';
 
-interface PostProps {
+interface Props {
   post: Post;
 }
 
-const Post = ({ post }: PostProps) => {
+const PostContent = ({ post }: Props) => {
   return (
-    <div>
-      <h1>{post.title}</h1>
-      <p>{post.dateString}</p>
-      <p>{post.desc}</p>
-    </div>
+    <MDXRemote
+      source={post.content}
+      options={{
+        mdxOptions: {
+          remarkPlugins: [remarkGfm],
+          rehypePlugins: [
+            [
+              rehypePrettyCode,
+              {
+                theme: { dark: 'github-dark-dimmed', light: 'github-light' },
+              },
+            ],
+            rehypeSlug,
+          ],
+        },
+      }}
+    />
   );
 };
 
-export default Post;
+export default PostContent;

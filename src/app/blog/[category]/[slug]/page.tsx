@@ -1,6 +1,8 @@
 import { getPostDetail, parsePostAbstract } from '@/src/utils/postUtils';
 import { getPostPaths } from '@/src/utils/fileUtils';
+import { parseToc } from '@/src/utils/postUtils';
 import PostContent from '@/src/components/post/PostContent';
+import TocContent from '@/src/components/post/TocContent';
 
 interface SlugProps {
   params: { category: string; slug: string };
@@ -16,12 +18,15 @@ export async function generateStaticParams() {
 
 const PostDetail = async ({ params }: SlugProps) => {
   const post = await getPostDetail(params.category, params.slug);
+  const toc = parseToc(post.content);
+  console.log(toc);
 
   return (
-    <div>
-      <article className='mt-[56px]'>
+    <div className='mt-[56px] flex justify-center p-5'>
+      <article className='w-full max-w-[720px]'>
         <PostContent post={post} />
       </article>
+      <TocContent toc={toc} />
     </div>
   );
 };
