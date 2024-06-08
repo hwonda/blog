@@ -25,8 +25,8 @@ const PostDetail = async ({ params }: SlugProps) => {
     <div className='mt-[56px] flex justify-center p-5'>
       <article className='w-full max-w-[720px]'>
         <PostContent post={post} />
+        <TocContent toc={toc} />
       </article>
-      <TocContent toc={toc} />
     </div>
   );
 };

@@ -8,7 +8,7 @@
 }
 
 body {
-  color: var(--foreground-rgb);
+  color: var(--foreground);
 }
 
 .dark {
@@ -20,4 +20,13 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+h2 {
+  font-size: 20px;
+  font-weight: 700;
+}
+h3{
+  font-size: 18px;
+  font-weight: 600;
 }
