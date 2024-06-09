@@ -30,3 +30,9 @@ h3{
   font-size: 18px;
   font-weight: 600;
 }
+
+@layer utilities {
+  .toc-position {
+    left: calc(50% + 376px);
+  }
+}

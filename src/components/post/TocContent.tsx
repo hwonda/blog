@@ -1,12 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-
-// import CopyLinkButton from '../common/CopyLinkButton';
-// import { ScrollToComment, ScrollTop } from '../common/TocButtons';
 import { TocItem } from '@/src/types/toc';
 import { useExtractToc } from '@/src/hooks/useExtractToc';
-// import { cn } from '@/lib/utils';
 
 interface Props {
   toc: TocItem[];
@@ -27,21 +23,38 @@ const TocContent = ({ toc }: Props) => {
   };
   
   return (
-    <div className='fixed hidden xl:block top-[180px] w-[280px] right-5 ml-10'>
-      <h3 className=' mb-2 text-lg font-bold'>목차</h3>
-      <ul className='pl-4'>
+    <div className='fixed hidden xl:block top-[180px] w-[260px] toc-position'>
+      <span className='font-bold'>목차</span>
+      <ul className='mt-2'>
         {toc.map((item, i) => {
           const isActiveContentHead = tocList.includes(item.link);
           return (
-            <li key={i} className='mb-2'>
-            <Link href={item.link} onClick={(e) => handleLinkClick(e,item.link)}>
-                <span className={`hover:underline ${isActiveContentHead ? 'text-orange-500' : ''}`}>
-                  {item.text}
-                </span>
-            </Link>
-          </li>
-          )
-        }
+            <li key={i} className='text-sm'>
+              <Link href={item.link} onClick={(e) => handleLinkClick(e, item.link)}>
+                <div className='flex'>
+                  <div
+                    className={`pl-2 py-1 transition-all duration-300 
+                      ${isActiveContentHead
+                        ? 'font-semibold border-l border-orange-600 dark:border-orange-400 pl-[6px]'
+                        : 'border-l border-gray-300 dark:border-gray-500'
+                      }`
+                    }
+                  ></div>
+                  <span
+                    className={`pl-2 py-1 transition-all duration-300 hover:text-orange-700
+                      ${isActiveContentHead
+                        ? 'font-semibold text-orange-600 dark:text-orange-400 pl-[6px] dark:hover:text-orange-700'
+                        : ''
+                      }`
+                    }
+                  >
+                    {item.text}
+                  </span>
+                </div>
+              </Link>
+            </li>
+            )
+          }
         )}
       </ul>
     </div>
