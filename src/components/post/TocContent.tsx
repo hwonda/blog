@@ -24,12 +24,12 @@ const TocContent = ({ toc }: Props) => {
   
   return (
     <div className='fixed hidden xl:block top-[180px] w-[260px] toc-position'>
-      <span className='font-bold'>목차</span>
+      <span className='font-bold text-sm'>목차</span>
       <ul className='mt-2'>
         {toc.map((item, i) => {
           const isActiveContentHead = tocList.includes(item.link);
           return (
-            <li key={i} className='text-sm'>
+            <li key={i} className='text-xs'>
               <Link href={item.link} onClick={(e) => handleLinkClick(e, item.link)}>
                 <div className='flex'>
                   <div
