@@ -8,7 +8,7 @@
 }
 
 body {
-  color: var(--foreground-rgb);
+  color: var(--foreground);
 }
 
 .dark {
@@ -19,5 +19,20 @@ body {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+h2 {
+  font-size: 20px;
+  font-weight: 700;
+}
+h3{
+  font-size: 18px;
+  font-weight: 600;
+}
+
+@layer utilities {
+  .toc-position {
+    left: calc(50% + 376px);
   }
 }

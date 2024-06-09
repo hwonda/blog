@@ -17,8 +17,8 @@ export default function Header() {
         <div className='flex w-20'>
           <button type='button' className='bg-transparent rounded-md p-2'>
             { mounted && theme === 'dark'
-              ?<Image src='images/dark_menu.svg' alt='' width={20} height={20} />
-              : <Image src='images/light_menu.svg' alt='' width={20} height={20} />
+              ? <Image src='/images/dark_menu.svg' alt='' width={20} height={20} />
+              : <Image src='/images/light_menu.svg' alt='' width={20} height={20} />
             }
           </button>
           {mounted && theme && <ThemeSwitch theme={theme} setTheme={setTheme}/>}
