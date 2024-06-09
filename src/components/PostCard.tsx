@@ -1,5 +1,5 @@
 'use client';
-import { Post } from '@/src/types';
+import { Post } from '@/types';
 import Link from 'next/link';
 import Image from 'next/image';
 

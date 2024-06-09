@@ -1,4 +1,4 @@
-import { Post, ParsedPost, TocItem } from '@/src/types';
+import { Post, ParsedPost, TocItem } from '@/types';
 import fs from 'fs/promises';
 import matter from 'gray-matter';
 import dayjs from 'dayjs';

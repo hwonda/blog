@@ -1,5 +1,5 @@
-import PostListLayout from '@/src/layouts/PostListLayout';
-import { getCategoryList } from '@/src/utils/categoryUtils';
+import PostListLayout from '@/layouts/PostListLayout';
+import { getCategoryList } from '@/utils/categoryUtils';
 
 type Props = {
   params: { category: string };

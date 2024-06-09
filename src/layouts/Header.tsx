@@ -1,6 +1,6 @@
 'use client';
 
-import ThemeSwitch from '@/src/components/ThemeSwitch';
+import ThemeSwitch from '@/components/ThemeSwitch';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';

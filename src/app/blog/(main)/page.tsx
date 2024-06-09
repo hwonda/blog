@@ -1,4 +1,4 @@
-import PostListLayout from '@/src/layouts/PostListLayout';
+import PostListLayout from '@/layouts/PostListLayout';
 
 const Blog = () => {
   return <PostListLayout />;

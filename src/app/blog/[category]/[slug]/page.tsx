@@ -1,8 +1,8 @@
-import { getPostDetail, parsePostAbstract } from '@/src/utils/postUtils';
-import { getPostPaths } from '@/src/utils/fileUtils';
-import { parseToc } from '@/src/utils/postUtils';
-import PostContent from '@/src/components/post/PostContent';
-import TocContent from '@/src/components/post/TocContent';
+import { getPostDetail, parsePostAbstract } from '@/utils/postUtils';
+import { getPostPaths } from '@/utils/fileUtils';
+import { parseToc } from '@/utils/postUtils';
+import PostContent from '@/components/post/PostContent';
+import TocContent from '@/components/post/TocContent';
 
 interface SlugProps {
   params: { category: string; slug: string };

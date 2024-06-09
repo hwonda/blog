@@ -1,6 +1,6 @@
-import PostCard from '@/src/components/PostCard';
+import PostCard from '@/components/PostCard';
 import { getSortedPostList } from '../utils/postUtils';
-import { Post } from '@/src/types/post';
+import { Post } from '@/types/post';
 
 interface PostListProps {
   category?: string;

@@ -1,4 +1,4 @@
-import { CategoryDetail } from '@/src/types';
+import { CategoryDetail } from '@/types';
 import { getPostList } from './postUtils';
 import { sync } from 'glob';
 import { ABSOLUTE_POSTS_PATH } from './fileUtils';

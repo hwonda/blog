@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { TocItem } from '@/src/types/toc';
-import { useExtractToc } from '@/src/hooks/useExtractToc';
+import { TocItem } from '@/types/toc';
+import { useExtractToc } from '@/hooks/useExtractToc';
 
 interface Props {
   toc: TocItem[];
