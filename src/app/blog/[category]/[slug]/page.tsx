@@ -1,6 +1,7 @@
 import { getPostDetail, parsePostAbstract } from '@/utils/postUtils';
 import { getPostPaths } from '@/utils/fileUtils';
 import { parseToc } from '@/utils/postUtils';
+import PostDetailLayout from '@/layouts/PostDetailLayout';
 import PostContent from '@/components/post/PostContent';
 import TocContent from '@/components/post/TocContent';
 
@@ -22,12 +23,7 @@ const PostDetail = async ({ params }: SlugProps) => {
   console.log(toc);
 
   return (
-    <div className='mt-[56px] flex justify-center p-5'>
-      <article className='w-full max-w-[720px]'>
-        <PostContent post={post} />
-        <TocContent toc={toc} />
-      </article>
-    </div>
+    <PostDetailLayout post={post} toc={toc} />
   );
 };
 

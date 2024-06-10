@@ -1,7 +1,5 @@
 'use client';
 
-// import { useEffect, useState } from 'react';
-// import { useTheme } from 'next-themes';
 import Image from 'next/image';
 
 interface ThemeSwitchProps {
@@ -9,14 +7,7 @@ interface ThemeSwitchProps {
   setTheme: (theme: string) => void;
 }
 
-
 const ThemeSwitch = ({ theme, setTheme}: ThemeSwitchProps) => {
-  // const [mounted, setMounted] = useState(false);
-  // const { theme, setTheme } = useTheme();
-
-  // useEffect(() => setMounted(true), []);
-
-  // if (!mounted) return null;
   return (
     <button
       aria-label='Toggle Dark Mode'
