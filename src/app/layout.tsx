@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import ThemeLayout from '@/layouts/ThemeLayout';
-import Header from '@/layouts/Header';
+import Header from '@/components/Header';
 
 export const metadata: Metadata = {
   title: '훤다log',
