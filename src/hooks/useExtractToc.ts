@@ -24,12 +24,9 @@ export const useExtractToc = (query: string) => {
   );
 
   useEffect(() => {
-    const scrollMarginOption = { rootMargin: '-32px 0px -80px 0px' };
-
     // IntersectionObserver를 설정하고 한 번만 초기화
     observer.current = new IntersectionObserver(
       handleObserver,
-      scrollMarginOption
     );
 
     const elements = document.querySelectorAll(query);
@@ -37,6 +34,13 @@ export const useExtractToc = (query: string) => {
 
     return () => observer.current?.disconnect();
   }, [handleObserver, query]); // handleObserver와 query가 변경될 때만 실행
+
+  const firstElement = activeIdList[0];
+  const lastElement = activeIdList[activeIdList.length - 1];
+
+  if (firstElement === lastElement) {
+    return [firstElement];
+  }
 
   return [...activeIdList, tempId];
 };

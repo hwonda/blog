@@ -10,6 +10,7 @@ interface Props {
 
 const TocContent = ({ toc }: Props) => {
   const tocList = useExtractToc('h2, h3');
+  // console.log('tocList', tocList);
   
   const handleLinkClick = (e: React.MouseEvent, link: string) => {
     e.preventDefault();
@@ -23,7 +24,7 @@ const TocContent = ({ toc }: Props) => {
   };
   
   return (
-    <div className='fixed hidden xl:block top-[220px] w-[260px] toc-position'>
+    <div className='not-prose fixed hidden xl:block top-[205px] w-full max-w-[240px] toc-position'>
       <span className='font-bold text-sm'>목차</span>
       <ul className='mt-2'>
         {toc.map((item, i) => {
