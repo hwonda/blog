@@ -8,6 +8,11 @@ interface Props {
   post: Post;
 }
 
+const rehypeOptions = {
+  theme: { dark: 'github-dark-dimmed', light: 'github-light' },
+  showLineNumbers: true,
+}
+
 const PostContent = ({ post }: Props) => {
   return (
     <MDXRemote
@@ -15,15 +20,7 @@ const PostContent = ({ post }: Props) => {
       options={{
         mdxOptions: {
           remarkPlugins: [remarkGfm],
-          rehypePlugins: [
-            [
-              rehypePrettyCode,
-              {
-                theme: { dark: 'github-dark-dimmed', light: 'github-light' },
-              },
-            ],
-            rehypeSlug,
-          ],
+          rehypePlugins: [[rehypePrettyCode, rehypeOptions],rehypeSlug,],
         },
       }}
     />

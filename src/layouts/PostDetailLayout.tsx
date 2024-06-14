@@ -10,13 +10,15 @@ interface PostDetailProps {
 
 const PostDetail = async ({ post, toc }: PostDetailProps) => {
   return (
-    <div className='flex flex-col items-center mt-[56px] p-5'>
-      <PostHeader post={post} />
-      <div className='flex justify-center'>
-        <article className='w-full max-w-[720px]'>
-          <PostContent post={post} />
-          <TocContent toc={toc} />
-        </article>
+    <div className='flex justify-center'>
+      <div className='prose dark:prose-invert w-full max-w-[800px] items-center mt-[56px] p-5'>
+        <PostHeader post={post} />
+        <div className='flex justify-center'>
+          <article className='w-full '>
+            <PostContent post={post} />
+            <TocContent toc={toc} />
+          </article>
+        </div>
       </div>
     </div>
   );
