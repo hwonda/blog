@@ -11,6 +11,9 @@ body {
   --background: #fff;
 
   --border-color: #e2e8f0;
+
+  /* --impact-color: rgb(194, 65, 12); */
+  --impact-color: rgb(255, 115, 0);
 }
 
 .dark {
@@ -21,15 +24,13 @@ body {
   --secondary-foreground: var(--white);
 
   --border-color: #2d3748;
+  --impact-color: rgb(251, 146, 60);
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
-}
-
-@layer utilities {
   .toc-position {
     left: calc(50% + 400px);
   }
@@ -37,5 +38,8 @@ body {
     .toc-position {
       left: calc(50% + 500px);
     }
+  }
+  .impact-color {
+    color: var(--impact-color);
   }
 }

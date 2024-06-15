@@ -1,7 +1,7 @@
 import PostListLayout from '@/layouts/PostListLayout';
 import { getCategoryList } from '@/utils/categoryUtils';
 
-type Props = {
+interface CategoryProps {
   params: { category: string };
 };
 
@@ -11,7 +11,7 @@ export async function generateStaticParams() {
   return paramList;
 }
 
-const CategoryPage = async ({ params }: Props) => {
+const CategoryPage = async ({ params }: CategoryProps) => {
   console.log(params.category);
   return <PostListLayout category={params.category} />;
 };
