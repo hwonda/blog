@@ -23,11 +23,13 @@ const PostCard = ({ post }: PostCardProps) => {
           />
         </div>
         <div className='flex flex-col px-2 pb-2'>
-          <div className='flex justify-between'>
+          <div className='flex justify-between p-1'>
+            <div className='w-auto px-3 rounded-full border border-orange-500 dark:border-orange-400'>
+              <p className='impact-color'>{post.categoryPublicName}</p>
+            </div>
             <p>{post.dateString}</p>
-            <p className='impact-color'>{post.categoryPublicName}</p>
           </div>
-          <p className='font-bold text-lg'>{post.title}</p>
+          <p className='font-bold text-lg p-1'>{post.title}</p>
         </div>
       </li>
     </Link>
