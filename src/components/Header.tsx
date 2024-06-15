@@ -65,7 +65,7 @@ export default function Header({ categoryList }: HeaderProps) {
           </button>
         </div>
         <a href='/' className='font-bold text-xl'>
-          hwonda blog
+          Hwonda Blog
         </a>
         <div className='flex justify-end w-20'>
           {mounted && theme && <ThemeSwitch theme={theme} setTheme={setTheme} />}

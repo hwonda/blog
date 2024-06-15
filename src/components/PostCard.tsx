@@ -24,10 +24,10 @@ const PostCard = ({ post }: PostCardProps) => {
         </div>
         <div className='flex flex-col px-2 pb-2'>
           <div className='flex justify-between'>
-            <span>{post.dateString}</span>
-            <span className='impact-color'>{post.categoryPublicName}</span>
+            <p>{post.dateString}</p>
+            <p className='impact-color'>{post.categoryPublicName}</p>
           </div>
-          <span className='font-bold text-lg'>{post.title}</span>
+          <p className='font-bold text-lg'>{post.title}</p>
         </div>
       </li>
     </Link>

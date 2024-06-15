@@ -10,9 +10,9 @@ const PostListLayout = async ({ category }: PostListProps) => {
 
   if (!postList) return <div>No posts found.</div>;
   return (
-    <div className='flex justify-center mt-10 px-5'>
+    <div className='flex justify-center mt-10 px-5 min-h-screen'>
       <section className='mt-10 w-full max-w-[1200px]'>
-        <div className='mb-5'>
+        <div className='mb-5 ml-5'>
           {category
             ? (
             <>
