@@ -28,15 +28,15 @@ export const getCategoryList = () => {
  */
 export const getCategoryDetailList = async (): Promise<CategoryDetail[]> => {
   const posts = await getPostList();
-  const categoryCounts: { [key: string]: number } = {};
+  const categoryCounts: { [key: string]: number } = { all: posts.length };
   posts.forEach(({ categoryPath }) => {
     categoryCounts[categoryPath] = (categoryCounts[categoryPath] || 0) + 1;
   });
 
   const detailList: CategoryDetail[] = Object.entries(categoryCounts).map(
     ([category, count]) => ({
-      dirName: category,
-      publicName: getCategoryPublicName(category),
+      dirName: category === 'all' ? '' : category,
+      publicName: category === 'all' ? '모든 포스트' : getCategoryPublicName(category),
       count,
     })
   );
