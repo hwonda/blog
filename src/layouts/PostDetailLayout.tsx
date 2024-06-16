@@ -1,6 +1,7 @@
 import PostContent from '@/components/post/PostContent';
 import TocContent from '@/components/post/TocContent';
 import PostHeader from '@/components/post/PostHeader';
+import Giscus from '@/components/post/Giscus';
 import { Post, TocItem } from '@/types';
 
 interface PostDetailProps {
@@ -19,6 +20,7 @@ const PostDetail = async ({ post, toc }: PostDetailProps) => {
             <TocContent toc={toc} />
           </article>
         </div>
+        <Giscus />
       </div>
     </div>
   );
