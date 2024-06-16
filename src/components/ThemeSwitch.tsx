@@ -16,8 +16,8 @@ const ThemeSwitch = ({ theme, setTheme}: ThemeSwitchProps) => {
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
     >
       {theme === 'dark'
-        ? <Image src="/images/light_mode.svg" alt="light" width={20} height={20} />
-        : <Image src="/images/dark_mode.svg" alt="dark" width={20} height={20} />
+        ? <Image src="/images/dark_mode.svg" alt="dark" width={20} height={20} />
+        : <Image src="/images/light_mode.svg" alt="light" width={20} height={20} />
       }
     </button>
   );
