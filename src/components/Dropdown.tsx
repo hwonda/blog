@@ -30,13 +30,13 @@ const Dropdown = ({ categoryList, mounted, theme, toggleDropdown, isOpen }: Drop
         }
       </button>
       {isOpen && (
-        <div className="absolute top-[46px] w-56 rounded-md shadow-lg bg-white">
+        <div className="absolute top-[46px] w-40 rounded-md shadow-lg bg-white">
           <div className="p-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
             {categoryList.map((category, i) => (
               <a
                 key={i}
                 href={`/blog/${category.dirName}`}
-                className="block rounded-md px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 "
+                className="flex items-center rounded-md px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 "
                 role="menuitem"
               >
                 {category.publicName} ({category.count})

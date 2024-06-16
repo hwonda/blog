@@ -1,10 +1,11 @@
 import { Post } from '@/types/post';
 import { MDXRemote } from 'next-mdx-remote/rsc';
+import MdxComponents from '@/components/MdxComponents';
 import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 
-interface Props {
+interface PostContentProps {
   post: Post;
 }
 
@@ -13,9 +14,10 @@ const rehypeOptions = {
   showLineNumbers: true,
 }
 
-const PostContent = ({ post }: Props) => {
+const PostContent = ({ post }: PostContentProps) => {
   return (
     <MDXRemote
+      components={MdxComponents}
       source={post.content}
       options={{
         mdxOptions: {
