@@ -33,7 +33,9 @@ const config: Config = {
             code: {
               counterReset: 'line',
             },
-
+            img: {
+              borderRadius: '0.5rem',
+            },
             'code::before': {
               content: 'none',
             },
