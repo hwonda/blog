@@ -1,4 +1,4 @@
-import CodeBlock from './CodeBlock';
+import CodeBlock from '@/components/post/CodeBlock';
 import { MDXComponents } from 'mdx/types';
 
 const MdxComponents: MDXComponents = {

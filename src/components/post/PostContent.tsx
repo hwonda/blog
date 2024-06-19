@@ -1,6 +1,6 @@
 import { Post } from '@/types/post';
 import { MDXRemote } from 'next-mdx-remote/rsc';
-import MdxComponents from '@/components/MdxComponents';
+import MdxComponents from '@/components/post/MdxComponents';
 import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
