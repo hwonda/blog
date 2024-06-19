@@ -9,6 +9,8 @@ interface SlugProps {
   params: { category: string; slug: string };
 }
 
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const postPaths: string[] = getPostPaths();
   const paramList = postPaths

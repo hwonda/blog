@@ -5,6 +5,8 @@ interface CategoryProps {
   params: { category: string };
 };
 
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const categoryList = getCategoryList();
   const paramList = categoryList.map((category) => ({ category }));
@@ -12,7 +14,6 @@ export async function generateStaticParams() {
 }
 
 const CategoryPage = async ({ params }: CategoryProps) => {
-  console.log(params.category);
   return <PostListLayout category={params.category} />;
 };
 
