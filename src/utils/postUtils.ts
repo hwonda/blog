@@ -89,20 +89,6 @@ export const sortPostsByDate = (posts: Post[]) =>
   posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
 /**
- * 사이트맵 생성을 위한 포스트 목록을 조회합니다.
- * @returns 사이트맵 포스트 목록
- */
-export const getSitemapPostList = async () => {
-  const posts = await getPostList();
-  // 도메인 빨리 사자...
-  const baseUrl = 'https://localhost:3000';
-  return posts.map(({ url }) => ({
-    lastModified: new Date(),
-    url: `${baseUrl}${url}`,
-  }));
-};
-
-/**
  * 모든 포스트의 개수를 반환합니다.
  * @returns 포스트 개수
  */
