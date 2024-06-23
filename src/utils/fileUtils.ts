@@ -2,7 +2,7 @@ import path from 'path';
 import { sync } from 'glob';
 
 // 상수 파일 분리
-export const POSTS_BASE_PATH = '/public/posts';
+export const POSTS_BASE_PATH = '/posts';
 export const ABSOLUTE_POSTS_PATH = path.join(process.cwd(), POSTS_BASE_PATH);
 
 /**
