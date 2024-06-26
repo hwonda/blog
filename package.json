@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "static": "ts-node --project tsconfig.node.json scripts/generate-sitemap.ts && ts-node --project tsconfig.node.json scripts/generate-robots.ts"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
