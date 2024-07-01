@@ -58,7 +58,7 @@ export default function Header({ categoryList }: HeaderProps) {
             className='bg-transparent rounded-md p-2 hover:bg-gray-200 dark:hover:bg-gray-500'
             aria-label='Search'
           >
-            { mounted && theme === 'dark'
+            { mounted && theme && theme === 'dark'
               ? <Image src='/images/dark_search.svg' alt='' width={20} height={20} />
               : <Image src='/images/light_search.svg' alt='' width={20} height={20} />
             }

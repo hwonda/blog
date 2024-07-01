@@ -1,5 +1,3 @@
-'use client';
-
 import Image from 'next/image';
 
 interface ThemeSwitchProps {
@@ -7,7 +5,7 @@ interface ThemeSwitchProps {
   setTheme: (theme: string) => void;
 }
 
-const ThemeSwitch = ({ theme, setTheme}: ThemeSwitchProps) => {
+const ThemeSwitch = ({ theme, setTheme }: ThemeSwitchProps) => {
   return (
     <button
       aria-label='Toggle Dark Mode'
