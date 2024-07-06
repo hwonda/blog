@@ -38,8 +38,8 @@ export const useExtractToc = (query: string) => {
   const firstElement = activeIdList[0];
   const lastElement = activeIdList[activeIdList.length - 1];
 
-  if (firstElement === lastElement) {
-    return [firstElement];
+  if (activeIdList.length > 1 && firstElement === lastElement) {
+    return [lastElement];
   }
 
   return [...activeIdList, tempId];
