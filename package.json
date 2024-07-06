@@ -16,6 +16,7 @@
     "react-dom": "^18"
   },
   "devDependencies": {
+    "@next/third-parties": "^14.2.4",
     "@tailwindcss/typography": "github:tailwindcss/typography",
     "@types/node": "^20",
     "@types/react": "^18",

@@ -1,7 +1,7 @@
 export const blogMetadata = {
   name: 'Hwonda Blog',
   description: '드디어 블로그 개설?',
-  url: 'https://localhost:3000',
+  url: 'https://hwonda.vercel.app',
   thumbnailURL: 'https://www.hwonda.com/images/thumbnail.png',
   author: {
     name: 'Hwonda',
