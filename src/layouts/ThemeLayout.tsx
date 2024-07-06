@@ -1,12 +1,12 @@
 'use client';
 
-import { ThemeProvider } from 'next-themes';
+import { ThemeProvider as NextTheme} from 'next-themes';
 import { type ThemeProviderProps } from 'next-themes/dist/types';
 
-export default function Theme({ children, ...props }: ThemeProviderProps) {
+export default function ThemeLayout({ children, ...props }: ThemeProviderProps) {
   return (
-    <ThemeProvider attribute='class' defaultTheme='system' {...props}>
+    <NextTheme attribute='class' defaultTheme='dark' {...props}>
       {children}
-    </ThemeProvider>
+    </NextTheme>
   );
 }
