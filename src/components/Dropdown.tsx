@@ -30,7 +30,7 @@ const Dropdown = ({ categoryList, mounted, theme, toggleDropdown, isOpen }: Drop
         }
       </button>
       {isOpen && (
-        <div className="absolute top-[46px] w-40 rounded-md shadow-lg bg-white">
+        <div className="absolute top-10 w-40 rounded-md shadow-lg bg-white">
           <div className="p-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
             {categoryList.map((category, i) => (
               <a

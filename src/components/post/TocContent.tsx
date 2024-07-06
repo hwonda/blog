@@ -24,7 +24,7 @@ const TocContent = ({ toc }: Props) => {
   };
   
   return (
-    <div className='not-prose fixed hidden xl:block top-[205px] w-full max-w-[240px] toc-position'>
+    <div className='not-prose fixed hidden xl:block top-[12.75rem] w-full max-w-[15rem] toc-position'>
       <span className='font-bold text-sm'>목차</span>
       <ul className='mt-2'>
         {toc.map((item, i) => {
@@ -36,7 +36,7 @@ const TocContent = ({ toc }: Props) => {
                   <div
                     className={`pl-2 py-1 transition-all duration-300 
                       ${isActiveContentHead
-                        ? 'font-semibold border-l border-orange-600 dark:border-orange-400 pl-[6px]'
+                        ? 'font-semibold border-l border-orange-600 dark:border-orange-400 pl-1.5'
                         : 'border-l border-gray-300 dark:border-gray-500'
                       }`
                     }
@@ -44,7 +44,7 @@ const TocContent = ({ toc }: Props) => {
                   <span
                     className={`pl-2 py-1 transition-all duration-300 hover:text-orange-700
                       ${isActiveContentHead
-                        ? 'font-semibold text-orange-600 dark:text-orange-400 pl-[6px] dark:hover:text-orange-700'
+                        ? 'font-semibold text-orange-600 dark:text-orange-400 pl-1.5 dark:hover:text-orange-700'
                         : ''
                       }`
                     }

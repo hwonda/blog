@@ -43,7 +43,7 @@ export default function Header({ categoryList }: HeaderProps) {
   }, [isDropdownOpen]);
 
   return (
-    <div className='top-0 left-0 z-10 fixed flex justify-center shadow-md p-2 w-full h-[50px] bg-background opacity-80 hover:opacity-100'>
+    <div className='top-0 left-0 z-10 fixed flex justify-center shadow-md p-2 w-full h-12 bg-background opacity-80 hover:opacity-100'>
       <div className='flex justify-between items-center w-full max-w-[1200px]'>
         <div className='flex w-20' ref={dropdownRef}>
           <Dropdown

@@ -12,7 +12,7 @@ interface PostDetailProps {
 const PostDetail = async ({ post, toc }: PostDetailProps) => {
   return (
     <div className='flex justify-center'>
-      <div className='prose dark:prose-invert w-full max-w-[800px] items-center mt-[56px] p-5'>
+      <div className='prose dark:prose-invert w-full max-w-[800px] items-center mt-14 p-5'>
         <PostHeader post={post} />
         <div className='flex justify-center'>
           <article className='w-full '>
