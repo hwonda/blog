@@ -6,7 +6,6 @@ import { blogMetadata } from '../src/constants';
   // 경로에 있는 모든 MDX 파일 목록 조회
   const getSitemapPostList = async () => {
     const postLists = await getPostList();
-    // 도메인 빨리 사자...
     const baseUrl = blogMetadata.url;
     return postLists.map(({ url }) => ({
       url: `${baseUrl}${url}`,

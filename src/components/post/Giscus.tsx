@@ -43,5 +43,9 @@ export default function Giscus() {
 
   }, [theme]);
 
-  return <div ref={refGiscus}></div>;
+  return (
+  <div className='mt-10 pt-10 border-t dark:border-gray-400'>
+    <div ref={refGiscus}></div>
+  </div>
+  );
 }

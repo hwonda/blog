@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useTheme } from 'next-themes';
 import Dropdown from '@/components/Dropdown';
 import { CategoryDetail } from '@/types';
+import { blogMetadata } from '@/constants';
 
 interface HeaderProps {
   categoryList: CategoryDetail[];
@@ -65,7 +66,7 @@ export default function Header({ categoryList }: HeaderProps) {
           </button>
         </div>
         <a href='/' className='font-bold text-xl'>
-          Hwonda Blog
+          {blogMetadata.name}
         </a>
         <div className='flex justify-end w-20'>
           {mounted && theme && <ThemeSwitch theme={theme} setTheme={setTheme} />}
