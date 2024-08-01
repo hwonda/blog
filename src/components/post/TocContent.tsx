@@ -28,35 +28,34 @@ const TocContent = ({ toc }: Props) => {
       <span className='font-bold text-sm'>목차</span>
       <ul className='mt-2'>
         {toc.map((item, i) => {
+          const isH3 = item.indent === 1;
           const isActiveContentHead = tocList.includes(item.link);
+
+          const baseClasses = 'pl-2 py-1 transition-all duration-300';
+          const activeClasses = isActiveContentHead ? 'font-semibold text-orange-600 dark:text-orange-400 pl-1.5 dark:hover:text-orange-700' : '';
+          const indentClasses = isH3 ? 'pl-5 text-xs' : '';
+
           return (
-            <li key={i} className='text-xs'>
+            <li key={i} className='text-sm'>
               <Link href={item.link} onClick={(e) => handleLinkClick(e, item.link)}>
                 <div className='flex'>
                   <div
-                    className={`pl-2 py-1 transition-all duration-300 
-                      ${isActiveContentHead
-                        ? 'font-semibold border-l border-orange-600 dark:border-orange-400 pl-1.5'
+                    className={`${baseClasses} ${
+                      isActiveContentHead
+                        ? 'border-l border-orange-600 dark:border-orange-400 pl-1.5'
                         : 'border-l border-gray-300 dark:border-gray-500'
-                      }`
-                    }
+                    }`}
                   ></div>
                   <span
-                    className={`pl-2 py-1 transition-all duration-300 hover:text-orange-700
-                      ${isActiveContentHead
-                        ? 'font-semibold text-orange-600 dark:text-orange-400 pl-1.5 dark:hover:text-orange-700'
-                        : ''
-                      }`
-                    }
+                    className={`${baseClasses} hover:text-orange-700 ${activeClasses} ${indentClasses}`}
                   >
                     {item.text}
                   </span>
                 </div>
               </Link>
             </li>
-            )
-          }
-        )}
+          );
+        })}
       </ul>
     </div>
   );
