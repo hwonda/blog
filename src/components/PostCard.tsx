@@ -11,8 +11,8 @@ const PostCard = ({ post }: PostCardProps) => {
   if (!post) return <div>로딩중ㅎㅎ</div>;
   return (
     <Link href={post.url}>
-      <li className='shadow-md hover:shadow-xl border rounded-md h-full transition dark:border-black dark:hover:border-white'>
-        <div className='relative m-2 w-[calc(100% - 4rem)] aspect-video'>
+      <li className='shadow-md hover:shadow-xl border rounded-md h-full transition dark:border-black dark:hover:border-white flex sm:block'>
+        <div className='relative m-2 sm:w-[calc(100% - 4rem)] aspect-video'>
           <Image
             src={post.thumbnail}
             alt={post.title}
