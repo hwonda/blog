@@ -33,18 +33,18 @@ const CodeBlock = ({ children } : CodeBlockProps) => {
   };
 
   return (
-    <>
-      <pre className='relative group'>
+    <div className='relative group'>
+      <pre>
         {children}
-        <button
-          type='button'
-          onClick={handleCopy}
-          className="absolute top-2 right-2 flex justify-center items-center w-auto h-7 rounded-md bg-amber-300 hover:bg-orange-500 text-white px-1 py-1 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        >
-          {copied ? 'Copied!' : <Image src="/images/copy.svg" alt="" width={20} height={20} />}
-        </button>
       </pre>
-    </>
+      <button
+        type='button'
+        onClick={handleCopy}
+        className="absolute top-2 right-2 flex justify-center items-center w-auto h-7 rounded-md bg-amber-300 hover:bg-orange-500 text-white px-1 py-1 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+      >
+        {copied ? 'Copied!' : <Image src="/images/copy.svg" alt="" width={20} height={20} />}
+      </button>
+    </div>
   );
 };
 
