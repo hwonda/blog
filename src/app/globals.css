@@ -12,8 +12,8 @@ body {
 
   --border-color: #e2e8f0;
 
-  /* --impact-color: rgb(194, 65, 12); */
-  --impact-color: rgb(255, 115, 0);
+  /* tailwind orange */
+  --impact-color: #f97316;
 }
 
 .dark {
@@ -24,7 +24,7 @@ body {
   --secondary-foreground: var(--white);
 
   --border-color: #2d3748;
-  --impact-color: rgb(251, 146, 60);
+  --impact-color: #fb923c;
 }
 
 @layer utilities {
@@ -41,5 +41,8 @@ body {
   }
   .impact-color {
     color: var(--impact-color);
+  }
+  .bg-impact-color {
+    background-color: var(--impact-color);
   }
 }

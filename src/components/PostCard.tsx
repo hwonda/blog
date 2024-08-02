@@ -22,7 +22,7 @@ const PostCard = ({ post }: PostCardProps) => {
             className='rounded-md'
           />
         </div>
-        <div className='flex flex-col px-2 pb-2 m-2 w-[100%] sm:m-0 sm:w-[auto]'>
+        <div className='flex flex-col px-2 pb-2 m-2 w-full sm:m-0 sm:w-[auto]'>
           <div className='flex justify-between p-1'>
             <div className='w-auto px-3 rounded-full border border-orange-500 dark:border-orange-400'>
               <p className='impact-color'>{post.categoryPublicName}</p>
