@@ -1,17 +1,21 @@
 ---
 title: 리액트를 시작하기 전 알아야 할 JavaScript
 desc: 리액트를 사용하기 전에 알아야 할 JavaScript 문법과 기능은 무엇이 있을까?
-date: 2024-06-14
-thumbnail: /images/image.png
+date: 2024-08-01
+thumbnail: /posts/React/react.png
 ---
+
+React를 사용하기 전에 알아야 할 JavaScript 문법과 기능은 무엇이 있을까요?
+잠깐 함께 JavaScript 문법을 복습하고, React를 시작할 준비를 해봅시다.
 
 ## Javascript 함수 선언 방식
 
-Javascript 함수 선언 방식은 다양합니다. 
-그 중에서 React 개발자들이 가장 많이 사용하는 방식은 화살표함수(Arrow Function)입니다. 
-아마도 보다 간결하고 간편한 문법을 제공하기 때문이라 생각됩니다.
+Javascript 함수 선언 방식은 다양합니다.
+기본적으로 함수 선언 방식은 `Function Declaration`, `Function Expression`, `Arrow Function`이 있습니다.
 
-### Function Declaration
+### Function Declaration(함수 선언문)
+
+일반적인 함수 선언 방식입니다.
 
 ```javascript {showLineNumbers} {1}
 function greet(name) {
@@ -23,7 +27,7 @@ greet("Hwonda"); // 출력: Hello, Hwonda!
 - 함수 이름과 함께 선언됩니다.
 - 호이스팅에 영향을 받습니다.
 
-### Function Expression
+### Function Expression(함수 표현식)
 
 ```javascript {showLineNumbers} {1}
 const greet = function(name) {
@@ -36,7 +40,10 @@ greet("Hwonda"); // 출력: Hello, Hwonda!
 - 변수에 할당된 함수는 변수 이름을 통해 호출됩니다.
 - 호이스팅에 영향을 받지 않습니다.
 
-### Arrow Function
+### Arrow Function(화살표 함수)
+
+그 중에서 React 개발자들이 가장 많이 사용하는 방식은 화살표함수(Arrow Function)입니다. 
+아마도 보다 간결하고 간편한 문법을 제공하기 때문이겠죠.
 
 ```javascript {showLineNumbers} {1}
 const greet = (name) => {
@@ -50,13 +57,17 @@ greet("Hwonda"); // 출력: Hello, Hwonda!
 
 참고로 생성자 함수(Constructor Function), 매서드 축약 포현(Method Shorthand) 등의 방식도 있습니다.
 
+그 것들은 필요할 때 찾아보면서 익히면 됩니다.
+
 ---
 
 ## Spread Operator
 
-`...` 으로 표현되는 Spread Operator는 배열이나 객체를 확장/병합할 때 사용됩니다. 
+`...` 으로 표현되는 `Spread Operator`는 배열이나 객체를 확장/병합할 때 사용됩니다. 
 
-아래 예시와 같이 아주 쉽게 표현하고 사용할 수 있습니다.
+`Spread Operator`를 사용하면
+- 배열의 요소를 확장하거나 병합할 수 있습니다.
+- 객체의 속성을 확장하거나 병합할 수 있습니다.
 
 ### 배열 확장
 
@@ -91,6 +102,7 @@ const mergedObject = { ...obj1, ...obj2 };
 
 console.log(mergedObject); // 출력: { a: 1, b: 2, c: 3, d: 4 }
 ```
+`Spread Operator`를 사용하여 객체를 병합할 때, 동일한 속성이 있는 경우, **마지막에 나오는 속성이 우선순위**를 가집니다.
 ```javascript {showLineNumbers} {4}
 // 중복된 속성(b) 처리
 const obj1 = { a: 1, b: 2 };
@@ -99,7 +111,6 @@ const mergedObject = { ...obj1, ...obj2 };
 
 console.log(mergedObject); // 출력: { a: 1, b: 3, c: 4 }
 ```
-`Spread Operator`를 사용하여 객체를 병합할 때, 동일한 속성이 있는 경우, **마지막에 나오는 속성이 우선순위**를 가집니다.
 
 ---
 
@@ -122,17 +133,19 @@ console.log(sum()); // 출력: 0
 ```
 **Q. `Spread`와 차이가 뭔가요? 헷갈려요.**
 
-  그냥 `Spread` 는 배열이나 객체를 다룰 때, `Rest` 는 매개변수나 분해 할당을 다룰 때 사용한다고 외우십셔.
+  그냥 `Spread` 는 **배열이나 객체**를 다룰 때, `Rest` 는 **매개변수나 분해 할당**을 다룰 때 사용한다고 외우십셔.
 <br/>
 **Q. `Spread`랑 혼동해서 써도 되나요? 헷갈려요.**
 
-(개인적인 생각으로는) 그냥 써도 됩니다. 하지만 구글링할 때는 정확한 용어를 사용하는 것이 좋습니다.
+혼동해서 쓰는 것은 본인 마음이지만, **구글링**할 때는 정확한 용어를 사용하는 것이 좋습니다.
 
 ---
 
 ## 구조 분해 할당(Destructuring Assignment)
 
-구조 분해 할당은 배열과 객체의 요소를 순서대로 또는 특정 속성에 따라 할당할 수 있습니다. 이를 통해 코드를 더 간결하게 작성할 수 있고, 필요한 데이터를 효율적으로 추출하여 활용할 수 있습니다. 또한, 할당하고자 하는 변수명을 다르게 지정하여 선택적으로 할당할 수도 있습니다.
+구조 분해 할당은 배열과 객체의 요소를 순서대로 또는 특정 속성에 따라 할당할 수 있습니다. 
+이를 통해 코드를 더 **간결**하게 작성할 수 있고, **필요한 데이터**를 효율적으로 **추출**하여 활용할 수 있습니다. 
+또한, 할당하고자 하는 변수명을 다르게 지정하여 선택적으로 할당할 수도 있습니다.
 
 **한 번에 여러 변수를 선언하고, 값을 마음대로 할당할 수 있고, 더욱 간결하게 작성할 수 있기 때문에** React를 사용하면서 많이 볼 문법입니다.
 
