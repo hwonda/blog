@@ -9,7 +9,7 @@ const config: Config = {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
-        'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       colors: {
         background: 'var(--background)',
@@ -21,7 +21,7 @@ const config: Config = {
         secondary: {
           DEFAULT: 'var(--secondary)',
           foreground: 'var(--secondary-foreground)',
-        }
+        },
       },
       typography: {
         DEFAULT: {
@@ -68,7 +68,7 @@ const config: Config = {
               paddingLeft: 0,
               color: 'var(--shiki-light)',
               backgroundColor: 'var(--shiki-light-bg)',
-              border: '1px solid #e5e7eb',  // tailwind gray-200
+              border: '1px solid #e5e7eb', // tailwind gray-200
             },
 
             '.dark pre': {
@@ -101,7 +101,7 @@ const config: Config = {
               borderBottom: 'none',
               borderRadius: '0.5rem 0.5rem 0 0',
             },
-            '.prose figcaption[data-rehype-pretty-code-title] + pre': {
+            '.prose figcaption[data-rehype-pretty-code-title] + div pre': {
               marginTop: 0,
               borderRadius: '0 0 0.5rem 0.5rem',
             },
