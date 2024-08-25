@@ -1,5 +1,5 @@
 import './globals.css';
-import ThemeLayout from '@/layouts/ThemeLayout';
+import ThemeProvider from '@/layouts/ThemeProvider';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { getCategoryDetailList } from '@/utils/categoryUtils';
@@ -15,11 +15,11 @@ export default async function RootLayout({
   return (
     <html lang='en' suppressHydrationWarning>
       <body className='flex flex-col'>
-        <ThemeLayout>
+        <ThemeProvider>
           <Header categoryList={categoryList || []} />
           {children}
           <Footer />
-        </ThemeLayout>
+        </ThemeProvider>
       </body>
       <GoogleAnalytics gaId='G-VL5HPPKVP9' />
     </html>
