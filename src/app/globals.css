@@ -45,4 +45,7 @@ body {
   .bg-impact-color {
     background-color: var(--impact-color);
   }
+  .border-impact-color {
+    border-color: var(--impact-color);
+  }
 }
