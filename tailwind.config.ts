@@ -26,6 +26,9 @@ const config: Config = {
       typography: {
         DEFAULT: {
           css: {
+            h2: {
+              color: 'var(--impact-color)',
+            },
             p: {
               marginTop: '0.5rem',
               marginBottom: '0.5rem',
