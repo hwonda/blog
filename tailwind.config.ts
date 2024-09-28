@@ -29,6 +29,9 @@ const config: Config = {
             h2: {
               color: 'var(--impact-color)',
             },
+            h3: {
+              marginTop: '2.5rem',
+            },
             p: {
               marginTop: '0.5rem',
               marginBottom: '0.5rem',
