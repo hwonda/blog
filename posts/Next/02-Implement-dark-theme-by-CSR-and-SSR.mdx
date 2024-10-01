@@ -1,8 +1,8 @@
 ---
-title: 우당탕탕 ServerComponent로 다크모드 구현하기(1)
+title: 우당탕탕 CSR과 SSR로 다크모드 구현하기(1)
 desc: 당신의 Next.js는 SSR이 맞을까?
 date: 2024-09-25
-thumbnail: /posts/Next/02/thumbnail.gif
+thumbnail: /posts/Next/02/0.gif
 ---
 
 > 해당 글은 Next.js 14버전을 사용한 Blog를 기반으로 작성하였습니다.
@@ -41,7 +41,7 @@ thumbnail: /posts/Next/02/thumbnail.gif
 
 ---
 
-## next-themes
+## CSR로 theme 구현하기
 
 ### 1. next-themes 패키지 설치
 
@@ -77,7 +77,27 @@ export default function ThemeLayout({
 ```
 이제 next-themes가 `ThemeProvider`를 통해 테마 전환을 관리(초기화, 구성)할 수 있습니다.
 
-### 3. layout.tsx에 ThemeProvider 적용
+### 3. tailwind.config.ts 수정
+
+```ts {showLineNumbers} title="tailwind.config.ts" {4}
+import type { Config } from 'tailwindcss';
+
+const config: Config = {
+  darkMode: ['class'],
+  //...
+};
+```
+`tailwind.config.ts`에서 `darkMode`를 `class`로 설정합니다.
+
+이제 컴포넌트에서는 `className`에 `dark:` 클래스를 추가하여 다크모드를 활성화할 수 있습니다.
+
+```tsx {showLineNumbers} title="Example.tsx"
+<div className='dark:bg-black dark:text-white'>
+  Dark mode
+</div>
+```
+
+### 4. layout.tsx에 ThemeProvider 적용
 
 ```tsx {showLineNumbers} title="layout.tsx" {2, 18, 22}
 import './globals.css';
@@ -116,7 +136,7 @@ Next.js로 개발을 하다보면, **서버에서 렌더링 된 HTML**과 **클�
 
 (`next-themes`에 의해 html 요소가 업데이트되므로 생기는 Hydration 경고가 방지됩니다.)
 
-### 4. client가 테마를 지정할 수 있도록 Header에 switch를 넣기
+### 5. client가 테마를 지정할 수 있도록 Header에 switch를 넣기
 
 ```tsx {showLineNumbers} title="Header.tsx" {6, 18, 49}
 'use client';
