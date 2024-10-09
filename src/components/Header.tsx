@@ -54,7 +54,7 @@ export default function Header({ categoryList }: HeaderProps) {
             toggleDropdown={toggleDropdown}
             isOpen={isDropdownOpen}
           />
-          <button
+          {/* <button
             type='button'
             className='bg-transparent rounded-md p-2 hover:bg-gray-200 dark:hover:bg-gray-500'
             aria-label='Search'
@@ -63,7 +63,7 @@ export default function Header({ categoryList }: HeaderProps) {
               ? <Image src='/images/dark_search.svg' alt='' width={20} height={20} />
               : <Image src='/images/light_search.svg' alt='' width={20} height={20} />
             }
-          </button>
+          </button> */}
         </div>
         <a href='/' className='font-bold text-xl'>
           {blogMetadata.name}

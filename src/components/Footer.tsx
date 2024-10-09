@@ -6,11 +6,11 @@ const IconList = [
     alt: 'github',
     link: 'https://github.com/hwonda',
   },
-  {
-    icon: '/images/portfolio.svg',
-    alt: 'portfolio',
-    link: 'https://hwonda.com/portfolio',
-  },
+  // {
+  //   icon: '/images/portfolio.svg',
+  //   alt: 'portfolio',
+  //   link: 'https://hwonda.com/portfolio',
+  // },
   {
     icon: '/images/linkedin.svg',
     alt: 'linkedin',
