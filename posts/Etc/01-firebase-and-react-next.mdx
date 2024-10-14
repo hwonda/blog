@@ -1,0 +1,231 @@
+---
+title: firebase와 Next.js 연결하기 (React)
+desc: firebase의 firestore와 storage를 Next.js와 연결하는 방법
+date: 2024-10-14
+thumbnail: /posts/Etc/thumbnail.png
+---
+
+## 들어가기 전에
+
+`Firebase`는 Google에서 제공하는 애플리케이션 개발 플랫폼으로, 클라우드 기반 서비스들을 통해 빠르고 효율적으로 앱을 구축할 수 있습니다. 
+Firebase는 **인증, 데이터베이스, 스토리지, 호스팅** 등의 다양한 기능을 제공하며, **프론트엔드와 백엔드를 쉽게 통합** 할 수 있게 해줍니다.
+
+`Firestore`는 Firebase의 **NoSQL 데이터베이스** 서비스로, **실시간 데이터 동기화** 와 **확장성** 을 제공합니다. 
+Firestore는 `컬렉션`과 `문서 구조`로 데이터를 저장하며, 여러 사용자들이 실시간으로 데이터를 주고받을 수 있도록 도와줍니다. 
+**직관적인 쿼리 기능과 서버리스 구조** 로, 다양한 환경에서 유연하게 사용할 수 있는 데이터베이스입니다.
+
+![](/posts/Etc/01.png)
+전통적인 방식으로는 Server에 데이터를 요청하고 응답을 받아오는 방식이었습니다만, 
+Firebase는 Server를 따로 구성할 필요가 없는 Serverless 방식으로 클라이언트에서 바로 데이터를 주고받을 수 있습니다.
+
+Firebase와 Firestore를 사용하면 클라이언트와 서버 간 데이터를 손쉽게 관리하고, 실시간으로 사용자에게 최신 정보를 제공할 수 있습니다.
+
+### 공식 문서
+
+- [Firebase 공식 문서](https://firebase.google.com/docs)
+- [Firestore 공식 문서](https://firebase.google.com/docs/firestore)
+
+---
+
+## Firebase 프로젝트 생성
+
+먼저 Firebase 프로젝트를 생성해야 합니다.
+
+1. [Firebase Console](https://console.firebase.google.com/)에 접속하여 로그인 후 **새 프로젝트 만들기** 버튼을 클릭합니다.
+
+2. 프로젝트를 만들었으면 프로젝트 설정(좌측 상단 '프로젝트 개요' 옆의 톱니바퀴 모양)을 누릅니다.
+![](/posts/Etc/02.png)
+
+3. 웹 앱에 Firebase 추가를 클릭합니다. 우리는 Next로 연결할 예정이니 3번째 코드 버튼을 클릭하면 됩니다.
+![](/posts/Etc/03.png)
+
+4. 프로젝트 닉네임 설정 및 'npm 사용' 체크 후 콘솔로 이동합니다.
+
+5. 다시 프로젝트 설정으로 돌아와서 '서비스 계정'을 클릭하고, '새 비공개 키 생성'을 클릭합니다.
+![](/posts/Etc/04.png)
+
+6. 생성된 키를 다운로드 받아서 프로젝트 루트에 `serviceAccountKey.json` 파일로 저장합니다.
+
+이렇게 Firebase 프로젝트를 생성하고, 서비스 계정 키를 발급받았습니다. 서비스 계정 키의 Private key가 노출되지 않게 조심해야 합니다!
+
+---
+
+## Next.js 프로젝트 생성
+
+이제 Next.js 프로젝트를 생성해보겠습니다. 이 프로젝트에서는 `json`을 `.env` 파일에 저장하여 사용하겠습니다.
+
+1. 터미널을 열고 다음 명령어를 입력하여 Next.js 프로젝트를 생성하고 프로젝트 폴더로 이동합니다.
+
+```bash
+npx create-next-app my-next-app
+```
+
+```bash
+cd my-next-app
+```
+
+2. Firebase SDK를 설치합니다.
+
+```bash
+npm install firebase
+```
+
+3. Firebase 서비스 계정 키를 프로젝트 루트에 `.env` 파일로 저장합니다.
+
+참고: `.env`는 애플리케이션에서 환경 변수를 관리하는 파일로, 보안과 설정 관리에 중요한 역할을 합니다. 
+개발환경에서 민감한 정보나 DB정보, API 키 등을 숨기고 관리할 수 있습니다.
+
+```json title="serviceAccoundKey.json"
+{
+  "type": "",
+  "project_id": "",
+  "private_key_id": "",
+  "private_key": "",
+  "client_email": "",
+  "client_id": "",
+  "auth_uri": "",
+  "token_uri": "",
+  "auth_provider_x509_cert_url": "",
+  "client_x509_cert_url": "",
+  "universe_domain": ""
+}
+```
+위와 같은 코드를 아래와 같은 방식으로 `.env` 파일에 저장합니다.
+
+```bash title=".env"
+NEXT_PUBLIC_FIREBASE_TYPE=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_PRIVATE_KEY_ID=
+NEXT_PUBLIC_FIREBASE_PRIVATE_KEY=
+NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL=
+NEXT_PUBLIC_FIREBASE_CLIENT_ID=
+NEXT_PUBLIC_FIREBASE_AUTH_URI=
+NEXT_PUBLIC_FIREBASE_TOKEN_URI=
+NEXT_PUBLIC_FIREBASE_AUTH_PROVIDER_CERT_URL=
+NEXT_PUBLIC_FIREBASE_CLIENT_CERT_URL=
+NEXT_PUBLIC_FIREBASE_UNIVERSE_DOMAIN=
+```
+
+여기서 주의할 점은,
+
+1. `컴마(,)`와 `개행문자`를 사용할 수 없다. 개행문자를 제거하고 **한 줄로 작성** 해야 합니다. (PRIVATE_KEY 내에는 이미 `\n`이 포함되어 있고, 그대로 두시면 됩니다.)
+2. Next.js는 `NEXT_PUBLIC_`으로 시작하는 환경변수들만 인식하기 때문에 변수 이름 앞에 꼭 `NEXT_PUBLIC_`를 붙여줘야합니다.
+3. `.env`파일은 반드시 프로젝트 루트에 위치해야 합니다.
+4. github에 올릴 때는 `.env` 파일을 `.gitignore`에 추가하여 올리지 않도록 주의해야 합니다.
+
+```bash title=".gitignore"
+# Ignore all .env files
+*.env
+```
+
+---
+
+## Firebase 연결하기
+
+이제 Firebase와 Firestore를 Next.js와 연결해보겠습니다.
+
+1. `firebase-admin` 설치
+
+Firebase Admin SDK는 서버 측 애플리케이션에서 Firebase 서비스를 관리하고 통합할 수 있도록 도와주는 라이브러리입니다. 
+주로 백엔드 애플리케이션에서 Firebase 프로젝트의 기능에 접근하거나 데이터를 처리할 때 사용됩니다.
+
+```bash
+npm install firebase-admin --save-dev
+```
+
+2. Firebase Admin SDK 초기화
+
+Firebase Admin SDK를 사용하여 서버에서 Firestore에 안전하게 접근하기 위한 초기 설정입니다. 
+.env 파일에 저장된 Firebase 서비스 계정 정보를 불러와 인증을 처리하고, Firestore 데이터베이스에 연결합니다. 
+
+이를 통해 서버 측에서 Firestore 데이터를 읽고 쓸 수 있는 환경을 설정합니다.
+
+저는 lib 폴더를 만들어 따로 관리했습니다.
+
+```ts title="/src/lib/firebaseAdmin.ts" {showLineNumbers}
+import admin, { ServiceAccount } from 'firebase-admin';
+
+const serviceAccount: ServiceAccount = {
+  // privateKey는 개행문자 처리
+  privateKey: process.env.NEXT_PUBLIC_FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  clientEmail: process.env.NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL,
+};
+
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+}
+
+const firestore = admin.firestore();
+
+export { firestore };
+```
+
+3. Firestore 데이터 읽기
+
+이제 Firestore 데이터베이스에 연결되었으니, 데이터를 읽어와보겠습니다.
+
+저는 현재 백엔드 개발자로부터 받은 `terms` 컬렉션의 데이터를 가져와보겠습니다.
+
+```ts title="/src/app/page.tsx" {showLineNumbers} {1, 9}
+import { firestore } from '../lib/firebaseAdmin';
+import { TermData } from '../types';
+
+export default async function HomePage() {
+  let termsData: TermData[] = [];
+
+  try {
+    // 'terms' 컬렉션에서 모든 문서 가져오기
+    const termsCollection = await firestore.collection('terms').get();
+    termsData = termsCollection.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: data.id,
+        usecase: data.usecase,
+        relevance: data.relevance,
+        difficulty: data.difficulty,
+        title: data.title,
+        tags: data.tags,
+        terms: data.terms,
+        publish: data.publish,
+        metadata: data.metadata,
+        references: data.references,
+        description: data.description,
+      } as TermData;
+    });
+  } catch (error) {
+    console.error('Error fetching terms:', error);
+  }
+
+  return (
+    <div>
+      <h1>{'Terms Collection Data'}</h1>
+      {termsData.length > 0 ? (
+        <ul>
+          {termsData.map((term) => (
+            <li key={term.id}>
+              <strong>{term.id}{':'}</strong> {JSON.stringify(term)}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>{'No data found in terms collection.'}</p>
+      )}
+    </div>
+  );
+}
+```
+
+이렇게 하면 terms 컬렉션의 데이터를 가져와서 termsData에 저장하고, 화면에 출력할 수 있습니다.
+
+---
+
+## 결과화면
+
+![](/posts/Etc/05.png)
+
+
+
+
