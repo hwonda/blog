@@ -2,7 +2,7 @@
 title: firebase와 Next.js 연결하기 (React)
 desc: firebase의 firestore와 storage를 Next.js와 연결하는 방법
 date: 2024-10-14
-thumbnail: /posts/Etc/thumbnail.png
+thumbnail: /posts/Etc/01/thumbnail.png
 ---
 
 ## 들어가기 전에
@@ -14,7 +14,7 @@ Firebase는 **인증, 데이터베이스, 스토리지, 호스팅** 등의 다�
 Firestore는 `컬렉션`과 `문서 구조`로 데이터를 저장하며, 여러 사용자들이 실시간으로 데이터를 주고받을 수 있도록 도와줍니다. 
 **직관적인 쿼리 기능과 서버리스 구조** 로, 다양한 환경에서 유연하게 사용할 수 있는 데이터베이스입니다.
 
-![](/posts/Etc/01.png)
+![](/posts/Etc/01/01.png)
 전통적인 방식으로는 Server에 데이터를 요청하고 응답을 받아오는 방식이었습니다만, 
 Firebase는 Server를 따로 구성할 필요가 없는 Serverless 방식으로 클라이언트에서 바로 데이터를 주고받을 수 있습니다.
 
@@ -34,15 +34,15 @@ Firebase와 Firestore를 사용하면 클라이언트와 서버 간 데이터를
 1. [Firebase Console](https://console.firebase.google.com/)에 접속하여 로그인 후 **새 프로젝트 만들기** 버튼을 클릭합니다.
 
 2. 프로젝트를 만들었으면 프로젝트 설정(좌측 상단 '프로젝트 개요' 옆의 톱니바퀴 모양)을 누릅니다.
-![](/posts/Etc/02.png)
+![](/posts/Etc/01/02.png)
 
 3. 웹 앱에 Firebase 추가를 클릭합니다. 우리는 Next로 연결할 예정이니 3번째 코드 버튼을 클릭하면 됩니다.
-![](/posts/Etc/03.png)
+![](/posts/Etc/01/03.png)
 
 4. 프로젝트 닉네임 설정 및 'npm 사용' 체크 후 콘솔로 이동합니다.
 
 5. 다시 프로젝트 설정으로 돌아와서 '서비스 계정'을 클릭하고, '새 비공개 키 생성'을 클릭합니다.
-![](/posts/Etc/04.png)
+![](/posts/Etc/01/04.png)
 
 6. 생성된 키를 다운로드 받아서 프로젝트 루트에 `serviceAccountKey.json` 파일로 저장합니다.
 
@@ -224,7 +224,7 @@ export default async function HomePage() {
 
 ## 결과화면
 
-![](/posts/Etc/05.png)
+![](/posts/Etc/01/05.png)
 
 
 
