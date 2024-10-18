@@ -31,9 +31,9 @@ const Dropdown = ({
         onClick={toggleDropdown}
       >
         {mounted && theme === 'dark' ? (
-          <Image src='/images/dark_menu.svg' alt='' width={20} height={20} />
+          <Image src='/images/dark_menu.svg' alt='menu_icon' width={20} height={20} />
         ) : (
-          <Image src='/images/light_menu.svg' alt='' width={20} height={20} />
+          <Image src='/images/light_menu.svg' alt='menu_icon' width={20} height={20} />
         )}
       </button>
       {isOpen && (

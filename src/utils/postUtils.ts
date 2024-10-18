@@ -132,3 +132,18 @@ export const parseToc = (content: string): TocItem[] => {
     })) || []
   );
 };
+
+/**
+ * 포스트 목록에서 검색어를 포함하는 포스트를 찾아 반환합니다.
+ * @param searchTerm - 검색어
+ * @returns 검색 결과 포스트 목록
+ */
+export async function searchPosts(searchTerm: string): Promise<Post[]> {
+  const allPosts = await getSortedPostList();
+  
+  return allPosts.filter(post => 
+    post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    post.desc.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    post.categoryPublicName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+}
