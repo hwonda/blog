@@ -9,7 +9,7 @@ const IconList = [
   {
     icon: '/images/portfolio.svg',
     alt: 'portfolio',
-    link: 'https://hwonda.com/portfolio',
+    link: 'https://hwonda.notion.site/11ac2c1e360180eb9b91e05124fc7df4',
   },
   {
     icon: '/images/linkedin.svg',

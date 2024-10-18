@@ -1,0 +1,294 @@
+---
+title: 우당탕탕 CSR과 SSR로 다크모드 구현하기(1)
+desc: 당신의 Next.js는 SSR이 맞을까?
+date: 2024-09-25
+thumbnail: /posts/Next/02/thumbnail.gif
+---
+
+> 해당 글은 Next.js 14버전을 사용한 Blog를 기반으로 작성하였습니다.
+
+## 다크모드란?
+
+**다크모드(Dark Mode)** 는 사용자 인터페이스(UI)를 어두운 배경과 밝은 텍스트로 표현하는 디스플레이 모드입니다. 
+일반적으로 사용되는 밝은 화면 배경(흰색 바탕에 검은 글자)과 반대되는 개념으로, 
+다크모드는 화면 전체를 어두운 톤으로 바꾸어 눈의 피로를 줄이고, 특히 저조도 환경에서 시각적 편안함을 제공합니다.
+
+<div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px'}}>
+  <div>![Manager](/posts/Next/02/1.png)</div>
+  <div>![Manager](/posts/Next/02/2.png)</div>
+</div>
+
+### 다크모드 특징
+
+- **시각적 피로 감소** : 밝은 화면이 계속 노출될 경우 눈의 피로를 유발할 수 있는데, 다크모드는 어두운 배경을 사용해 이러한 문제를 줄여줍니다. 특히 밤이나 어두운 환경에서 유용합니다.
+
+- **배터리 절약** : OLED 디스플레이에서는 다크모드가 배터리 절약에 효과적입니다. 검은색 픽셀은 화면에 표시되지 않거나 전력을 거의 소모하지 않기 때문에, 밝은 모드보다 배터리 소비량이 적습니다.
+
+- **시각적 스타일** : 다크모드는 미적 요소로도 인기를 끌고 있습니다. 어두운 배경과 선명한 색상 텍스트, 그래픽이 조화를 이루어 깔끔하고 세련된 느낌을 줄 수 있습니다.
+
+이러한 모드의 전환은 다른 말로 **테마 전환(Theme Switching)**이라고도 합니다.
+
+---
+
+## CSR로 구현한다면? (Blog)
+
+> 아니, 당연히~ **"사용자의 ineraction에 의해 테마가 변경"** 되어야하니까 CSR 아니야!?
+
+처음 다크모드를 구현할 때 가장 먼저 떠오르는 방법은 **클라이언트 사이드 렌더링(`CSR`)** 이었습니다. 
+당연히 '테마 전환 버튼' 혹은 뭐든지 클릭하면 테마가 변경되는 방식이기 때문에 CSR이 맞다고 생각했습니다.
+
+(그렇게 지금 블로그(2024년 9월 기준)에서도 사용하고 있는 방식이기도 합니다.)
+
+---
+
+## CSR로 theme 구현하기
+
+### 1. next-themes 패키지 설치
+
+먼저 [`next-themes`](https://www.npmjs.com/package/next-themes) 패키지를 설치합니다. 이 친구는 꽤나 번거로운 작업을 대신해주는 친구입니다.
+
+```bash
+npm install next-themes --save-dev
+```
+- `useTheme` hook 사용 가능
+- 페이지별로 테마 구분 지정 가능
+- 페이지 로드 시 깜빡임 없음
+- 사용자 선호 색상(prefers-color-scheme)에 따라 테마 자동 적용
+- 다른 페이지로 이동해도 테마 유지
+
+### 2. next-themes를 이용한 ThemeProvider 구현
+
+```tsx {showLineNumbers} title="/layouts/ThemeProvider.tsx" {3, 11, 13}
+'use client';
+
+import { ThemeProvider } from 'next-themes';
+import { type ThemeProviderProps } from 'next-themes/dist/types';
+
+export default function ThemeLayout({
+  children,
+  ...props
+}: ThemeProviderProps) {
+  return (
+    <ThemeProvider attribute='class' defaultTheme='dark' {...props}>
+      {children}
+    </ThemeProvider>
+  );
+}
+```
+이제 next-themes가 `ThemeProvider`를 통해 테마 전환을 관리(초기화, 구성)할 수 있습니다.
+
+### 3. tailwind.config.ts 수정
+
+```ts {showLineNumbers} title="tailwind.config.ts" {4}
+import type { Config } from 'tailwindcss';
+
+const config: Config = {
+  darkMode: ['class'],
+  //...
+};
+```
+`tailwind.config.ts`에서 `darkMode`를 `class`로 설정합니다.
+
+이제 컴포넌트에서는 `className`에 `dark:` 클래스를 추가하여 다크모드를 활성화할 수 있습니다.
+
+```tsx {showLineNumbers} title="Example.tsx"
+<div className='dark:bg-black dark:text-white'>
+  Dark mode
+</div>
+```
+
+### 4. layout.tsx에 ThemeProvider 적용
+
+```tsx {showLineNumbers} title="layout.tsx" {2, 18, 22}
+import './globals.css';
+import ThemeProvider from '@/layouts/ThemeProvider';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import { getCategoryDetailList } from '@/utils/categoryUtils';
+import { GoogleAnalytics } from '@next/third-parties/google';
+
+export default async function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  const categoryList = await getCategoryDetailList();
+
+  return (
+    <html lang='en' suppressHydrationWarning>
+      <body className='flex flex-col'>
+        <ThemeProvider>
+          <Header categoryList={categoryList || []} />
+          {children}
+          <Footer />
+        </ThemeProvider>
+      </body>
+      <GoogleAnalytics gaId='G-VL5HPPKVP9' />
+    </html>
+  );
+}
+```
+이 코드에서 주의할 점은 **`suppressHydrationWarning` 속성을 사용하여 `ThemeProvider`를 서버에서 렌더링하지 않도록 설정했다**는 것입니다.
+Next.js로 개발을 하다보면, **서버에서 렌더링 된 HTML**과 **클라이언트에서 재활성화(hydration)될 때의 내용**이 **일치하지 않는 경우** 발생하는 문제가 종종 있습니다.
+
+`hydration`이란 서버에서 렌더링된 HTML을 클라이언트에서 재활성화하는 과정이고, 
+`suppressHydrationWarning`는 서버와 클라이언트 렌더링 결과가 다를 때 발생하는 경고를 억제합니다.
+
+(`next-themes`에 의해 html 요소가 업데이트되므로 생기는 Hydration 경고가 방지됩니다.)
+
+### 5. client가 테마를 지정할 수 있도록 Header에 switch를 넣기
+
+```tsx {showLineNumbers} title="Header.tsx" {6, 18, 49}
+'use client';
+
+import ThemeSwitch from '@/components/ThemeSwitch';
+import Image from 'next/image';
+import { useState, useEffect, useRef } from 'react';
+import { useTheme } from 'next-themes';
+import Dropdown from '@/components/Dropdown';
+import { CategoryDetail } from '@/types';
+import { blogMetadata } from '@/constants';
+
+interface HeaderProps {
+  categoryList: CategoryDetail[];
+}
+
+export default function Header({ categoryList }: HeaderProps) {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  //...
+
+  return (
+    <div className='top-0 left-0 z-10 fixed flex justify-center shadow-md p-2 w-full h-12 bg-background opacity-80 hover:opacity-100'>
+      <div className='flex justify-between items-center w-full max-w-[1200px]'>
+        <div className='flex w-20' ref={dropdownRef}>
+          <Dropdown
+            categoryList={categoryList}
+            mounted={mounted}
+            theme={theme || 'dark'}
+            toggleDropdown={toggleDropdown}
+            isOpen={isDropdownOpen}
+          />
+          <button
+            type='button'
+            className='bg-transparent rounded-md p-2 hover:bg-gray-200 dark:hover:bg-gray-500'
+            aria-label='Search'
+          >
+            { mounted && theme && theme === 'dark'
+              ? <Image src='/images/dark_search.svg' alt='' width={20} height={20} />
+              : <Image src='/images/light_search.svg' alt='' width={20} height={20} />
+            }
+          </button>
+        </div>
+        <a href='/' className='font-bold text-xl'>
+          {blogMetadata.name}
+        </a>
+        <div className='flex justify-end w-20'>
+          {mounted && theme && <ThemeSwitch theme={theme} setTheme={setTheme} />}
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+이제 사용자는 Header에 있는 테마 전환 스위치를 통해 테마를 변경할 수 있습니다.
+```tsx {showLineNumbers} title="ThemeSwitch.tsx" {9, 15}
+'use client';
+import Image from 'next/image';
+
+interface ThemeSwitchProps {
+  theme: string;
+  setTheme: (theme: string) => void;
+}
+
+const ThemeSwitch = ({ theme, setTheme }: ThemeSwitchProps) => {
+  return (
+    <button
+      aria-label='Toggle Dark Mode'
+      type='button'
+      className='rounded-md p-2 hover:bg-gray-200 dark:hover:bg-gray-500 transition-all duration-1000'
+      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+    >
+      {theme === 'dark'
+        ? <Image src="/images/dark_mode.svg" alt="dark" width={20} height={20} />
+        : <Image src="/images/light_mode.svg" alt="light" width={20} height={20} />
+      }
+    </button>
+  );
+};
+
+export default ThemeSwitch;
+```
+
+---
+
+## CSR로 구현한 theme의 문제점
+
+### 1. Hydration 경고 억제
+`HydrationWarning`는 서버와 클라이언트의 일관성을 유지하기 위한 중요한 도구입니다. 
+
+경고를 억제하는 대신, 가능한 경우 서버와 클라이언트에서 동일한 결과를 생성하는 방향으로 코드를 수정하는 것이 좋습니다. 
+`suppressHydrationWarning`는 최후의 수단으로 사용하는 것이 좋습니다.
+
+그러나 `next-themes`를 사용한다면 html 조작을 통해 테마를 변경하기 때문에 Hydration 경고가 발생할 수 있습니다.
+필연적으로 `suppressHydrationWarning`를 사용하게 되는데, 이는 **성능 저하**를 가져올 수 있습니다.
+
+### 2. Client Component가 컴포넌트 트리 상단에 위치
+
+`layout.tsx`는 **서버에서 렌더링**되어 **클라이언트로 전달**되는 **최상위 레이아웃**입니다.
+
+하지만 `ThemeProvider`를 사용하게 되면, client component가 상단에 위치하게 됩니다.
+
+```tsx {showLineNumbers} title="layout.tsx" {2, 18,19,20,21,22}
+import './globals.css';
+import ThemeProvider from '@/layouts/ThemeProvider';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import { getCategoryDetailList } from '@/utils/categoryUtils';
+import { GoogleAnalytics } from '@next/third-parties/google';
+
+export default async function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  const categoryList = await getCategoryDetailList();
+
+  return (
+    <html lang='en' suppressHydrationWarning>
+      <body className='flex flex-col'>
+        <ThemeProvider>
+          <Header categoryList={categoryList || []} />
+          {children}
+          <Footer />
+        </ThemeProvider>
+      </body>
+      <GoogleAnalytics gaId='G-VL5HPPKVP9' />
+    </html>
+  );
+}
+```
+컴포넌트 트리 깊이는 `html>body>ThemeProvider` 순서로, client component가 3번째 레벨에 위치하게 됩니다.
+
+이는 "클라이언트 컴포넌트를 가능한 한 트리의 말단에 배치하라"는 권장사항과는 다소 거리가 있습니다. 
+클라이언트 컴포넌트가 트리의 상단에 배치됐을 때의 문제점은 다음과 같습니다.
+
+- **SSR 효율성 저하** : 상위에 클라이언트 컴포넌트가 있으면 그 아래의 서버 컴포넌트들도 클라이언트에서 렌더링될 수 있습니다.
+- **JavaScript 번들 크기 증가** : 상위 컴포넌트가 클라이언트 컴포넌트일 경우, 그 아래의 모든 컴포넌트도 클라이언트 번들에 포함될 수 있습니다.
+- **데이터 흐름 관리 어려움** : 서버 컴포넌트에서 데이터를 가져와 클라이언트 컴포넌트로 전달하는 것이 더 효율적입니다.
+
+---
+
+## 나가며...
+
+이러한 문제점들이 있지만, `next-theme`를 이용한 CSR 방식은 **간단하게 구현**할 수 있고, **사용자 경험**을 높일 수 있습니다.
+특히 `cookie`를 사용할 수 없는 `github.io`와 같은 경우에는 CSR 방식이 유용할 수 있습니다.
+
+그러나 저의 경우에, **첫 페이지 로드 속도와 SEO**에 더 중점을 두고 있기 때문에, **CSR 방식보다는 SSR 방식**을 사용하는 것이 더 적합하다고 생각했습니다.
+또한, `layout.tsx`가 `Client Component`로 변질되는 문제도 있기 때문에, **CSR 방식은 사용하지 않기로 결정**했습니다.
+<br/>
+
+다음 글에서는 다른 프로젝트 예시를 보며 **SSR 방식으로 (간단하지는 않지만 사용자 경험을 높이도록) 구현**하는 방법을 알아보겠습니다.
