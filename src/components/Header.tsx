@@ -1,10 +1,10 @@
 'use client';
 
 import ThemeSwitch from '@/components/ThemeSwitch';
-import Image from 'next/image';
+import Dropdown from '@/components/Dropdown';
+import SearchInput from '@/components/SearchInput';
 import { useState, useEffect, useRef } from 'react';
 import { useTheme } from 'next-themes';
-import Dropdown from '@/components/Dropdown';
 import { CategoryDetail } from '@/types';
 import { blogMetadata } from '@/constants';
 
@@ -27,7 +27,10 @@ export default function Header({ categoryList }: HeaderProps) {
   };
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
       setIsDropdownOpen(false);
     }
   };
@@ -54,22 +57,15 @@ export default function Header({ categoryList }: HeaderProps) {
             toggleDropdown={toggleDropdown}
             isOpen={isDropdownOpen}
           />
-          {/* <button
-            type='button'
-            className='bg-transparent rounded-md p-2 hover:bg-gray-200 dark:hover:bg-gray-500'
-            aria-label='Search'
-          >
-            { mounted && theme && theme === 'dark'
-              ? <Image src='/images/dark_search.svg' alt='' width={20} height={20} />
-              : <Image src='/images/light_search.svg' alt='' width={20} height={20} />
-            }
-          </button> */}
+          <SearchInput mounted={mounted} theme={theme || 'light'} />
         </div>
         <a href='/' className='font-bold text-xl'>
           {blogMetadata.name}
         </a>
         <div className='flex justify-end w-20'>
-          {mounted && theme && <ThemeSwitch theme={theme} setTheme={setTheme} />}
+          {mounted && theme && (
+            <ThemeSwitch theme={theme} setTheme={setTheme} />
+          )}
         </div>
       </div>
     </div>
