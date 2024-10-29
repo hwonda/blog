@@ -10,7 +10,7 @@ interface ClientPostListProps {
 }
 
 const ClientPostList = ({ initialPosts, category }: ClientPostListProps) => {
-  const { searchResults, searchQuery } = useSearch();
+  const { searchResults, searchQuery , pastSearchValue } = useSearch();
   const postList = searchResults.length > 0 ? searchResults : initialPosts;
 
   if (!postList.length) return <div>No posts found.</div>;
@@ -18,9 +18,14 @@ const ClientPostList = ({ initialPosts, category }: ClientPostListProps) => {
   return (
     <>
       <div className='mb-5 ml-5'>
-        {searchResults.length > 0 ? (
+        {searchResults.length === 0 && pastSearchValue ? (
           <strong className='text-xl font-semibold text-gray-600 dark:text-gray-300'>
-            Search Results for {searchQuery}
+            No Results for <span className='text-orange-600 dark:text-orange-400'>{pastSearchValue}</span>, Showing all posts
+          </strong>
+        ) :
+        searchResults.length > 0 ? (
+          <strong className='text-xl font-semibold text-gray-600 dark:text-gray-300'>
+            Search Results for <span className='text-orange-600 dark:text-orange-400'>{pastSearchValue}</span>
           </strong>
         ) : category ? (
           <>
