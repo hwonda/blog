@@ -1,8 +1,9 @@
 'use client';
 
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSearch } from '@/contexts/SearchContext';
 import Image from 'next/image';
-import { useEffect, useState, useRef } from 'react';
-import useSearch from '@/hooks/useSearch';
 
 interface SearchInputProps {
   mounted: boolean;
@@ -10,28 +11,59 @@ interface SearchInputProps {
 }
 
 const SearchInput = ({ mounted, theme }: SearchInputProps) => {
-  const { searchValue, searchHandler } = useSearch();
   const [isExpanded, setIsExpanded] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { setSearchResults, searchQuery, setSearchQuery, setPastSearchValue } = useSearch();
+  const router = useRouter();
 
-  const handleClickOutside = (event: MouseEvent) => {
+  const handleSearch = async () => {
+    if (searchQuery.trim() === '') {
+      setSearchResults([]);
+      setPastSearchValue('');
+      return;
+    }
+    setPastSearchValue(searchQuery);
+    try {
+      const response = await fetch(`/api/search?q=${encodeURIComponent(searchQuery)}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const results = await response.json();
+      setSearchResults(results);
+    } catch (error) {
+      console.error('Search error:', error);
+      setSearchResults([]);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      router.push('/blog');
+      handleSearch();
+      setIsExpanded(false);
+      setSearchQuery('');
+    }
+  };
+
+  const handleClickOutside = useCallback((event: MouseEvent) => {
     if (
-      !searchValue &&
+      !searchQuery &&
       !(event.target as HTMLElement).closest('.search-container')
     ) {
       setIsExpanded(false);
     }
-    if (!isExpanded && inputRef.current) {
-      inputRef.current.focus();
-    }
-  };
+  }, [searchQuery]);
 
   useEffect(() => {
     document.addEventListener('click', handleClickOutside);
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
-  }, [searchValue]);
+  }, [handleClickOutside]);
 
   useEffect(() => {
     if (isExpanded && inputRef.current) {
@@ -43,20 +75,30 @@ const SearchInput = ({ mounted, theme }: SearchInputProps) => {
     <div className='flex items-center search-container'>
       <button
         type='button'
-        className='bg-transparent rounded-md p-2 w-10 hover:bg-gray-200 dark:hover:bg-gray-500'
+        className={`bg-transparent rounded-md p-2 w-10 hover:bg-gray-200 dark:hover:bg-gray-500
+          ${isExpanded ? 'hidden sm:block' : 'block'}
+          transition-all duration-300`}
         aria-label='Search'
-        onClick={() => setIsExpanded(!isExpanded)}
+        onClick={() => {
+          setIsExpanded(!isExpanded);
+          if (isExpanded && searchQuery) {
+            handleSearch();
+          }
+        }}
       >
         {mounted && theme && theme === 'dark' ? (
-          <Image src='/images/dark_search.svg' alt='' width={20} height={20} />
+          <Image src='/images/dark_search.svg' alt='search_icon' width={20} height={20} />
         ) : (
-          <Image src='/images/light_search.svg' alt='' width={20} height={20} />
+          <Image src='/images/light_search.svg' alt='search_icon' width={20} height={20} />
         )}
       </button>
       <input
         ref={inputRef}
         type='text'
-        onChange={searchHandler}
+        value={searchQuery}
+        onChange={handleInputChange}
+        onKeyDown={handleKeyPress}
+        placeholder='Search...'
         className={`transition-all duration-300 bg-orange-50 dark:bg-gray-800 border border-impact-color rounded-sm h-8 ${
           isExpanded ? 'w-24 p-2 sm:w-36 md:w-48 lg:w-64' : 'w-0 p-0 border-0'
         }`}
