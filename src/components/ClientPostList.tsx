@@ -20,7 +20,7 @@ const ClientPostList = ({ initialPosts, category }: ClientPostListProps) => {
       <div className='mb-5 ml-5'>
         {searchResults.length > 0 ? (
           <strong className='text-xl font-semibold text-gray-600 dark:text-gray-300'>
-            Search Results for '{searchQuery}'
+            Search Results for {searchQuery}
           </strong>
         ) : category ? (
           <>
