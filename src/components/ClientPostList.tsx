@@ -2,45 +2,73 @@
 
 import PostCard from '@/components/PostCard';
 import { useSearch } from '@/contexts/SearchContext';
-import { Post } from '@/types';
+import { PostListHeaderProps, PostGridProps, ClientPostListProps } from '@/types/search';
 
-interface ClientPostListProps {
-  initialPosts: Post[];
-  category?: string;
-}
+const PostListHeader = ({ searchResults, pastSearchValue, category }: PostListHeaderProps) => {
+  const renderHeaderContent = () => {
+    // 검색어가 있을 때
+    if (pastSearchValue) {
+      return searchResults.length > 0 ? (
+        <span>
+          <span className="impact-color mr-1">{`'${pastSearchValue}'`}</span>
+          에 대한 검색결과
+        </span>
+      ) : (
+        <span>
+          <span className="impact-color mr-1">{`'${pastSearchValue}'`}</span>
+          에 대한 검색 결과가 없습니다.
+        </span>
+      );
+    }
+    // 카테고리가 있을 때
+    if (category) {
+      return (
+        <span>
+          <span className="impact-color mr-1">{category}</span>
+          에 관한 글들
+        </span>
+      );
+    }
+    // 기본
+    return "모든 포스트";
+  };
+
+  return (
+    <div className="mb-5 ml-5">
+      <strong className="text-xl font-semibold">
+        {renderHeaderContent()}
+      </strong>
+    </div>
+  );
+};
+
+const PostGrid = ({ posts }: PostGridProps) => {
+  // 포스트가 없을 때
+  if (!posts.length) {
+    return <div>No posts found.</div>;
+  }
+
+  return (
+    <ul className="gap-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      {posts.map((post) => (
+        <PostCard key={post.title} post={post} />
+      ))}
+    </ul>
+  );
+};
 
 const ClientPostList = ({ initialPosts, category }: ClientPostListProps) => {
-  const { searchResults, searchQuery , pastSearchValue } = useSearch();
+  const { searchResults, pastSearchValue } = useSearch();
   const postList = searchResults.length > 0 ? searchResults : initialPosts;
-
-  if (!postList.length) return <div>No posts found.</div>;
 
   return (
     <>
-      <div className='mb-5 ml-5'>
-        {searchResults.length === 0 && pastSearchValue ? (
-          <strong className='text-xl font-semibold text-gray-600 dark:text-gray-300'>
-            No Results for <span className='text-orange-600 dark:text-orange-400'>{pastSearchValue}</span>, Showing all posts
-          </strong>
-        ) :
-        searchResults.length > 0 ? (
-          <strong className='text-xl font-semibold text-gray-600 dark:text-gray-300'>
-            Search Results for <span className='text-orange-600 dark:text-orange-400'>{pastSearchValue}</span>
-          </strong>
-        ) : category ? (
-          <>
-            <span className='text-gray-600 dark:text-gray-300'>Posts about</span>
-            <strong className='ml-2 text-xl font-semibold impact-color'>{category}</strong>
-          </>
-        ) : (
-          <strong className='text-xl font-semibold text-gray-600 dark:text-gray-300'>All posts</strong>
-        )}
-      </div>
-      <ul className='gap-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
-        {postList.map((post) => (
-          <PostCard key={post.title} post={post} />
-        ))}
-      </ul>
+      <PostListHeader 
+        searchResults={searchResults}
+        pastSearchValue={pastSearchValue}
+        category={category}
+      />
+      <PostGrid posts={postList} />
     </>
   );
 };

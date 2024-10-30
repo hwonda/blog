@@ -17,10 +17,19 @@ const SearchContext = createContext<SearchContextType | undefined>(undefined);
 export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [searchResults, setSearchResults] = useState<Post[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [pastSearchValue, setPastSearchValue] = useState<string>(''); // 확정된 검색어 초기화
+  const [pastSearchValue, setPastSearchValue] = useState<string>('');
+
+  const contextValue: SearchContextType = {
+    searchResults,
+    setSearchResults,
+    searchQuery,
+    setSearchQuery,
+    pastSearchValue,
+    setPastSearchValue
+  };
 
   return (
-    <SearchContext.Provider value={{ searchResults, setSearchResults, searchQuery, setSearchQuery, pastSearchValue, setPastSearchValue }}>
+    <SearchContext.Provider value={contextValue}>
       {children}
     </SearchContext.Provider>
   );
