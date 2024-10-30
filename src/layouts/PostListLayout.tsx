@@ -9,7 +9,7 @@ const PostListLayout = async ({ category }: PostListProps) => {
   const initialPosts = await getSortedPostList(category);
 
   return (
-    <div className='flex justify-center mt-10 px-5 min-h-screen'>
+    <div className='flex justify-center mt-10 px-5 min-h-screen w-full'>
       <section className='mt-10 w-full max-w-[1200px]'>
         <ClientPostList initialPosts={initialPosts} category={category} />
       </section>
