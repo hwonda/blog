@@ -15,7 +15,7 @@ export default async function RootLayout({
 
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className='flex flex-col'>
+      <body className='flex flex-col items-center'>
         <ThemeProvider>
           <SearchProvider>
             <Header categoryList={categoryList || []} />

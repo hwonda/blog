@@ -10,14 +10,14 @@ export default function PostHeader({ post }: PostHeaderProps) {
   return (
     <>
       <ProgressBar />
-      <div className='not-prose mt-10 w-full'>
-        <header className='text-center mb-10'>
+      <div className='not-prose mt-20 w-full max-w-[1200px] flex flex-col items-center'>
+        <header className='w-full text-center mb-10'>
           <h1 className='text-3xl font-bold'>{post.title}</h1>
           <p className='text-sm mt-2 text-gray-500 dark:text-gray-400'>
             {post.desc}
           </p>
         </header>
-        <div className='flex justify-between items-center pb-2 mb-5 border-b dark:border-gray-400'>
+        <div className='w-full flex justify-between items-center pb-2 mb-5 border-b dark:border-gray-400'>
           <div className='w-auto px-3 rounded-full border border-impact-color'>
             <p className='impact-color'>{post.categoryPublicName}</p>
           </div>
@@ -26,14 +26,16 @@ export default function PostHeader({ post }: PostHeaderProps) {
           </p>
         </div>
         {post.thumbnail && (
-          <div className='relative aspect-video'>
-            <Image
-              src={post.thumbnail}
-              alt={post.title}
-              fill
-              priority
-              className='rounded-md'
-            />
+          <div className='w-full max-w-[800px] mt-10'>
+            <div className='relative aspect-video'>
+              <Image
+                src={post.thumbnail}
+                alt={post.title}
+                fill
+                priority
+                className='rounded-md'
+              />
+            </div>
           </div>
         )}
       </div>
