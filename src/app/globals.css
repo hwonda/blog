@@ -49,3 +49,7 @@ body {
     border-color: var(--impact-color);
   }
 }
+
+.border-main {
+  border-color: var(--border-color);
+}
