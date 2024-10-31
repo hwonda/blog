@@ -50,7 +50,7 @@ export const parsePostDetail = async (postPath: string) => {
     const file = await fs.readFile(postPath, 'utf8');
     const { data, content } = matter(file);
     const grayMatter = data as ParsedPost;
-    const dateString = dayjs(grayMatter.date).locale('ko').format('YYYY-MM-DD');
+    const dateString = dayjs(grayMatter.date).locale('ko').format('YYYY.MM.DD');
 
     return { ...grayMatter, dateString, content };
   } catch (error) {
