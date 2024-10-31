@@ -2,6 +2,7 @@
 import { Post } from '@/types';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Clock3 } from 'lucide-react';
 
 interface PostCardProps {
   post: Post;
@@ -27,7 +28,14 @@ const PostCard = ({ post }: PostCardProps) => {
             <div className='w-auto px-3 rounded-full border border-impact-color'>
               <p className='impact-color'>{post.categoryPublicName}</p>
             </div>
-            <p>{post.dateString}</p>
+            <div className='flex gap-1 items-center'>
+              <Clock3 className="size-4 text-active" />
+              <span className='text-active'>{post.readingTimes}</span>
+              <span className="text-sub">mins {'•'}</span>
+              <span className='text-gray-500 dark:text-gray-400'>
+                {post.dateString}
+              </span>
+            </div>
           </div>
           <p className='font-bold text-lg p-1'>{post.title}</p>
         </div>

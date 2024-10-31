@@ -11,5 +11,6 @@ export interface Post extends ParsedPost {
   slug: string;
   categoryPath: string;
   content: string;
+  readingTimes: number;
   categoryPublicName: string;
 }

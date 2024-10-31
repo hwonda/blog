@@ -1,6 +1,7 @@
 import { Post } from '@/types';
 import Image from 'next/image';
 import ProgressBar from '@/components/ProgressBar';
+import { Clock3 } from 'lucide-react';
 
 interface PostHeaderProps {
   post: Post;
@@ -12,18 +13,23 @@ export default function PostHeader({ post }: PostHeaderProps) {
       <ProgressBar />
       <div className='not-prose mt-20 w-full max-w-[1200px] flex flex-col items-center'>
         <header className='w-full text-center mb-10'>
-          <h1 className='text-3xl font-bold'>{post.title}</h1>
-          <p className='text-sm mt-2 text-gray-500 dark:text-gray-400'>
+          <h1 className='text-3xl font-bold '>{post.title}</h1>
+          <span className='mt-2 text-gray-500 dark:text-gray-400'>
             {post.desc}
-          </p>
+          </span>
         </header>
         <div className='w-full flex justify-between items-center pb-2 mb-5 border-b dark:border-gray-400'>
           <div className='w-auto px-3 rounded-full border border-impact-color'>
             <p className='impact-color'>{post.categoryPublicName}</p>
           </div>
-          <p className='text-sm text-gray-500 dark:text-gray-400'>
-            {post.dateString}
-          </p>
+          <div className='flex gap-2 items-center'>
+            <Clock3 className="size-4 text-active" />
+            <span className='text-active'>{post.readingTimes}</span>
+            <span className="text-sub">mins {'•'}</span>
+            <span className='text-gray-500 dark:text-gray-400'>
+              {post.dateString}
+            </span>
+          </div>
         </div>
         {post.thumbnail && (
           <div className='w-full max-w-[800px] mt-10'>

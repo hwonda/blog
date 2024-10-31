@@ -11,9 +11,10 @@ body {
   --background: #fff;
 
   --border-color: #e2e8f0;
-
-  /* tailwind orange */
   --impact-color: #f97316;
+
+  --text-color: #333333;
+  --text-secondary-color: #666666;
 }
 
 .dark {
@@ -25,6 +26,9 @@ body {
 
   --border-color: #2d3748;
   --impact-color: #fb923c;
+
+  --text-color: #E5E5E5;
+  --text-secondary-color: #B0B0B0;
 }
 
 @layer utilities {
@@ -52,4 +56,16 @@ body {
 
 .border-main {
   border-color: var(--border-color);
+}
+
+.text-main {
+  color: var(--text-color);
+}
+
+.text-sub {
+  color: var(--text-secondary-color);
+}
+
+.text-active {
+  color: var(--impact-color);
 }

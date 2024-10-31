@@ -2,6 +2,7 @@ import { Post, ParsedPost, TocItem } from '@/types';
 import fs from 'fs/promises';
 import matter from 'gray-matter';
 import dayjs from 'dayjs';
+import readingTime from 'reading-time';
 import { getCategoryPublicName } from './categoryUtils';
 import {
   POSTS_BASE_PATH,
@@ -51,8 +52,9 @@ export const parsePostDetail = async (postPath: string) => {
     const { data, content } = matter(file);
     const grayMatter = data as ParsedPost;
     const dateString = dayjs(grayMatter.date).locale('ko').format('YYYY.MM.DD');
+    const readingTimes = Math.ceil(readingTime(content).minutes);
 
-    return { ...grayMatter, dateString, content };
+    return { ...grayMatter, dateString, content, readingTimes };
   } catch (error) {
     console.error(`Error reading file ${postPath}:`, error);
     throw error;
