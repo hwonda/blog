@@ -14,10 +14,11 @@ const PostListHeader = ({ searchResults, pastSearchValue, category }: PostListHe
           에 대한 검색결과
         </span>
       ) : (
-        <span>
+        <div>
           <span className="impact-color mr-1">{`'${pastSearchValue}'`}</span>
           에 대한 검색 결과가 없습니다.
-        </span>
+          <div className='mt-8 pt-2 border-t border-main'>모든 포스트</div>
+        </div>
       );
     }
     // 카테고리가 있을 때
