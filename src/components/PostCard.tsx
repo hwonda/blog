@@ -24,7 +24,7 @@ const PostCard = ({ post }: PostCardProps) => {
         </div>
         <div className='flex flex-col px-2 pb-2 m-2 w-full sm:m-0 sm:w-[auto]'>
           <div className='flex justify-between p-1'>
-            <span className='impact-color'>{post.categoryPublicName}</span>
+            <span className='text-sub'>{post.categoryPublicName}</span>
             <div className='flex gap-1 items-center'>
               <Clock3 className="size-4 text-sub" />
               <span className="text-sub">{post.readingTimes}{'분'}</span>
