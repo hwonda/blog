@@ -50,9 +50,11 @@ export default function Giscus() {
   return (
     <div className='mt-10 pt-10 border-t dark:border-gray-400'>
       <div className='flex justify-center'>
-        <p>-이 글이 여러분에게 도움이 되었으면 </p>
-        <p className='impact-color mx-1'>reactions</p>
-        <p>를 눌러주세요. 감사합니다.-</p>
+        <p>
+          - 이 글이 여러분에게 도움이 되었으면
+          <span className='impact-color mx-1'>reactions</span>
+          를 눌러주세요. 감사합니다 -
+        </p>
       </div>
       <div ref={refGiscus}></div>
     </div>
