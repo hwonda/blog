@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import { getCategoryDetailList } from '@/utils/categoryUtils';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { SearchProvider } from '@/contexts/SearchContext';
+import { fontPretendard } from '@/utils/fontUtils';
 
 export default async function RootLayout({
   children,
@@ -15,7 +16,7 @@ export default async function RootLayout({
 
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className='flex flex-col items-center'>
+      <body className={`flex flex-col items-center ${fontPretendard.variable}`}>
         <ThemeProvider>
           <SearchProvider>
             <Header categoryList={categoryList || []} />
