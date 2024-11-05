@@ -23,6 +23,9 @@ const config: Config = {
           foreground: 'var(--secondary-foreground)',
         },
       },
+      fontFamily: {
+        pretendard: [ 'var(--font-pretendard)', 'sans-serif' ],
+      },
       typography: {
         DEFAULT: {
           css: {

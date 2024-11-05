@@ -2,8 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+body, * {
   color: var(--foreground);
+  font-family: 'Pretendard', sans-serif;
 }
 
 :root {
