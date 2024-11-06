@@ -21,9 +21,9 @@ const IconList = [
 export default function Footer() {
   return (
     <footer className='w-full min-h-40 mt-20'>
-      <div className='flex justify-center mb-7'>
+      {/* <div className='flex justify-center mb-7'>
         <a href="https://hits.sh/hwonda.com/"><img alt="Hits" src="https://hits.sh/hwonda.com.svg?view=today-total&style=flat-square&label=visitors&color=fb923c&labelColor=fb923c"/></a>
-      </div>
+      </div> */}
       <div className='flex gap-5 justify-center items-center'>
         {
           IconList.map(({ icon, alt, link }) => (

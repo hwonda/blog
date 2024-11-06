@@ -48,15 +48,8 @@ export default function Giscus() {
   }, [theme]);
 
   return (
-    <div className='mt-10 pt-10 border-t dark:border-gray-400'>
-      <div className='flex justify-center'>
-        <p>
-          - 이 글이 여러분에게 도움이 되었으면
-          <span className='impact-color mx-1'>reactions</span>
-          를 눌러주세요. 감사합니다 -
-        </p>
-      </div>
-      <div ref={refGiscus}></div>
+    <div className='w-full mt-10 pt-10 border-t border-light flex justify-center'>
+      <div ref={refGiscus} className='w-full md:w-2/3'></div>
     </div>
   );
 }
