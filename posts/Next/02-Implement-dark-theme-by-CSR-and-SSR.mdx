@@ -1,5 +1,5 @@
 ---
-title: 우당탕탕 CSR과 SSR로 다크모드 구현하기(1)
+title: CSR로 다크모드 구현하기
 desc: 당신의 Next.js는 SSR이 맞을까?
 date: 2024-09-25
 thumbnail: /posts/Next/02/thumbnail.gif
@@ -28,7 +28,6 @@ thumbnail: /posts/Next/02/thumbnail.gif
 
 이러한 모드의 전환은 다른 말로 **테마 전환(Theme Switching)**이라고도 합니다.
 
----
 
 ## CSR로 구현한다면? (Blog)
 
@@ -39,7 +38,6 @@ thumbnail: /posts/Next/02/thumbnail.gif
 
 (그렇게 지금 블로그(2024년 9월 기준)에서도 사용하고 있는 방식이기도 합니다.)
 
----
 
 ## CSR로 theme 구현하기
 
@@ -128,8 +126,8 @@ export default async function RootLayout({
   );
 }
 ```
-이 코드에서 주의할 점은 **`suppressHydrationWarning` 속성을 사용하여 `ThemeProvider`를 서버에서 렌더링하지 않도록 설정했다**는 것입니다.
-Next.js로 개발을 하다보면, **서버에서 렌더링 된 HTML**과 **클라이언트에서 재활성화(hydration)될 때의 내용**이 **일치하지 않는 경우** 발생하는 문제가 종종 있습니다.
+이 코드에서 주의할 점은 **`suppressHydrationWarning` 속성을 사용하여 `ThemeProvider`를 서버에서 렌더링하지 않도록 설정했다** 는 것입니다.
+Next.js로 개발을 하다보면, **서버에서 렌더링 된 HTML** 과 **클라이언트에서 재활성화(hydration)될 때의 내용** 이 **일치하지 않는 경우** 발생하는 문제가 종종 있습니다.
 
 `hydration`이란 서버에서 렌더링된 HTML을 클라이언트에서 재활성화하는 과정이고, 
 `suppressHydrationWarning`는 서버와 클라이언트 렌더링 결과가 다를 때 발생하는 경고를 억제합니다.
@@ -223,7 +221,6 @@ const ThemeSwitch = ({ theme, setTheme }: ThemeSwitchProps) => {
 export default ThemeSwitch;
 ```
 
----
 
 ## CSR로 구현한 theme의 문제점
 
@@ -234,11 +231,11 @@ export default ThemeSwitch;
 `suppressHydrationWarning`는 최후의 수단으로 사용하는 것이 좋습니다.
 
 그러나 `next-themes`를 사용한다면 html 조작을 통해 테마를 변경하기 때문에 Hydration 경고가 발생할 수 있습니다.
-필연적으로 `suppressHydrationWarning`를 사용하게 되는데, 이는 **성능 저하**를 가져올 수 있습니다.
+필연적으로 `suppressHydrationWarning`를 사용하게 되는데, 이는 **성능 저하** 를 가져올 수 있습니다.
 
 ### 2. Client Component가 컴포넌트 트리 상단에 위치
 
-`layout.tsx`는 **서버에서 렌더링**되어 **클라이언트로 전달**되는 **최상위 레이아웃**입니다.
+`layout.tsx`는 **서버에서 렌더링** 되어 **클라이언트로 전달** 되는 **최상위 레이아웃** 입니다.
 
 하지만 `ThemeProvider`를 사용하게 되면, client component가 상단에 위치하게 됩니다.
 
@@ -280,15 +277,14 @@ export default async function RootLayout({
 - **JavaScript 번들 크기 증가** : 상위 컴포넌트가 클라이언트 컴포넌트일 경우, 그 아래의 모든 컴포넌트도 클라이언트 번들에 포함될 수 있습니다.
 - **데이터 흐름 관리 어려움** : 서버 컴포넌트에서 데이터를 가져와 클라이언트 컴포넌트로 전달하는 것이 더 효율적입니다.
 
----
 
-## 나가며...
+## 마치며
 
-이러한 문제점들이 있지만, `next-theme`를 이용한 CSR 방식은 **간단하게 구현**할 수 있고, **사용자 경험**을 높일 수 있습니다.
+이러한 문제점들이 있지만, `next-theme`를 이용한 CSR 방식은 **간단하게 구현** 할 수 있고, **사용자 경험** 을 높일 수 있습니다.
 특히 `cookie`를 사용할 수 없는 `github.io`와 같은 경우에는 CSR 방식이 유용할 수 있습니다.
 
-그러나 저의 경우에, **첫 페이지 로드 속도와 SEO**에 더 중점을 두고 있기 때문에, **CSR 방식보다는 SSR 방식**을 사용하는 것이 더 적합하다고 생각했습니다.
-또한, `layout.tsx`가 `Client Component`로 변질되는 문제도 있기 때문에, **CSR 방식은 사용하지 않기로 결정**했습니다.
+그러나 저의 경우에, **첫 페이지 로드 속도와 SEO** 에 더 중점을 두고 있기 때문에, **CSR 방식보다는 SSR 방식** 을 사용하는 것이 더 적합하다고 생각했습니다.
+또한, `layout.tsx`가 `Client Component`로 변질되는 문제도 있기 때문에, **CSR 방식은 사용하지 않기로 결정** 했습니다.
 <br/>
 
-다음 글에서는 다른 프로젝트 예시를 보며 **SSR 방식으로 (간단하지는 않지만 사용자 경험을 높이도록) 구현**하는 방법을 알아보겠습니다.
+다음 글에서는 다른 프로젝트 예시를 보며 **SSR 방식으로 (간단하지는 않지만 사용자 경험을 높이도록) 구현** 하는 방법을 알아보겠습니다.

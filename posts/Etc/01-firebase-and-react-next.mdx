@@ -1,6 +1,6 @@
 ---
-title: firebase와 Next.js 연결하기 (React)
-desc: firebase의 firestore와 storage를 Next.js와 연결하는 방법
+title: firebase와 Next.js 연결하기
+desc: firebase(firestore)와 Next.js(React)를 연결하는 방법
 date: 2024-10-14
 thumbnail: /posts/Etc/01/thumbnail.png
 ---
@@ -25,7 +25,6 @@ Firebase와 Firestore를 사용하면 클라이언트와 서버 간 데이터를
 - [Firebase 공식 문서](https://firebase.google.com/docs)
 - [Firestore 공식 문서](https://firebase.google.com/docs/firestore)
 
----
 
 ## Firebase 프로젝트 생성
 
@@ -48,7 +47,6 @@ Firebase와 Firestore를 사용하면 클라이언트와 서버 간 데이터를
 
 이렇게 Firebase 프로젝트를 생성하고, 서비스 계정 키를 발급받았습니다. 서비스 계정 키의 Private key가 노출되지 않게 조심해야 합니다!
 
----
 
 ## Next.js 프로젝트 생성
 
@@ -118,7 +116,6 @@ NEXT_PUBLIC_FIREBASE_UNIVERSE_DOMAIN=
 *.env
 ```
 
----
 
 ## Firebase 연결하기
 
@@ -220,7 +217,6 @@ export default async function HomePage() {
 
 이렇게 하면 terms 컬렉션의 데이터를 가져와서 termsData에 저장하고, 화면에 출력할 수 있습니다.
 
----
 
 ## 결과화면
 

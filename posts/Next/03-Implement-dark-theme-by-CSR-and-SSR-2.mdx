@@ -1,5 +1,5 @@
 ---
-title: 우당탕탕 CSR과 SSR로 다크모드 구현하기(2)
+title: SSR로 다크모드 구현하기
 desc: 당신의 Next.js는 SSR이 맞을까?
 date: 2024-10-01
 thumbnail: /posts/Next/03/thumbnail2.gif
@@ -10,18 +10,17 @@ thumbnail: /posts/Next/03/thumbnail2.gif
 ## 복습
 
 - CSR과 SSR : [CSR과 SSR](https://www.hwonda.com/blog/Next/01-CSR-and-SSR)
-- 다크모드 구현하기(1) : [우당탕탕 ServerComponent로 다크모드 구현하기(1)](https://www.hwonda.com/blog/Next/02-Implement-dark-theme-by-CSR-and-SSR)
+- 다크모드 구현하기(1) : [CSR로 다크모드 구현하기](https://www.hwonda.com/blog/Next/02-Implement-dark-theme-by-CSR-and-SSR)
 
 ### 결론
 
-저는 프로젝트에선 **첫 페이지 로드 속도와 SEO**에 더 중점을 두고 있기 때문에, **CSR 방식보다는 SSR 방식**을 사용하는 것이 더 적합하다고 생각합니다.
-또한, **Client Component**가 컴포넌트 트리에서 상위레벨에 있어 Javascript 번들크기가 커지는 것을 방지하고, SSR의 효율성을 극대화 하기 위해 **CSR 방식은 사용하지 않기로 결정**했습니다.
+저는 프로젝트에선 **첫 페이지 로드 속도와 SEO** 에 더 중점을 두고 있기 때문에, **CSR 방식보다는 SSR 방식** 을 사용하는 것이 더 적합하다고 생각합니다.
+또한, **Client Component** 가 컴포넌트 트리에서 상위레벨에 있어 Javascript 번들크기가 커지는 것을 방지하고, SSR의 효율성을 극대화 하기 위해 **CSR 방식은 사용하지 않기로 결정** 했습니다.
 
 ### 결과물
 
 ![](/posts/Next/03/2.gif)
 
----
 
 ## 사전 참고사항(필수X)
 
@@ -43,7 +42,7 @@ npm install lucide-react --save-dev
 ### 3. .env 설정
 이번에는 `next-themes`를 사용하는 `ThemeProvider`가 없이, `layout`과 `ThemeSwitch` 컴포넌트에서 `cookies`를 사용하여 모드를 관리합니다.
 
-Server, Client component 모두 `cookies`를 사용할 수 있기 때문에, `cookies`를 사용하여 모드를 관리하면 **CSR과 SSR에서 모드를 유지**할 수 있습니다.
+Server, Client component 모두 `cookies`를 사용할 수 있기 때문에, `cookies`를 사용하여 모드를 관리하면 **CSR과 SSR에서 모드를 유지** 할 수 있습니다.
 
 루트 디렉토리에 `.env` 파일을 생성하고, `NEXT_PUBLIC_THEME_COOKIE_NAME`을 추가합니다.
 
@@ -51,7 +50,6 @@ Server, Client component 모두 `cookies`를 사용할 수 있기 때문에, `co
 NEXT_PUBLIC_THEME_COOKIE_NAME=project_name_theme
 ```
 
----
 
 ## SSR로 theme 구현하기
 
@@ -396,11 +394,9 @@ const config: Config = {
 };
 ```
 
----
 
 > 한편, 위 코드는 문제점을 해결한 코드입니다. 제가 경험한 문제는 다음과 같습니다.
 
----
 
 ## 문제점과 해결
 
@@ -464,9 +460,9 @@ const RootLayout = ({ children }: RootLayoutProps) => {
 ```
 이렇게 사용하니, 페이지 리로드 시 깜빡임이 발생했습니다. 
 
-`headers().get('OS-Theme')`는 **미들웨어에서 설정한 커스텀 헤더를 읽으려고 시도**합니다.
+`headers().get('OS-Theme')`는 **미들웨어에서 설정한 커스텀 헤더를 읽으려고 시도** 합니다.
 이 헤더가 일관되게 설정되지 않았거나, 클라이언트 사이드 네비게이션 시 업데이트되지 않을 수 있습니다.
-결과적으로, 페이지 리로드 시 서버와 클라이언트의 **상태가 불일치**할 수 있어 깜빡임이 발생했던 것입니다.
+결과적으로, 페이지 리로드 시 서버와 클라이언트의 **상태가 불일치** 할 수 있어 깜빡임이 발생했던 것입니다.
 
 그래서 미들웨어를 삭제하고, `layout.tsx`에서 쿠키를 가져오는 방식으로 변경했습니다.
 
@@ -490,8 +486,8 @@ const RootLayout = ({ children }: RootLayoutProps) => {
 
 ### 2. UI 문제
 
-1. **Monitor 아이콘을 사용하고 default**로 설정해서, 사용자 입장에서 해당 버튼이 **무엇을 의미하는지 인지하기 어려웠습니다.**
-2. **테마가 변경**될 때, 아이콘이 너무 **정적**으로 바뀌어서 부드러운 느낌을 주고 싶었습니다.
+1. **Monitor 아이콘을 사용하고 default** 로 설정해서, 사용자 입장에서 해당 버튼이 **무엇을 의미하는지 인지하기 어려웠습니다.**
+2. **테마가 변경** 될 때, 아이콘이 너무 **정적** 으로 바뀌어서 부드러운 느낌을 주고 싶었습니다.
 
 ```tsx {showLineNumbers} title="이전 ThemeSwitch.tsx"
 <DropdownTrigger>
