@@ -1,3 +1,5 @@
+import { Underline } from 'lucide-react';
+import { text } from 'stream/consumers';
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
@@ -14,14 +16,10 @@ const config: Config = {
       colors: {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
-        primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
-        },
-        secondary: {
-          DEFAULT: 'var(--secondary)',
-          foreground: 'var(--secondary-foreground)',
-        },
+        main: 'var(--text-color)',
+        sub: 'var(--text-secondary-color)',
+        impact: 'var(--impact-color)',
+        light: 'var(--border-color)',
       },
       fontFamily: {
         pretendard: [ 'var(--font-pretendard)', 'sans-serif' ],
@@ -29,21 +27,26 @@ const config: Config = {
       typography: {
         DEFAULT: {
           css: {
-            h2: {
-              color: 'var(--impact-color)',
-            },
             h3: {
-              marginTop: '2.5rem',
+              marginTop: '2rem',
+              marginBottom: '1rem',
+              fontSize: '1.1rem',
             },
             p: {
               marginTop: '0.5rem',
               marginBottom: '0.5rem',
+              color: 'var(--text-secondary-color)',
             },
             code: {
               counterReset: 'line',
             },
             img: {
               borderRadius: '0.5rem',
+              maxHeight: '600px',
+            },
+            '.prose :where(strong):not(:where([class~="not-prose"],[class~="not-prose"] *))': {
+              marginRight: '-0.2rem',
+              color: 'var(--text-color)',
             },
             'code::before': {
               content: 'none',
@@ -51,7 +54,20 @@ const config: Config = {
             'code::after': {
               content: 'none',
             },
-
+            '.prose :where(h2):not(:where([class~="not-prose"],[class~="not-prose"] *))':{
+              marginTop: '8rem',
+              marginBottom: '2rem',
+              color: 'var(--text-color)',
+              fontSize: '1.25rem',
+            },
+            '.prose :where(a):not(:where([class~="not-prose"],[class~="not-prose"] *))': {
+              textDecoration: 'none',
+              position: 'relative',
+              color: 'var(--impact-color)',
+            },
+            '.prose :where(a):not(:where([class~="not-prose"],[class~="not-prose"] *)):hover': {
+              borderBottom: '1px solid var(--impact-color)',
+            },
             '.prose code[data-line-numbers]': {
               counterReset: 'line',
             },

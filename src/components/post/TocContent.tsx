@@ -24,7 +24,7 @@ const TocContent = ({ toc }: Props) => {
   };
   
   return (
-    <div className='not-prose sticky top-20 left-3 w-[16rem]'>
+    <div className='not-prose sticky top-32 left-3 w-[16rem]'>
       <span className='font-bold text-sm'>목차</span>
       <ul className='mt-2'>
         {toc.map((item, i) => {
@@ -32,7 +32,7 @@ const TocContent = ({ toc }: Props) => {
           const isActiveContentHead = tocList.includes(item.link);
 
           const baseClasses = 'pl-2 py-1 transition-all duration-300';
-          const activeClasses = isActiveContentHead ? 'font-semibold text-orange-600 dark:text-orange-400 pl-1.5 dark:hover:text-orange-700' : '';
+          const activeClasses = isActiveContentHead ? 'font-semibold text-impact pl-1.5' : '';
           const indentClasses = isH3 ? 'pl-5 text-xs' : '';
 
           return (
@@ -42,8 +42,8 @@ const TocContent = ({ toc }: Props) => {
                   <div
                     className={`${baseClasses} ${
                       isActiveContentHead
-                        ? 'border-l border-orange-600 dark:border-orange-400 pl-1.5'
-                        : 'border-l border-gray-300 dark:border-gray-500'
+                        ? 'border-l border-impact pl-1.5'
+                        : 'border-l border-light'
                     }`}
                   ></div>
                   <span

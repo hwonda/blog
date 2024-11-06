@@ -3,8 +3,11 @@
 @tailwind utilities;
 
 body, * {
-  color: var(--foreground);
   font-family: 'Pretendard', sans-serif;
+}
+
+svg {
+  margin-bottom: 3px;
 }
 
 :root {
@@ -14,8 +17,8 @@ body, * {
   --border-color: #e2e8f0;
   --impact-color: #f97316;
 
-  --text-color: #333333;
-  --text-secondary-color: #666666;
+  --text-color: #222;
+  --text-secondary-color: #5E5E5E;
 }
 
 .dark {
@@ -32,41 +35,6 @@ body, * {
   --text-secondary-color: #B0B0B0;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-  .toc-position {
-    left: calc(50% + 400px);
-  }
-  @media screen and (min-width:1500px) {
-    .toc-position {
-      left: calc(50% + 500px);
-    }
-  }
-  .impact-color {
-    color: var(--impact-color);
-  }
-  .bg-impact-color {
-    background-color: var(--impact-color);
-  }
-  .border-impact-color {
-    border-color: var(--impact-color);
-  }
-}
-
-.border-main {
-  border-color: var(--border-color);
-}
-
-.text-main {
-  color: var(--text-color);
-}
-
-.text-sub {
+.not-prose > ul > li > * {
   color: var(--text-secondary-color);
-}
-
-.text-active {
-  color: var(--impact-color);
 }

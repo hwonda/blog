@@ -11,19 +11,19 @@ interface PostDetailProps {
 
 const PostDetail = async ({ post, toc }: PostDetailProps) => {
   return (
-      <div className='w-full max-w-[1200px] relative flex flex-col p-10'>
+      <div className='w-full max-w-[1200px] relative flex flex-col p-5 md:p-10'>
         <div className='w-full flex justify-center'>
           <PostHeader post={post} />
         </div>
         <div className='flex xl:justify-between justify-center gap-10 w-full max-w-[1200px]'>
           <article className='prose dark:prose-invert w-full max-w-[900px] mt-10'>
             <PostContent post={post} />
-            <Giscus />
           </article>
-          <div className='hidden xl:block mt-20'>
+          <div className='hidden xl:block mt-40'>
             <TocContent toc={toc} />
           </div>
         </div>
+        <Giscus />
       </div>
   );
 };

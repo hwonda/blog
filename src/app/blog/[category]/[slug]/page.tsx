@@ -2,8 +2,6 @@ import { getPostDetail, parsePostAbstract } from '@/utils/postUtils';
 import { getPostPaths } from '@/utils/fileUtils';
 import { parseToc } from '@/utils/postUtils';
 import PostDetailLayout from '@/layouts/PostDetailLayout';
-import PostContent from '@/components/post/PostContent';
-import TocContent from '@/components/post/TocContent';
 
 interface SlugProps {
   params: { category: string; slug: string };

@@ -31,13 +31,13 @@ export default function Footer() {
               <a href={link}>
                 <Image src={icon} alt={alt} width={32} height={32} />
               </a>
-              <p className='impact-color text-sm'>{alt}</p>
+              <p className='text-impact'>{alt}</p>
             </button>
           ))
         }
       </div>
       <div className='flex justify-center items-center h-20'>
-        <p className='text-sm text-gray-400 dark:text-gray-500'>
+        <p className='text-sub'>
           © 2024 Hwonda All rights reserved.
         </p>
       </div>
