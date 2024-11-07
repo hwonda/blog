@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSearch } from '@/contexts/SearchContext';
-import Image from 'next/image';
+import { Search } from 'lucide-react';
 
 interface SearchInputProps {
   mounted: boolean;
@@ -88,7 +88,7 @@ const SearchInput = ({ mounted, theme }: SearchInputProps) => {
         type='button'
         className={`bg-transparent rounded-md p-2 hover:bg-gray-200 dark:hover:bg-gray-500 mr-1
           ${isExpanded ? 'hidden sm:block' : 'block'}
-          transition-all duration-300`}
+          transition-all duration-500`}
         aria-label='Search'
         onClick={() => {
           setIsExpanded(!isExpanded);
@@ -98,11 +98,9 @@ const SearchInput = ({ mounted, theme }: SearchInputProps) => {
         }}
         disabled={isSearching}
       >
-        {mounted && theme === 'dark' ? (
-          <Image src='/images/dark_search.svg' alt='search_icon' width={20} height={20} />
-        ) : (
-          <Image src='/images/light_search.svg' alt='search_icon' width={20} height={20} />
-        )}
+        {mounted && 
+          <Search size={16} />
+        }
       </button>
       <input
         ref={inputRef}
@@ -110,7 +108,7 @@ const SearchInput = ({ mounted, theme }: SearchInputProps) => {
         value={searchQuery}
         onChange={handleInputChange}
         onKeyDown={handleKeyPress}
-        placeholder='Search...'
+        placeholder='검색어 입력'
         disabled={isSearching}
         className={`transition-all duration-300 bg-orange-50 dark:bg-gray-800 border border-impact-color rounded-sm h-8 ${
           isExpanded ? 'w-24 p-2 sm:w-36 md:w-48 lg:w-64' : 'w-0 p-0 border-0'

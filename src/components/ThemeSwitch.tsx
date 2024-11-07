@@ -1,5 +1,5 @@
 'use client';
-import Image from 'next/image';
+import { Sun, Moon } from 'lucide-react';
 
 interface ThemeSwitchProps {
   theme: string;
@@ -11,12 +11,12 @@ const ThemeSwitch = ({ theme, setTheme }: ThemeSwitchProps) => {
     <button
       aria-label='Toggle Dark Mode'
       type='button'
-      className='rounded-md p-2 hover:bg-gray-200 dark:hover:bg-gray-500 transition-all duration-1000'
+      className='rounded-md p-2 hover:bg-gray-200 dark:hover:bg-gray-500 transition-all duration-500'
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
     >
       {theme === 'dark'
-        ? <Image src="/images/dark_mode.svg" alt="dark" width={20} height={20} />
-        : <Image src="/images/light_mode.svg" alt="light" width={20} height={20} />
+        ? <Moon size={16} />
+        : <Sun size={16} />
       }
     </button>
   );

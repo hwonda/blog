@@ -2,8 +2,8 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { getCategoryDetailList } from '@/utils/categoryUtils';
 import { CategoryDetail } from '@/types';
+import { Menu } from 'lucide-react';
 
 interface DropdownMenuProps {
   categoryList: CategoryDetail[];
@@ -20,21 +20,18 @@ const Dropdown = ({
   toggleDropdown,
   isOpen,
 }: DropdownMenuProps) => {
-  // const categoryList = await getCategoryDetailList();
 
   return (
     <>
       <button
         type='button'
-        className='bg-transparent rounded-md p-2 hover:bg-gray-200 dark:hover:bg-gray-500'
+        className='bg-transparent rounded-md p-2 hover:bg-gray-200 dark:hover:bg-gray-500  transition-all duration-500'
         aria-label='Menu'
         onClick={toggleDropdown}
       >
-        {mounted && theme === 'dark' ? (
-          <Image src='/images/dark_menu.svg' alt='menu_icon' width={20} height={20} />
-        ) : (
-          <Image src='/images/light_menu.svg' alt='menu_icon' width={20} height={20} />
-        )}
+        {mounted && 
+          <Menu size={16} />
+        }
       </button>
       {isOpen && (
         <div className='absolute top-10 w-40 rounded-md shadow-lg bg-white'>
