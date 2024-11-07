@@ -2,17 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-body, * {
+* {
   font-family: 'Pretendard', sans-serif;
 }
 
-svg {
-  margin-bottom: 3px;
+body {
+  background-color: var(--background);
 }
 
 :root {
   --foreground: #000;
-  --background: #fff;
+  --background: #fefefe;
 
   --border-color: #e2e8f0;
   --impact-color: #f97316;

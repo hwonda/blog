@@ -1,5 +1,3 @@
-import { Underline } from 'lucide-react';
-import { text } from 'stream/consumers';
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
@@ -28,8 +26,8 @@ const config: Config = {
         DEFAULT: {
           css: {
             h3: {
-              marginTop: '2rem',
-              marginBottom: '1rem',
+              marginTop: '4rem',
+              marginBottom: '1.8rem',
               fontSize: '1.1rem',
             },
             p: {
@@ -55,8 +53,8 @@ const config: Config = {
               content: 'none',
             },
             '.prose :where(h2):not(:where([class~="not-prose"],[class~="not-prose"] *))':{
-              marginTop: '8rem',
-              marginBottom: '2rem',
+              marginTop: '9rem',
+              marginBottom: '3rem',
               color: 'var(--text-color)',
               fontSize: '1.25rem',
             },
@@ -67,6 +65,17 @@ const config: Config = {
             },
             '.prose :where(a):not(:where([class~="not-prose"],[class~="not-prose"] *)):hover': {
               borderBottom: '1px solid var(--impact-color)',
+            },
+            '.prose :where(pre code span):not(:where([class~="not-prose"],[class~="not-prose"] *))': {
+              fontFamily: 'monospace',
+            },
+            '.prose :where(blockquote):not(:where([class~="not-prose"],[class~="not-prose"] *))': {
+              border: 'none',
+              padding: '0.25rem 1rem',
+              fontStyle: 'normal',
+              backgroundColor: 'var(--border-color)',
+              borderRadius: '0.5rem',
+
             },
             '.prose code[data-line-numbers]': {
               counterReset: 'line',
@@ -81,39 +90,36 @@ const config: Config = {
               color: 'grey',
               fontSize: '0.75rem',
             },
-
             'code[data-line-numbers-max-digits="2"] > [data-line]::before': {
               width: '1rem',
             },
             'code[data-line-numbers-max-digits="3"] > [data-line]::before': {
               width: '2rem',
             },
+
             pre: {
+              fontFamily: 'ui-monospace',
               paddingRight: 0,
               paddingLeft: 0,
               color: 'var(--shiki-light)',
               backgroundColor: 'var(--shiki-light-bg)',
               border: '1px solid #e5e7eb', // tailwind gray-200
             },
-
             '.dark pre': {
               backgroundColor: 'var(--shiki-dark-bg)',
               color: 'var(--shiki-dark)',
               border: '1px solid #374151',
             },
-
             'pre > code > span': {
               paddingLeft: '1rem',
               paddingRight: '1rem',
             },
-
             'pre code span': {
               color: 'var(--shiki-light)',
             },
             '.dark pre code span': {
               color: 'var(--shiki-dark)',
             },
-
             '[data-highlighted-line]': {
               backgroundColor: 'rgba(249, 209, 130, 0.3)',
             },
@@ -130,7 +136,6 @@ const config: Config = {
               marginTop: 0,
               borderRadius: '0 0 0.5rem 0.5rem',
             },
-
             ':not(pre) > code': {
               fontWeight: 600,
               position: 'relative',
@@ -138,7 +143,7 @@ const config: Config = {
               margin: '0 2px',
               color: 'rgb(234, 88, 12)',
               backgroundColor: 'rgba(135,131,120,0.15)',
-              padding: '0.2em 0.5em',
+              padding: '0.2em 0.4em',
               overflowWrap: 'break-word',
               borderRadius: '4px',
             },
