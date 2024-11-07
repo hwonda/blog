@@ -19,7 +19,7 @@ const PostDetail = async ({ post, toc }: PostDetailProps) => {
           <article className='prose dark:prose-invert w-full max-w-[900px] mt-10'>
             <PostContent post={post} />
           </article>
-          <div className='hidden xl:block mt-40'>
+          <div className='hidden xl:block mt-48'>
             <TocContent toc={toc} />
           </div>
         </div>

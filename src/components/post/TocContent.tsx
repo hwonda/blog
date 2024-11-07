@@ -24,7 +24,7 @@ const TocContent = ({ toc }: Props) => {
   };
   
   return (
-    <div className='not-prose sticky top-32 left-3 w-[16rem]'>
+    <div className='not-prose sticky top-40 left-3 w-[16rem]'>
       <span className='font-bold text-sm'>목차</span>
       <ul className='mt-2'>
         {toc.map((item, i) => {
