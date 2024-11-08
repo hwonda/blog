@@ -29,6 +29,7 @@ const config: Config = {
               marginTop: '4rem',
               marginBottom: '1.8rem',
               fontSize: '1.1rem',
+              color: 'var(--text-color)',
             },
             p: {
               marginTop: '0.5rem',

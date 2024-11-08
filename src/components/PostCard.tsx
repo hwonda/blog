@@ -35,8 +35,8 @@ const PostCard = ({ post }: PostCardProps) => {
               </span>
             </div>
           </div>
-          <span className='font-bold text-lg p-1'>{post.title}</span>
-          <span className='text-sub font-semibold text-sm p-1'>
+          <span className='font-semibold p-1'>{post.title}</span>
+          <span className='text-sub text-sm p-1'>
             {post.desc}
           </span>
         </div>
