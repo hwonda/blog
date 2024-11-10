@@ -3,9 +3,9 @@ import fs from 'fs/promises';
 import matter from 'gray-matter';
 import dayjs from 'dayjs';
 import readingTime from 'reading-time';
+import path from 'path';
 import { getCategoryPublicName } from './categoryUtils';
 import {
-  POSTS_BASE_PATH,
   ABSOLUTE_POSTS_PATH,
   getPostPaths,
 } from './fileUtils';
@@ -30,15 +30,17 @@ export const parsePost = async (postPath: string): Promise<Post> => {
  * @returns 포스트 요약 정보 객체
  */
 export const parsePostAbstract = (postPath: string) => {
-  const relativeFilePath = postPath
-    .slice(postPath.indexOf(POSTS_BASE_PATH))
-    .replace(`${POSTS_BASE_PATH}/`, '')
-    .replace('.mdx', '');
+   const relativeFilePath = path
+   .relative(ABSOLUTE_POSTS_PATH, postPath)
+   .replace(/\\/g, '/') 
+   .replace('.mdx', '');
 
-  const [categoryPath, slug] = relativeFilePath.split('/');
-  const url = `/blog/${categoryPath}/${slug}`;
-  const categoryPublicName = getCategoryPublicName(categoryPath);
-  return { url, categoryPath, categoryPublicName, slug };
+    const [categoryPath, slug] = relativeFilePath.split('/');
+
+    const url = `/blog/${categoryPath}/${slug}`;
+    const categoryPublicName = getCategoryPublicName(categoryPath);
+
+    return { url, categoryPath, categoryPublicName, slug };
 };
 
 /**
