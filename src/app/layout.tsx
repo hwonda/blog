@@ -16,7 +16,10 @@ export default async function RootLayout({
 
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className={`flex flex-col items-center ${fontPretendard.variable}`}>
+      <head>
+        <meta name="google-site-verification" content="WHeQXAs9lHffv42lDKMLtDAotCpQlVpqe63FjZ27Wks" />
+      </head>
+      <body className={`flex flex-col items-center ${ fontPretendard.variable }`}>
         <ThemeProvider>
           <SearchProvider>
             <Header categoryList={categoryList || []} />
