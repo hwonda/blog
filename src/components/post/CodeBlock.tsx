@@ -20,16 +20,14 @@ function extractTextFromChildren(children: ReactNode): string {
   return '';
 }
 
-const CodeBlock = ({ children } : CodeBlockProps) => {
+const CodeBlock = ({ children }: CodeBlockProps) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
     const textToCopy = extractTextFromChildren(children);
-    if (navigator.clipboard) {
-      await navigator.clipboard.writeText(textToCopy.trim());
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1000);
-    }
+    await navigator.clipboard.writeText(textToCopy.trim());
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1000);
   };
 
   return (
@@ -40,7 +38,7 @@ const CodeBlock = ({ children } : CodeBlockProps) => {
       <button
         type='button'
         onClick={handleCopy}
-        className="absolute top-2 right-2 flex justify-center items-center w-auto h-7 rounded-md bg-amber-300 hover:bg-orange-500 text-white px-1 py-1 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        className="absolute top-2 right-2 flex justify-center items-center w-auto h-7 rounded-md bg-amber-300 hover:bg-orange-500 text-white p-1 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"
       >
         {copied ? 'Copied!' : <Image src="/images/copy.svg" alt="" width={20} height={20} />}
       </button>

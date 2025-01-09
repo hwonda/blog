@@ -1,4 +1,4 @@
-import pretendard from 'next/font/local'
+import pretendard from 'next/font/local';
 
 export const fontPretendard = pretendard({
   variable: '--font-pretendard',

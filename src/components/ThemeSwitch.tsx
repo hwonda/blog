@@ -3,7 +3,7 @@ import { Sun, Moon } from 'lucide-react';
 
 interface ThemeSwitchProps {
   theme: string;
-  setTheme: (theme: string) => void;
+  setTheme: (theme: string)=> void;
 }
 
 const ThemeSwitch = ({ theme, setTheme }: ThemeSwitchProps) => {

@@ -22,7 +22,7 @@ export default async function RootLayout({
       <body className={`flex flex-col items-center ${ fontPretendard.variable }`}>
         <ThemeProvider>
           <SearchProvider>
-            <Header categoryList={categoryList || []} />
+            <Header categoryList={categoryList} />
             {children}
             <Footer />
           </SearchProvider>

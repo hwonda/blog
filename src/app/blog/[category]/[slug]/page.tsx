@@ -20,7 +20,6 @@ export async function generateStaticParams() {
 const PostDetail = async ({ params }: SlugProps) => {
   const post = await getPostDetail(params.category, params.slug);
   const toc = parseToc(post.content);
-  console.log(toc);
 
   return (
     <PostDetailLayout post={post} toc={toc} />

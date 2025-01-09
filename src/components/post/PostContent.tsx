@@ -12,7 +12,7 @@ interface PostContentProps {
 const rehypeOptions = {
   theme: { dark: 'github-dark-dimmed', light: 'github-light' },
   showLineNumbers: true,
-}
+};
 
 const PostContent = ({ post }: PostContentProps) => {
   return (
@@ -22,7 +22,7 @@ const PostContent = ({ post }: PostContentProps) => {
       options={{
         mdxOptions: {
           remarkPlugins: [remarkGfm],
-          rehypePlugins: [[rehypePrettyCode, rehypeOptions],rehypeSlug,],
+          rehypePlugins: [[rehypePrettyCode, rehypeOptions],rehypeSlug],
         },
       }}
     />

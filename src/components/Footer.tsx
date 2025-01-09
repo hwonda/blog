@@ -16,7 +16,7 @@ const IconList = [
     alt: 'linkedin',
     link: 'https://www.linkedin.com/in/dahwon-ju-bb9892295/',
   },
-]
+];
 
 export default function Footer() {
   return (
@@ -38,7 +38,7 @@ export default function Footer() {
       </div>
       <div className='flex justify-center items-center h-20'>
         <p className='text-sub'>
-          © 2024 Hwonda All rights reserved.
+          {'© 2024 Hwonda All rights reserved.'}
         </p>
       </div>
     </footer>

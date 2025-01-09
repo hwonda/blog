@@ -18,7 +18,7 @@ export const getCategoryPublicName = (dirPath: string) =>
  * @returns 카테고리 목록
  */
 export const getCategoryList = () => {
-  const categoryPaths: string[] = sync(`${ABSOLUTE_POSTS_PATH}/*`);
+  const categoryPaths: string[] = sync(`${ ABSOLUTE_POSTS_PATH }/*`);
   return categoryPaths.map((path) => path.split('/').pop());
 };
 

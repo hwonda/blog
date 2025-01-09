@@ -8,7 +8,6 @@ interface PostCardProps {
 }
 
 const PostCard = ({ post }: PostCardProps) => {
-  if (!post) return <div>로딩중ㅎㅎ</div>;
   return (
     <Link href={post.url}>
       <li className='group shadow-md hover:shadow-xl border rounded-xl h-full transition dark:border-cyan-700 dark:hover:border-white flex sm:block'>
@@ -19,10 +18,10 @@ const PostCard = ({ post }: PostCardProps) => {
             fill
             sizes='(max-width: 1290px) 100vw, 700px'
             priority
-            className='rounded-md transform transition-transform duration-300 ease-in-out group-hover:opacity-80'
+            className='rounded-md transition-transform duration-300 ease-in-out group-hover:opacity-80'
           />
         </div>
-        <div className='flex flex-col px-2 pb-2 m-2 w-full sm:m-0 sm:w-[auto]'>
+        <div className='flex flex-col px-2 pb-2 m-2 w-full sm:m-0 sm:w-auto'>
           <div className='flex justify-between p-1 text-sm'>
             <span className='text-impact'>{post.categoryPublicName}</span>
             <div className='flex gap-1 items-center text-light text-xs'>

@@ -11,7 +11,7 @@ interface Props {
 const TocContent = ({ toc }: Props) => {
   const tocList = useExtractToc('h2, h3');
   // console.log('tocList', tocList);
-  
+
   const handleLinkClick = (e: React.MouseEvent, link: string) => {
     e.preventDefault();
     const targetId = link.substring(1);
@@ -22,10 +22,10 @@ const TocContent = ({ toc }: Props) => {
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
   };
-  
+
   return (
-    <div className='not-prose sticky top-40 left-3 w-[16rem]'>
-      <span className='font-bold text-sm'>목차</span>
+    <div className='not-prose sticky top-40 left-3 w-64'>
+      <span className='font-bold text-sm'>{'목차'}</span>
       <ul className='mt-2'>
         {toc.map((item, i) => {
           const isH3 = item.indent === 1;
@@ -40,14 +40,14 @@ const TocContent = ({ toc }: Props) => {
               <Link href={item.link} onClick={(e) => handleLinkClick(e, item.link)}>
                 <div className='flex'>
                   <div
-                    className={`${baseClasses} ${
+                    className={`${ baseClasses } ${
                       isActiveContentHead
                         ? 'border-l border-impact pl-1.5'
                         : 'border-l border-light'
                     }`}
-                  ></div>
+                  />
                   <span
-                    className={`${baseClasses} hover:text-orange-700 ${activeClasses} ${indentClasses}`}
+                    className={`${ baseClasses } hover:text-orange-700 ${ activeClasses } ${ indentClasses }`}
                   >
                     {item.text}
                   </span>

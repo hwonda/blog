@@ -9,6 +9,6 @@ export const blogMetadata = {
       email: 'hwondaa@gmail.com',
       github: 'hwonda',
       linkedin: 'hwonda',
-    }
-  }
+    },
+  },
 };

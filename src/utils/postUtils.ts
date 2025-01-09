@@ -30,17 +30,17 @@ export const parsePost = async (postPath: string): Promise<Post> => {
  * @returns 포스트 요약 정보 객체
  */
 export const parsePostAbstract = (postPath: string) => {
-   const relativeFilePath = path
-   .relative(ABSOLUTE_POSTS_PATH, postPath)
-   .replace(/\\/g, '/') 
-   .replace('.mdx', '');
+  const relativeFilePath = path
+    .relative(ABSOLUTE_POSTS_PATH, postPath)
+    .replace(/\\/g, '/')
+    .replace('.mdx', '');
 
-    const [categoryPath, slug] = relativeFilePath.split('/');
+  const [categoryPath, slug] = relativeFilePath.split('/');
 
-    const url = `/blog/${categoryPath}/${slug}`;
-    const categoryPublicName = getCategoryPublicName(categoryPath);
+  const url = `/blog/${ categoryPath }/${ slug }`;
+  const categoryPublicName = getCategoryPublicName(categoryPath);
 
-    return { url, categoryPath, categoryPublicName, slug };
+  return { url, categoryPath, categoryPublicName, slug };
 };
 
 /**
@@ -58,7 +58,7 @@ export const parsePostDetail = async (postPath: string) => {
 
     return { ...grayMatter, dateString, content, readingTimes };
   } catch (error) {
-    console.error(`Error reading file ${postPath}:`, error);
+    console.error(`Error reading file ${ postPath }:`, error);
     throw error;
   }
 };
@@ -109,7 +109,7 @@ export const getPostDetail = async (
   category: string,
   slug: string
 ): Promise<Post> => {
-  const filePath = `${ABSOLUTE_POSTS_PATH}/${category}/${slug}.mdx`;
+  const filePath = `${ ABSOLUTE_POSTS_PATH }/${ category }/${ slug }.mdx`;
   return await parsePost(filePath);
 };
 
@@ -125,8 +125,8 @@ export const parseToc = (content: string): TocItem[] => {
     headingList?.map((heading) => ({
       text: heading.replace(/^(##|###) /, ''),
       link:
-        '#' +
-        heading
+        '#'
+        + heading
           .replace(/^(##|###) /, '')
           .replace(/[\[\]:!@#$/%^&*()+=,.]/g, '')
           .replace(/ /g, '-')
@@ -144,10 +144,10 @@ export const parseToc = (content: string): TocItem[] => {
  */
 export async function searchPosts(searchTerm: string): Promise<Post[]> {
   const allPosts = await getSortedPostList();
-  
-  return allPosts.filter(post => 
-    post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    post.desc.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    post.categoryPublicName.toLowerCase().includes(searchTerm.toLowerCase())
+
+  return allPosts.filter((post) =>
+    post.title.toLowerCase().includes(searchTerm.toLowerCase())
+    || post.desc.toLowerCase().includes(searchTerm.toLowerCase())
+    || post.categoryPublicName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 }

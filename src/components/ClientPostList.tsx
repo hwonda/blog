@@ -10,14 +10,14 @@ const PostListHeader = ({ searchResults, pastSearchValue, category }: PostListHe
     if (pastSearchValue) {
       return searchResults.length > 0 ? (
         <span>
-          <span className="impact-color mr-1">{`'${pastSearchValue}'`}</span>
-          에 대한 검색결과
+          <span className="impact-color mr-1">{`'${ pastSearchValue }'`}</span>
+          {'에 대한 검색결과'}
         </span>
       ) : (
         <div>
-          <span className="impact-color mr-1">{`'${pastSearchValue}'`}</span>
-          에 대한 검색 결과가 없습니다.
-          <div className='mt-8 pt-2 border-t border-main'>모든 포스트</div>
+          <span className="impact-color mr-1">{`'${ pastSearchValue }'`}</span>
+          {'에 대한 검색 결과가 없습니다.'}
+          <div className='mt-8 pt-2 border-t border-main'>{'모든 포스트'}</div>
         </div>
       );
     }
@@ -26,12 +26,12 @@ const PostListHeader = ({ searchResults, pastSearchValue, category }: PostListHe
       return (
         <span>
           <span className="impact-color mr-1">{category}</span>
-          에 관한 글들
+          {'에 관한 글들'}
         </span>
       );
     }
     // 기본
-    return "모든 포스트";
+    return '모든 포스트';
   };
 
   return (
@@ -46,7 +46,7 @@ const PostListHeader = ({ searchResults, pastSearchValue, category }: PostListHe
 const PostGrid = ({ posts }: PostGridProps) => {
   // 포스트가 없을 때
   if (!posts.length) {
-    return <div>No posts found.</div>;
+    return <div>{'No posts found.'}</div>;
   }
 
   return (
@@ -64,7 +64,7 @@ const ClientPostList = ({ initialPosts, category }: ClientPostListProps) => {
 
   return (
     <>
-      <PostListHeader 
+      <PostListHeader
         searchResults={searchResults}
         pastSearchValue={pastSearchValue}
         category={category}

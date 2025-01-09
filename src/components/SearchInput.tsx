@@ -10,7 +10,7 @@ interface SearchInputProps {
   theme: string;
 }
 
-const SearchInput = ({ mounted, theme }: SearchInputProps) => {
+const SearchInput = ({ mounted }: SearchInputProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -26,16 +26,16 @@ const SearchInput = ({ mounted, theme }: SearchInputProps) => {
 
     setIsSearching(true);
     try {
-      const response = await fetch(`/api/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      const response = await fetch(`/api/search?q=${ encodeURIComponent(searchQuery.trim()) }`);
       if (!response.ok) {
-        throw new Error(`HTTP error. status: ${response.status}`);
+        throw new Error(`HTTP error. status: ${ response.status }`);
       }
       const results = await response.json();
-      
+
       // 상태 업데이트를 동시에 처리
       Promise.all([
         setPastSearchValue(searchQuery.trim()),
-        setSearchResults(results)
+        setSearchResults(results),
       ]);
     } catch (error) {
       console.error('Search error:', error);
@@ -62,8 +62,8 @@ const SearchInput = ({ mounted, theme }: SearchInputProps) => {
 
   const handleClickOutside = useCallback((event: MouseEvent) => {
     if (
-      !searchQuery &&
-      !(event.target as HTMLElement).closest('.search-container')
+      !searchQuery
+      && !(event.target as HTMLElement).closest('.search-container')
     ) {
       setIsExpanded(false);
     }
@@ -87,7 +87,7 @@ const SearchInput = ({ mounted, theme }: SearchInputProps) => {
       <button
         type='button'
         className={`bg-transparent rounded-md p-2 hover:bg-gray-200 dark:hover:bg-gray-500 mr-1
-          ${isExpanded ? 'hidden sm:block' : 'block'}
+          ${ isExpanded ? 'hidden sm:block' : 'block' }
           transition-all duration-500`}
         aria-label='Search'
         onClick={() => {
@@ -98,8 +98,8 @@ const SearchInput = ({ mounted, theme }: SearchInputProps) => {
         }}
         disabled={isSearching}
       >
-        {mounted && 
-          <Search size={16} />
+        {mounted
+          && <Search size={16} />
         }
       </button>
       <input

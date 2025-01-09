@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
 import { CategoryDetail } from '@/types';
 import { Menu } from 'lucide-react';
 
@@ -9,18 +8,16 @@ interface DropdownMenuProps {
   categoryList: CategoryDetail[];
   mounted: boolean;
   theme: string;
-  toggleDropdown: () => void;
+  toggleDropdown: ()=> void;
   isOpen: boolean;
 }
 
 const Dropdown = ({
   categoryList,
   mounted,
-  theme,
   toggleDropdown,
   isOpen,
 }: DropdownMenuProps) => {
-
   return (
     <>
       <button
@@ -29,8 +26,8 @@ const Dropdown = ({
         aria-label='Menu'
         onClick={toggleDropdown}
       >
-        {mounted && 
-          <Menu size={16} />
+        {mounted
+          && <Menu size={16} />
         }
       </button>
       {isOpen && (
@@ -44,11 +41,11 @@ const Dropdown = ({
             {categoryList.map((category, i) => (
               <a
                 key={i}
-                href={`/blog/${category.dirName}`}
+                href={`/blog/${ category.dirName }`}
                 className='flex items-center rounded-md px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 '
                 role='menuitem'
               >
-                {category.publicName} ({category.count})
+                {category.publicName}{' ('}{category.count}{')'}
               </a>
             ))}
           </div>

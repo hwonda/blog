@@ -25,7 +25,7 @@ export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     searchQuery,
     setSearchQuery,
     pastSearchValue,
-    setPastSearchValue
+    setPastSearchValue,
   };
 
   return (
