@@ -1,10 +1,11 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 * {
-  font-family: 'Pretendard', sans-serif;
-  word-break: keep-all;
+  @apply font-pretendard;
 }
 
 body {
@@ -18,22 +19,22 @@ body {
   --border-color: #e2e8f0;
   --impact-color: #f97316;
 
-  --text-color: #222;
-  --text-secondary-color: #5E5E5E;
+  --text-color: rgb(5, 5, 5);
+  --text-secondary-color: rgb(39, 39, 39);
 }
 
 .dark {
   --foreground: #fff;
-  --background: #222;
+  --background: #010409;
 
-  --secondary: hsl(217.2 32.6% 17.5%);
+  --secondary: hsl(217, 33%, 17%);
   --secondary-foreground: var(--white);
 
   --border-color: #2d3748;
   --impact-color: #fb923c;
 
-  --text-color: #E5E5E5;
-  --text-secondary-color: #B0B0B0;
+  --text-color: rgb(251, 251, 251);
+  --text-secondary-color: rgb(216, 216, 216);
 }
 
 .not-prose > ul > li > * {

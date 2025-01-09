@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss';
+import { fontFamily } from 'tailwindcss/defaultTheme';
 
 const config: Config = {
   darkMode: ['class'],
@@ -20,7 +21,7 @@ const config: Config = {
         light: 'var(--border-color)',
       },
       fontFamily: {
-        pretendard: [ 'var(--font-pretendard)', 'sans-serif' ],
+        pretendard: [ 'Pretendard Variable', ...fontFamily.sans ],
       },
       typography: {
         DEFAULT: {
@@ -44,7 +45,7 @@ const config: Config = {
               maxHeight: '600px',
             },
             '.prose :where(strong):not(:where([class~="not-prose"],[class~="not-prose"] *))': {
-              marginRight: '-0.2rem',
+              // marginRight: '-0.2rem',
               color: 'var(--text-color)',
             },
             'code::before': {
