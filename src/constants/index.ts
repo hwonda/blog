@@ -1,14 +1,14 @@
 export const blogMetadata = {
-  name: '훤다 블로그',
-  description: '드디어 블로그 개설?',
+  name: '훤다(Hwonda) 블로그',
+  description: '프론트엔드를 중심으로 백엔드, 모바일 앱 등 다양한 분야를 탐구하는 기술 블로그',
   url: 'https://hwonda.com',
   thumbnailURL: 'https://www.hwonda.com/images/thumbnail.png',
   author: {
     name: 'Hwonda',
     contacts: {
       email: 'hwondaa@gmail.com',
-      github: 'hwonda',
-      linkedin: 'hwonda',
+      github: 'https://github.com/hwonda',
+      linkedin: 'https://www.linkedin.com/in/dahwon-ju-bb9892295/',
     },
   },
 };
