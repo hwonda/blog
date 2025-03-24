@@ -12,26 +12,25 @@ export default function PostHeader({ post }: PostHeaderProps) {
     <>
       <ProgressBar />
       <div className='not-prose mt-20 w-full max-w-[1200px] flex flex-col items-center'>
-        <header className='w-full text-center mb-10'>
+        <header className='w-full mb-2.5'>
           <h1 className='text-3xl font-bold mb-2'>{post.title}</h1>
-          <span className='mt-2 text-sub'>
+          <span className='text-sub'>
             {post.desc}
           </span>
         </header>
-        <div className='w-full flex justify-between items-center pb-2 mb-5 border-b dark:border-gray-400'>
-          <span className='text-sub'>{post.categoryPublicName}</span>
-          <div className='flex gap-1 items-center'>
-            <Clock3 className="size-4 text-sub" />
-            <span className="text-sub">{post.readingTimes}{'분'}</span>
-            <span className='px-1 text-sub'>{'•'}</span>
-            <Calendar className="size-4 text-sub" />
-            <span className='text-sub'>
-              {post.dateString}
-            </span>
-          </div>
+        <div className='w-full flex justify-start gap-1 items-center'>
+          <span className='text-sm text-gray2'>{post.categoryPublicName}</span>
+          <span className='px-1 text-sm text-gray3'>{'•'}</span>
+          <Clock3 className="size-4 text-sm text-gray2" />
+          <span className="text-sm text-gray2">{post.readingTimes}{'분'}</span>
+          <span className='px-1 text-sm text-gray3'>{'•'}</span>
+          <Calendar className="size-4 text-sm text-gray2" />
+          <span className='text-sm text-gray2'>
+            {post.dateString}
+          </span>
         </div>
         {post.thumbnail && (
-          <div className='w-full max-w-[800px] mt-10'>
+          <div className='w-full max-w-[800px] my-10'>
             <div className='relative aspect-video'>
               <Image
                 src={post.thumbnail}

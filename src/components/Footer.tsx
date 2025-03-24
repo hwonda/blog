@@ -37,7 +37,7 @@ export default function Footer() {
         }
       </div>
       <div className='flex justify-center items-center h-20'>
-        <p className='text-sub'>
+        <p className='text-gray3'>
           {'© 2024 Hwonda All rights reserved.'}
         </p>
       </div>

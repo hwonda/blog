@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss';
 import { fontFamily } from 'tailwindcss/defaultTheme';
+import typography from '@tailwindcss/typography';
 
 const config: Config = {
   darkMode: ['class'],
@@ -14,27 +15,37 @@ const config: Config = {
       },
       colors: {
         background: 'var(--background)',
+        'background-opacity': 'var(--background-opacity)',
         foreground: 'var(--foreground)',
         main: 'var(--text-color)',
         sub: 'var(--text-secondary-color)',
         impact: 'var(--impact-color)',
         light: 'var(--border-color)',
+        'gray0': 'var(--gray0)',
+        'gray1': 'var(--gray1)',
+        'gray2': 'var(--gray2)',
+        'gray3': 'var(--gray3)',
+        'gray4': 'var(--gray4)',
+        'gray5': 'var(--gray5)',
       },
       fontFamily: {
-        pretendard: [ 'Pretendard Variable', ...fontFamily.sans ],
+        pretendard: ['Pretendard Variable', ...fontFamily.sans],
       },
       typography: {
         DEFAULT: {
           css: {
+            h2: {
+              borderLeft: '4px solid var(--impact-color)',
+              padding: '0.5rem 1rem',
+              backgroundColor: 'var(--gray5)',
+            },
             h3: {
-              marginTop: '4rem',
-              marginBottom: '1.8rem',
+              margin: '1rem 0',
               fontSize: '1.1rem',
               color: 'var(--text-color)',
             },
             p: {
-              marginTop: '0.5rem',
-              marginBottom: '0.5rem',
+              margin: '0.5rem 0',
               color: 'var(--text-secondary-color)',
             },
             code: {
@@ -55,8 +66,7 @@ const config: Config = {
               content: 'none',
             },
             '.prose :where(h2):not(:where([class~="not-prose"],[class~="not-prose"] *))':{
-              marginTop: '9rem',
-              marginBottom: '3rem',
+              marginTop: '1rem',
               color: 'var(--text-color)',
               fontSize: '1.25rem',
             },
@@ -103,6 +113,7 @@ const config: Config = {
               fontFamily: 'ui-monospace',
               paddingRight: 0,
               paddingLeft: 0,
+              margin: '0.5rem 2rem',
               color: 'var(--shiki-light)',
               backgroundColor: 'var(--shiki-light-bg)',
               border: '1px solid #e5e7eb', // tailwind gray-200
@@ -127,6 +138,7 @@ const config: Config = {
             },
             '.prose figcaption[data-rehype-pretty-code-title]': {
               padding: '0.5rem 1rem',
+              margin: '0 2rem',
               fontSize: '0.75rem',
               fontWeight: 600,
               backgroundColor: 'var(--background)',
@@ -145,9 +157,12 @@ const config: Config = {
               margin: '0 2px',
               color: 'rgb(234, 88, 12)',
               backgroundColor: 'rgba(135,131,120,0.15)',
-              padding: '0.2em 0.4em',
+              padding: '0.2rem 0.4rem',
               overflowWrap: 'break-word',
               borderRadius: '4px',
+            },
+            '.prose :where(figure):not(:where([class~="not-prose"],[class~="not-prose"] *))': {
+              margin: '0.5rem 0',
             },
 
             u: {
@@ -160,6 +175,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [require('@tailwindcss/typography')],
+  plugins: [typography],
 };
 export default config;

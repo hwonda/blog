@@ -49,7 +49,7 @@ export default function Giscus() {
 
   return (
     <div className='w-full mt-10 pt-10 border-t border-light flex justify-center'>
-      <div ref={refGiscus} className='w-full md:w-2/3' />
+      <div ref={refGiscus} className='w-full' />
     </div>
   );
 }
