@@ -13,7 +13,8 @@ export const dynamicParams = false;
 export async function generateMetadata({ params: { category, slug } }: SlugProps): Promise<Metadata> {
   const post = await getPostDetail(category, slug);
 
-  const title = `${ post.title } | hwonda`;
+  const title = `${ post.title } | 훤다 블로그`;
+  const thumbnailPath = `/posts/${ post.categoryPublicName }/${ post.slug }/thumbnail.png`;
 
   return {
     title,
@@ -21,13 +22,13 @@ export async function generateMetadata({ params: { category, slug } }: SlugProps
     openGraph: {
       title: title,
       description: post.desc,
-      url: `${ blogMetadata.url }/posts/${ post.url }`,
+      url: `${ blogMetadata.url }/${ post.categoryPublicName }/${ post.url }`,
       siteName: blogMetadata.name,
       locale: 'ko_KR',
       type: 'article',
       images: [
         {
-          url: blogMetadata.thumbnailURL,
+          url: thumbnailPath,
           width: 1200,
           height: 630,
           alt: title,
@@ -38,7 +39,7 @@ export async function generateMetadata({ params: { category, slug } }: SlugProps
       card: 'summary_large_image',
       title: title,
       description: post.desc,
-      images: [blogMetadata.thumbnailURL],
+      images: [thumbnailPath],
     },
   };
 }
