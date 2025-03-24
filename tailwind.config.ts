@@ -40,7 +40,8 @@ const config: Config = {
               backgroundColor: 'var(--gray5)',
             },
             h3: {
-              margin: '1rem 0',
+              marginTop: '1.5rem',
+              marginBottom: '0.75rem',
               fontSize: '1.1rem',
               color: 'var(--text-color)',
             },
@@ -66,7 +67,8 @@ const config: Config = {
               content: 'none',
             },
             '.prose :where(h2):not(:where([class~="not-prose"],[class~="not-prose"] *))':{
-              marginTop: '1rem',
+              marginTop: '5rem',
+              marginBottom: '1.5rem',
               color: 'var(--text-color)',
               fontSize: '1.25rem',
             },
@@ -113,7 +115,7 @@ const config: Config = {
               fontFamily: 'ui-monospace',
               paddingRight: 0,
               paddingLeft: 0,
-              margin: '0.5rem 2rem',
+              margin: '0.5rem 2rem 1rem 1rem',
               color: 'var(--shiki-light)',
               backgroundColor: 'var(--shiki-light-bg)',
               border: '1px solid #e5e7eb', // tailwind gray-200
@@ -138,7 +140,7 @@ const config: Config = {
             },
             '.prose figcaption[data-rehype-pretty-code-title]': {
               padding: '0.5rem 1rem',
-              margin: '0 2rem',
+              margin: '0 2rem 0 1rem',
               fontSize: '0.75rem',
               fontWeight: 600,
               backgroundColor: 'var(--background)',

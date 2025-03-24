@@ -18,7 +18,7 @@ const PostDetail = async ({ post, toc }: PostDetailProps) => {
       <article className='prose dark:prose-invert w-full max-w-[800px]'>
         <PostContent post={post} />
       </article>
-      <div className='hidden 2xl:block absolute h-[calc(100%-720px)] right-[-260px] top-[255px]'>
+      <div className='hidden xl:block absolute h-[calc(100%-720px)] right-[-220px] 2xl:right-[-260px] top-[255px]'>
         <TocContent toc={toc} />
       </div>
       <Giscus />
