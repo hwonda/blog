@@ -15,7 +15,7 @@ const PostDetail = async ({ post, toc }: PostDetailProps) => {
       <div className='w-full flex justify-center'>
         <PostHeader post={post} />
       </div>
-      <article className='prose dark:prose-invert w-full max-w-[800px]'>
+      <article className='prose dark:prose-invert w-full max-w-[800px] break-all'>
         <PostContent post={post} />
       </article>
       <div className='hidden xl:block absolute h-[calc(100%-720px)] right-[-220px] 2xl:right-[-260px] top-[255px]'>
