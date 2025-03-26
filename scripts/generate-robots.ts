@@ -7,8 +7,7 @@ import { blogMetadata } from '../src/constants';
 
     const text = 'User-agent: *\n'
                  + 'Allow: /\n'
-                 + `Sitemap: ${ siteUrl }/sitemap.xml\n`
-                 + `Host: ${ siteUrl }`;
+                 + `Sitemap: ${ siteUrl }/sitemap.xml\n`;
 
     return text;
   };
