@@ -62,5 +62,5 @@ export const getSitemapURLs = async (): Promise<SitemapURL[]> => {
 
   // 사이트맵 파일 생성
   await fs.writeFile('public/sitemap.xml', sitemap);
-  console.log('sitemap.xml generated', sitemap);
+  console.log('sitemap.xml generated');
 })();

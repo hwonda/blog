@@ -38,3 +38,4 @@ next-env.d.ts
 # sitemap, robots
 /public/sitemap.xml
 /public/robots.txt
+/public/rss/*
