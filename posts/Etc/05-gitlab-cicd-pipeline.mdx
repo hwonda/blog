@@ -1,0 +1,305 @@
+---
+title: 회사 서버에 npm registry 만들기(2)
+desc: 서버에 Gitlab 만들기
+date: 2025-03-02
+thumbnail: /posts/Etc/05/thumbnail.png
+---
+
+[회사 서버에 npm registry를 만들어](http://hwonda.com/blog/Etc/04-npm-registry-with-verdaccio) 버렸으니, `CI/CD`도 하고 싶어졌습니다.
+
+그런데 `github`의 `Actions`를 쓰려니, 회사 내부망이라 외부에서 접속이 안 되더라구요.
+
+그래서 `gitlab`을 사용해 `Pipelines`를 만들어 보겠습니다. `github`의 `Actions`라고 생각하면 될 것 같습니다.
+
+> 이번 포스트에서는 `gitlab`을 설치하고, 다음 포스트에서 `Pipelines`를 만들어 보겠습니다.
+
+ 
+## 실패담 - 다른 서버에서 CI/CD 구축
+
+
+![gitlab-ci-cd](/posts/Etc/05/1.png)
+다른 동료가 60번 서버에 이미 gitlab을 구축해놔서
+
+> 내 npm registry는 79번 서버지만, 60번 서버에 레포를 만들어서 연결하면 되지 않을까? 어차피 내부망인데…
+
+라는 생각을 했습니다. 
+
+결과는 대 실패. 아무리 권한설정이나 방화벽을 건드려봐도 쉽지 않더라구요...
+
+결론은 `Verdaccio`를 설치한 `79번 서버`에 `gitlab`을 만들어야겠다.
+
+## Gitlab 설치 전 확인사항
+
+반나절을 날리고, `79번 서버`에 gitlab을 설치했습니다. `docker`를 이용하였고, **서버에 10GB의 여유 용량**이 있는지 먼저 확인해야 합니다. 추가적으로 **RAM이 4GB 이상**이어야 한다고 합니다.
+
+### 운영체제 확인법
+
+```bash
+cat /etc/os-release
+```
+```bash title="cat /etc/os-release 결과"
+PRETTY_NAME="Ubuntu 22.04.5 LTS"
+```
+79번 서버는 `Ubuntu 22버전`이군요.
+
+### 여유 용량 확인법
+
+```bash
+df -h
+```
+```bash title="df -h 결과"
+Filesystem                         Size  Used Avail Use% Mounted on
+tmpfs                              794M   20M  775M   3% /run
+/dev/mapper/ubuntu--vg-ubuntu--lv  501G  237G  239G  50% /
+tmpfs                              3.9G   84K  3.9G   1% /dev/shm
+tmpfs                              5.0M     0  5.0M   0% /run/lock
+/dev/sda2                          2.0G  359M  1.5G  20% /boot
+tmpfs                              794M  4.0K  794M   1% /run/user/1000
+```
+root의 여유공간이 239G이니 차고 넘치네요. (루트에 깝시다.)
+
+### 서버 업데이트
+
+시스템 패키지를 최신 상태로 업데이트 해줍니다.
+
+```bash
+sudo apt update && sudo apt upgrade -y
+```
+(업데이트 잘 안 했다면 꽤 걸립니다.)
+
+### Docker 설치
+
+```bash
+sudo apt install docker.io -y
+```
+(docker가 없다면 위 명령어로 설치해주세요.)
+
+## Gitlab 설치
+
+### 1. Gitlab 패키지 리포지토리를 추가 (GitLab 공식 리포지트리)
+
+```bash
+sudo apt install -y curl
+```
+
+```bash
+curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash
+```
+
+```bash title="결과화면"
+Selecting previously unselected package gitlab-ce.
+(Reading database ... 92556 files and directories currently installed.)
+Preparing to unpack .../gitlab-ce_14.10.0-ce.0_amd64.deb ...
+Unpacking gitlab-ce (14.10.0-ce.0) ...
+Setting up gitlab-ce (14.10.0-ce.0) ...
+It looks like GitLab has not been configured yet; skipping the upgrade script.
+
+       *.                  *.
+      ***                 ***
+     *****               *****
+    .******             *******
+    ********            ********
+   ,,,,,,,,,***********,,,,,,,,,
+  ,,,,,,,,,,,*********,,,,,,,,,,,
+  .,,,,,,,,,,,*******,,,,,,,,,,,,
+      ,,,,,,,,,*****,,,,,,,,,.
+         ,,,,,,,****,,,,,,
+            .,,,***,,,,
+                ,*,.
+
+
+
+     _______ __  __          __
+    / ____(_) /_/ /   ____ _/ /_
+   / / __/ / __/ /   / __ `/ __ \
+  / /_/ / / /_/ /___/ /_/ / /_/ /
+  \____/_/\__/_____/\__,_/_.___/
+
+
+Thank you for installing GitLab!
+GitLab was unable to detect a valid hostname for your instance.
+Please configure a URL for your GitLab instance by setting `external_url`
+```
+### 2. Gitlab 외부 URL 설정
+
+: GitLab 설정파일(/etc/gitlab/gitlab.rb)에서 외부 URL을 설정합니다.
+
+```bash
+sudo nano /etc/gitlab/gitlab.rb
+```
+여기서 `external_url 'http://<서버_IP>'` 로 수정합니다.
+
+```bash title="gitlab.rb 수정"
+external_url 'http://10.2.10.79'
+```
+
+### 3. Gitlab 설정 적용
+: 설정을 저장하고, GitLab 구성 파일을 적용합니다.
+
+```bash
+sudo gitlab-ctl reconfigure
+```
+
+### 4. GitLab 서비스 시작 및 상태 확인
+: GitLab 서비스를 시작하고, 상태를 확인합니다.
+
+```bash
+sudo gitlab-ctl start
+```
+
+```bash
+sudo gitlab-ctl status
+```
+
+```bash title="gitlab-ctl status 결과"
+run: alertmanager: (pid 376898) 16188s; run: log: (pid 358882) 17996s
+run: gitaly: (pid 376918) 16187s; run: log: (pid 356750) 18223s
+run: gitlab-exporter: (pid 376936) 16186s; run: log: (pid 358654) 18014s
+run: gitlab-kas: (pid 377039) 16175s; run: log: (pid 357124) 18203s
+run: gitlab-workhorse: (pid 377050) 16175s; run: log: (pid 358408) 18034s
+run: logrotate: (pid 513887) 1774s; run: log: (pid 356603) 18235s
+run: nginx: (pid 377069) 16174s; run: log: (pid 358501) 18028s
+run: node-exporter: (pid 377077) 16174s; run: log: (pid 358600) 18020s
+run: postgres-exporter: (pid 377104) 16173s; run: log: (pid 358908) 17992s
+run: postgresql: (pid 377136) 16174s; run: log: (pid 356882) 18215s
+run: prometheus: (pid 377145) 16173s; run: log: (pid 358811) 18003s
+run: puma: (pid 377158) 16173s; run: log: (pid 358285) 18047s
+run: redis: (pid 377163) 16173s; run: log: (pid 356640) 18232s
+run: redis-exporter: (pid 377171) 16172s; run: log: (pid 358708) 18011s
+run: sidekiq: (pid 377219) 16167s; run: log: (pid 358382) 18039s
+```
+
+### 5. GitLab 웹 인터페이스 접속
+: GitLab 웹 인터페이스에 접속합니다.
+
+```bash
+http://10.2.10.79
+```
+![gitlab-login](/posts/Etc/05/2.png)
+짜잔!
+
+
+## 트러블 슈팅
+
+### 1. 502 error
+
+만약 무한 502 error 등 잘 되지 않는다면, 무언가 문제가 있는 겁니다.
+
+```bash
+sudo gitlab-ctl tail
+```
+모든 Gitlab 구성 요소의 로그가 출력됩니다. 나온 로그를 복붙해서 GPT한테 물어봅시다.
+
+저의 경우, **`PUMA`의 포트 중복 문제**가 있었습니다.
+
+`nginx`가 `80`포트를 이용하고, `puma`도 `80`포트를 이용하니 중복되는 것이죠.
+
+[PUMA](https://puma.io/)는 Ruby 기반 애플리케이션을 위한 고성능 웹 서버로, GitLab의 Rails 애플리케이션이 클라이언트 요청을 처리하는 데 사용됩니다. 
+Puma는 **GitLab의 웹 요청(예: 브라우저에서의 GitLab 페이지 요청, API 호출 등)을 효율적으로 처리**하는 중요한 구성 요소입니다.
+
+- 확인 및 해결
+
+```bash
+sudo lsof -i :80
+```
+
+```bash title="lsof -i :80 결과"
+COMMAND      PID          USER   FD   TYPE    DEVICE SIZE/OFF NODE NAME
+nginx     377069          root    7u  IPv4 189480515      0t0  TCP *:http (LISTEN)
+nginx     377070    gitlab-www    7u  IPv4 189480515      0t0  TCP *:http (LISTEN)
+nginx     377070    gitlab-www   15u  IPv4 190331035      0t0  TCP eomserver:http->eomserver:33950 (ESTABLISHED)
+nginx     377071    gitlab-www    7u  IPv4 189480515      0t0  TCP *:http (LISTEN)
+nginx     377072    gitlab-www    7u  IPv4 189480515      0t0  TCP *:http (LISTEN)
+nginx     377073    gitlab-www    7u  IPv4 189480515      0t0  TCP *:http (LISTEN)
+gitlab-ru 462921 gitlab-runner    3u  IPv4 190328548      0t0  TCP eomserver:33950->eomserver:http (ESTABLISHED)
+```
+역시 중복됐네요. GitLab 설정파일을 수정하도록 합시다.
+```bash
+sudo nano /etc/gitlab/gitlab.rb
+```
+```bash title="gitlab.rb 수정"
+puma['listen'] = '127.0.0.1'
+puma['port'] = 81  # Puma가 사용하는 포트를 수정
+```
+위처럼 puma 포트 번호를 81로 바꿔주면 8081포트를 이용하게 됩니다. (gitlab.rb 파일 해당 라인이 주석처리되지 않았는 지 확인합시다. #이 있다면 삭제 해주세요.)
+
+설정을 다시 적용합니다.
+
+```bash
+sudo gitlab-ctl reconfigure
+```
+
+이제 접속해보면 정상적으로 접속됩니다.
+
+그대로 재시작도 합시다.
+
+```bash
+sudo gitlab-ctl restart
+```
+
+이제 8081 포트를 확인하면 ruby(puma)로 되어있는 것을 확인할 수 있습니다.
+
+```bash
+sudo netstat -tuln | grep :8081
+```
+
+### 2. Socket 권한 문제
+
+```bash
+error="dial unix /var/opt/gitlab/gitlab-workhorse/sockets/socket: connect: permission denied"
+```
+이런 종류의 에러도 떠버렸습니다.
+
+socket 권한 문제인데, 역시 GitLab 설정파일을 수정하도록 합시다.
+
+```bash
+sudo nano /etc/gitlab/gitlab.rb
+```
+```bash title="gitlab.rb 수정"
+gitlab_workhorse['listen_umask'] = 000  # 007 -> 000 수정
+```
+특정 환경에서 `Workhorse`가 생성한 소켓 파일의 권한이 제한돼 `Puma`나 `Nginx`가 접근하지 못하는 경우를 방지합니다. 
+다만, 회사 내부 서버이기 때문에 open한 거지, 프로덕션 환경에서는 권장되지 않습니다.
+
+그리고 조금 기다리면 Gitlab이 뜹니다!
+
+## Gitlab 초기값 확인/설정
+
+내친김에 마지막으로 Gitlab 계정을 확인/설정 해보겠습니다.
+
+### root 계정 password 확인
+
+```bash
+sudo su
+```
+```bash
+cat /etc/gitlab/initial_root_password
+```
+
+```bash title="initial_root_password 결과"
+  Password: ~
+```
+위와 같은 형식으로 나옵니다. 그럼 gitlab에서 
+
+`id: root`, `pw: ~`
+
+입력하면 로그인 가능~
+
+### 비밀번호 변경
+
+비밀번호가 너무 어려워 슬프다면, 바꿔봅시다.
+
+```bash
+sudo gitlab-rails console -e production
+```
+```bash
+user = User.where(id:1).first
+user.password='변경할 비밀번호'
+user.password_confirmation='변경할 비밀번호 재확인'
+user.save
+exit
+```
+이렇게 비밀번호 변경해도 됩니다.
+
+
+
