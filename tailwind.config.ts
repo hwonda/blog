@@ -46,12 +46,13 @@ const config: Config = {
             h2: {
               borderLeft: '4px solid var(--impact-color)',
               padding: '0.5rem 1rem',
+              borderRadius: '0.25rem 0 0 0.25rem',
               backgroundColor: 'var(--gray5)',
             },
             h3: {
               marginTop: '1.5rem',
               marginBottom: '0.75rem',
-              fontSize: '1.1rem',
+              fontSize: '1.25rem',
               color: 'var(--text-color)',
             },
             p: {
