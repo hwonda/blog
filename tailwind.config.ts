@@ -65,6 +65,7 @@ const config: Config = {
             img: {
               borderRadius: '0.5rem',
               maxHeight: '600px',
+              margin: '0 auto',
             },
             '.prose :where(strong):not(:where([class~="not-prose"],[class~="not-prose"] *))': {
               // marginRight: '-0.2rem',
