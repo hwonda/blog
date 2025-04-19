@@ -32,7 +32,7 @@ const CodeBlock = ({ children }: CodeBlockProps) => {
 
   return (
     <div className='relative group'>
-      <pre className='group-hover:bg-gray5'>
+      <pre className='group-hover:bg-gray5 lg:mt-2 lg:mr-8 lg:mb-4 lg:ml-4'>
         {children}
       </pre>
       <button
