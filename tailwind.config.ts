@@ -126,7 +126,6 @@ const config: Config = {
               fontFamily: 'ui-monospace',
               paddingRight: 0,
               paddingLeft: 0,
-              margin: '0.5rem 2rem 1rem 1rem',
               color: 'var(--shiki-light)',
               backgroundColor: 'var(--shiki-light-bg)',
               border: '1px solid #e5e7eb', // tailwind gray-200
