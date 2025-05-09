@@ -151,6 +151,9 @@ const config: Config = {
             '.prose figcaption[data-rehype-pretty-code-title]': {
               padding: '0.5rem 1rem',
               margin: '0 2rem 0 1rem',
+              '@media (max-width: 1024px)': {
+                margin: '0',
+              },
               fontSize: '0.75rem',
               fontWeight: 600,
               backgroundColor: 'var(--background)',
