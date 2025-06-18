@@ -338,7 +338,7 @@ WantedBy=multi-user.target
 
 3. 퍼미션 점검
 ```bash
-chmod +x /opt/mr-reviewer/mr_reviewer.py
+sudo chmod +x /opt/mr-reviewer/mr_reviewer.py
 ```
 
 ```bash
@@ -353,9 +353,8 @@ ls -l /opt/mr-reviewer/mr_reviewer.py
 
 - 권한부여
 ```bash
-ls -l /opt/mr-reviewer/mr_reviewer.py
+sudo chmod +x /opt/mr-reviewer/mr_reviewer.py
 ```
-> -rwxr-xr-x 1 root root 3085 Apr 30 07:00 /opt/mr-reviewer/mr_reviewer.py
 
 4. systemd 등록 및 실행 (순서대로 실행)
 ```bash
