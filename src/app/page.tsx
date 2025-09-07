@@ -1,5 +1,7 @@
-import { redirect } from 'next/navigation';
+import PostListLayout from '@/layouts/PostListLayout';
 
-export default function Home() {
-  return redirect('/blog');
-}
+const Blog = () => {
+  return <PostListLayout />;
+};
+
+export default Blog;
