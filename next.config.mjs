@@ -1,4 +1,8 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {};
+import { withMicrofrontends } from '@vercel/microfrontends/next/config';
 
-export default nextConfig;
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  // ...당신의 설정
+};
+
+export default withMicrofrontends(nextConfig);

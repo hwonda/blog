@@ -18,6 +18,11 @@
     "tailwindcss",
     "@stylistic"
   ],
+  "overrides": [
+    {
+      "files": ["next.config.mjs"],
+    }
+  ],
   "rules": {
     "semi": ["warn", "always"],
     "quotes": ["warn", "single"],
