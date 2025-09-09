@@ -2,7 +2,11 @@ import { withMicrofrontends } from '@vercel/microfrontends/next/config';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // ...당신의 설정
+  async rewrites() {
+    return [
+      { source: '/blog/:path*', destination: '/:path*' },
+    ]
+  },
 };
 
 export default withMicrofrontends(nextConfig);
