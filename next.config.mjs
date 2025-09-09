@@ -16,6 +16,9 @@ const nextConfig = {
       ],
     }
   },
+  images: {
+    path: '/blog/_next/image'
+  },
 };
 
 export default withMicrofrontends(nextConfig);
