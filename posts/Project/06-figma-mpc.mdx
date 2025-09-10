@@ -2,7 +2,7 @@
 title: Cursor에게 MCP 쥐어주기
 desc: Cursor에 Figma-Context-MCP 쥐어주기
 date: 2025-07-27
-thumbnail: /posts/Project/06/thumbnail.png
+thumbnail: /blog/posts/Project/06/thumbnail.png
 ---
 
 ## 요즘 HOT한 MCP
@@ -63,19 +63,19 @@ MCP는 이러한 문제를 해결하기 위해 만들어졌습니다.
 
 	1. Figma에서 로그인 후 Settings 탭으로 이동합니다.
   - [Figma] - [프로필] - [Settings]
-  ![MCP](/posts/Project/06/1.png)
+  ![MCP](/blog/posts/Project/06/1.png)
 	2. Security 탭에서 새 토큰을 발행합니다.
   - [Security] - [Generate new token] 클릭
-  ![MCP](/posts/Project/06/2.png)
+  ![MCP](/blog/posts/Project/06/2.png)
   - 임의의 이름과 만료기간(최대 90일), write 권한들 부여한 뒤 Generate token 클릭합니다.
-  ![MCP](/posts/Project/06/3.png)
+  ![MCP](/blog/posts/Project/06/3.png)
 	3. 값은 잘 저장해두세요.
 
 ### 2. Figma-Context-MCP SSE 스트림 연결하기
 	1. [Figma-Context-MCP 오픈소스 저장소](https://github.com/GLips/Figma-Context-MCP)로 이동합니다.
-  ![MCP](/posts/Project/06/4.png)
+  ![MCP](/blog/posts/Project/06/4.png)
 	2. Fork한 뒤 npm i, npm run dev 명령어를 실행합니다.
-  ![MCP](/posts/Project/06/7.png)
+  ![MCP](/blog/posts/Project/06/7.png)
 
 ### 참고하기
 
@@ -87,7 +87,7 @@ MCP는 이러한 문제를 해결하기 위해 만들어졌습니다.
 ### 3. Cursor에 MCP 서버 연결하기
 3. Cursor에 MCP 서버 연결
 	1. Ctrl + Shift + J 클릭해서 Setting 에서 MCP 탭에 들어간 뒤 [Add new global MCP server] 추가
-  ![MCP](/posts/Project/06/5.png)
+  ![MCP](/blog/posts/Project/06/5.png)
   - 아래와 같이 sse 스트림 주소와 환경변수(Figma API Key)를 입력합니다.
 ```
 {
@@ -101,22 +101,22 @@ MCP는 이러한 문제를 해결하기 위해 만들어졌습니다.
   }
 }
 ```
-  ![MCP](/posts/Project/06/6.png)
+  ![MCP](/blog/posts/Project/06/6.png)
   - 이렇게 빨간 불이 들어왔다가 
-  ![MCP](/posts/Project/06/67.png)
+  ![MCP](/blog/posts/Project/06/67.png)
   - 초록 불이 들어오면 성공입니다. (안 되면 Cursor 껐다 켜기)
-  ![MCP](/posts/Project/06/9.png)
+  ![MCP](/blog/posts/Project/06/9.png)
 
 ### 4. 즐기기
 
 이제 Figma에서 작업한 내용을 코드로 변환해보겠습니다.
 
 - Figma 프레임 선택 후 우클릭 - [Copy link to selection]
-![MCP](/posts/Project/06/10.png)
+![MCP](/blog/posts/Project/06/10.png)
 - 이 주소를 복사해서 Cursor 프롬프트에 붙여넣기(저는 프롬프트 창에서 html 코드로 변경해달라고 요청했습니다.)
-![MCP](/posts/Project/06/11.png)
+![MCP](/blog/posts/Project/06/11.png)
 - 이렇게 코드로 변환된 것을 확인할 수 있습니다.
-![MCP](/posts/Project/06/12.png)
+![MCP](/blog/posts/Project/06/12.png)
 
 ## 참고 링크
   - [Cursor와 Figma로 경험하는 Model Context Protocol(MCP)](https://www.reese-log.com/cursor-figma-model-context-protocol)

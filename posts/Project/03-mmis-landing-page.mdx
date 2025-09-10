@@ -2,12 +2,12 @@
 title: 2년차 개발자의 모바일 랜딩페이지 제작기(3)
 desc: GaugeChart를 직접 만들었다
 date: 2024-11-11
-thumbnail: /posts/Project/01/thumbnail.png
+thumbnail: /blog/posts/Project/01/thumbnail.png
 ---
 
 ## 복습
-- [2년차 개발자의 모바일 랜딩페이지 제작기(1) - 개요](/posts/Project/01-mmis-landing-page)
-- [2년차 개발자의 모바일 랜딩페이지 제작기(2) - 컴포넌트 구조화](/posts/Project/02-mmis-landing-page)
+- [2년차 개발자의 모바일 랜딩페이지 제작기(1) - 개요](/blog/posts/Project/01-mmis-landing-page)
+- [2년차 개발자의 모바일 랜딩페이지 제작기(2) - 컴포넌트 구조화](/blog/posts/Project/02-mmis-landing-page)
 
 ## GaugeChart 구현
 
@@ -18,9 +18,9 @@ thumbnail: /posts/Project/01/thumbnail.png
 저는 기능을 개발할 때, **가장 어려운 부분을 먼저 개발** 하는 편입니다. 그래야 제가 책정한 **시간을 넘어서는 부분** 이 있는지 빨리 파악할 수 있거든요.
 (종종 넘기기도 하기 때문에 그런 경우는 빠르게 피드백을 받으려고 합니다.)
 
-![gaugeChart](/posts/Project/03/01.png)
+![gaugeChart](/blog/posts/Project/03/01.png)
 
-[이전 글(개요)](/posts/Project/01-mmis-landing-page)에서 얘기한 것처럼, **게이지 차트** 가 랜딩페이지 개발에서 가장 어려운 기능이라 생각하고 2일을 투자하기로 계획했습니다.
+[이전 글(개요)](/blog/posts/Project/01-mmis-landing-page)에서 얘기한 것처럼, **게이지 차트** 가 랜딩페이지 개발에서 가장 어려운 기능이라 생각하고 2일을 투자하기로 계획했습니다.
 
 가장 어려울 거라 예상한 이유는 다음과 같았습니다.
 
@@ -29,7 +29,7 @@ thumbnail: /posts/Project/01/thumbnail.png
 - 기존의 30가지 색상으로 구분되는 범례를 **그라데이션** 으로 표현해야 하기 때문에 **색상 처리가 복잡** 할 것이다.
 - 범례의 범위가 일정하지 않고 0.2 ~ 5.0 (m/s)로 다양한 범위를 적용해서 게이지가 이동해야하기 때문에 **범위 처리가 복잡** 할 것이다.
 
-![legend](/posts/Project/03/02.png)
+![legend](/blog/posts/Project/03/02.png)
 
 ### GaugeChart template
 우선 GaugeChart.vue를 생성했습니다. 이 컴포넌트는 나중에 맞춤형정보 페이지 내에서도 사용될 예정이라 **component 폴더** 에 두었습니다.
@@ -247,9 +247,9 @@ const gaugeEndColor = computed(() => {
 실제로 GaugeChart를 구현하는 데 **2일** , 디자인 초안과 다르게 요구사항이 추가되어 **0.5일** 이 더 소요되었습니다.
 
 <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2rem'}}>
-  <div>![figma](/posts/Project/03/03.png)</div>
-  <div>![component](/posts/Project/03/04.png)</div>
-  <div>![component](/posts/Project/03/05.png)</div>
+  <div>![figma](/blog/posts/Project/03/03.png)</div>
+  <div>![component](/blog/posts/Project/03/04.png)</div>
+  <div>![component](/blog/posts/Project/03/05.png)</div>
 </div>
 
 ## 인사이트

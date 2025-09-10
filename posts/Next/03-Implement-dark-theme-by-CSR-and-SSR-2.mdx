@@ -2,7 +2,7 @@
 title: SSR로 다크모드 구현하기
 desc: 당신의 Next.js는 SSR이 맞을까?
 date: 2024-10-01
-thumbnail: /posts/Next/03/thumbnail2.gif
+thumbnail: /blog/posts/Next/03/thumbnail2.gif
 ---
 
 > 해당 글은 Next.js 14버전을 사용한 Project를 기반으로 작성하였습니다.
@@ -19,7 +19,7 @@ thumbnail: /posts/Next/03/thumbnail2.gif
 
 ### 결과물
 
-![](/posts/Next/03/2.gif)
+![](/blog/posts/Next/03/2.gif)
 
 
 ## 사전 참고사항(필수X)
@@ -34,7 +34,7 @@ npm install lucide-react --save-dev
 ```
 
 ### 2. 파일 구조
-![](/posts/Next/03/1.png)
+![](/blog/posts/Next/03/1.png)
 - component를 `client`와 `server`로 나누어 구성합니다.
 - User의 interaction에 따라 모드가 바뀌는 부분(`Dropdown`과 `ThemeSwitch`)은 client에 위치합니다.
 - 모드에 따라 변하지 않는 부분(`Header`)은 server에 위치합니다.
@@ -402,7 +402,7 @@ const config: Config = {
 
 ### 1. 페이지 새로고침 시, 깜빡임 발생
 
-![](/posts/Next/03/1.gif)
+![](/blog/posts/Next/03/1.gif)
 
 > middleware.ts를 써야되지 않나?
 

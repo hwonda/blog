@@ -2,11 +2,11 @@
 title: 2년차 개발자의 모바일 랜딩페이지 제작기(2)
 desc: 컴포넌트를 구조화한다
 date: 2024-11-10
-thumbnail: /posts/Project/01/thumbnail.png
+thumbnail: /blog/posts/Project/01/thumbnail.png
 ---
 
 ## 복습
-- [2년차 개발자의 모바일 랜딩페이지 제작기(1) - 개요](/posts/Project/01-mmis-landing-page)
+- [2년차 개발자의 모바일 랜딩페이지 제작기(1) - 개요](/blog/posts/Project/01-mmis-landing-page)
 
 ## 미리 알면 좋은 내용
 1. vue.js 3의 [Composition API](https://ko.vuejs.org/guide/typescript/composition-api.html)를 사용했습니다. 
@@ -24,8 +24,8 @@ thumbnail: /posts/Project/01/thumbnail.png
 먼저 디자이너로부터 **Figma 파일** 을 받아 개략적으로 **컴포넌트** 를 나누었습니다.
 
 <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5rem'}}>
-  <div>![figma](/posts/Project/02/01.png)</div>
-  <div>![component](/posts/Project/02/02.png)</div>
+  <div>![figma](/blog/posts/Project/02/01.png)</div>
+  <div>![component](/blog/posts/Project/02/02.png)</div>
 </div>
 컴포넌트를 **section을 기준** 으로 나누었습니다. 그리고 section 내에서 재사용 되는 부분들(예를 들어, 단기예보의 탭 등)은 파일 정리 후 만들 예정입니다.
 이렇게 나눈 컴포넌트를 기반으로 파일을 정리해 줍니다. (Header.vue는 이전 컴포넌트를 재사용할 것이기 때문에, 새로 만들지 않았습니다.)

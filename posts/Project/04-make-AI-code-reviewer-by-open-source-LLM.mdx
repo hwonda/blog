@@ -2,7 +2,7 @@
 title: 흙수저용 AI 코드리뷰어 만들기
 desc: 0원으로 코드래빗 만들기
 date: 2025-05-09
-thumbnail: /posts/Project/04/thumbnail.png
+thumbnail: /blog/posts/Project/04/thumbnail.png
 ---
 
 개발자라면, 무에서 유를 창조해야 합니다. 물론 금수저라면 유에서 유를 창조해도 되겠죠.
@@ -13,7 +13,7 @@ thumbnail: /posts/Project/04/thumbnail.png
 
 ## 개요
 
-![coderabbit](/posts/Project/04/0.png)
+![coderabbit](/blog/posts/Project/04/0.png)
 
 얼마 전, 개인 github에 [코드래빗](https://www.coderabbit.ai/)을 무료로 적용해봤습니다. 
 코드래빗은 코드의 변경점(`diff_text`)을 확인한 뒤 AI모델을 통해 코드를 리뷰해주고, 사용자와 대화형으로 피드백을 해주는 좋은 놈이었습니다.
@@ -28,7 +28,7 @@ thumbnail: /posts/Project/04/thumbnail.png
 
 결과물은 다음과 같이 나왔습니다. 코드래빗 보다는 다소 부족하지만, 동료의 코드를 이해하기 전에 살펴볼 정도의 퀄리티는 나오는 것 같습니다.
 
-![result](/posts/Project/04/result.png)
+![result](/blog/posts/Project/04/result.png)
 
 ## 필요한 거
 
@@ -51,13 +51,13 @@ thumbnail: /posts/Project/04/thumbnail.png
 ## 1. 리뷰를 받을 Gitlab 레포지토리의 token 발급
 
 [Gitlab] - [Settings] - [Access Tokens]에서 `Add new token`을 클릭합니다.
-![gitlab](/posts/Project/04/1.png)
+![gitlab](/blog/posts/Project/04/1.png)
 
 api, read_api, read_repository를 체크한 뒤 생성해줍니다.
-![gitlab](/posts/Project/04/2.png)
+![gitlab](/blog/posts/Project/04/2.png)
 
 생성된 값은 따로 잘 복사해둡니다. 이후 python에서 GitLab 연결에 필요합니다.
-![gitlab](/posts/Project/04/3.png)
+![gitlab](/blog/posts/Project/04/3.png)
 
 ## 2. Ollama 설치 및 원하는 LLM 준비(pull)
 
@@ -67,16 +67,16 @@ curl -fsSL https://ollama.com/install.sh | sh
 ```
 을 통해 손쉽게 Ollama를 설치할 수 있습니다. 
 
-![webui](/posts/Project/04/4.png)
+![webui](/blog/posts/Project/04/4.png)
 
 [Open-webui](https://github.com/open-webui/open-webui)를 이용해 ChatGPT처럼 만들 수도 있죠.
 
 여기서 `/admin/settings`를 url 뒤에 입력하면 설정 페이지로 이동하는데, [설정] - [모델] - [(우측상단) 다운로드 버튼]을 누르면 다음과 같이 원하는 모델을 받을 수 있습니다.
 
-![webui](/posts/Project/04/5.png)
+![webui](/blog/posts/Project/04/5.png)
 [다운로드 받을 수 있는 LLM 목록](https://ollama.com/library)을 확인해서 `ollama run 모델명`을 입력하면 모델을 받을 수 있습니다. 
 
-![webui](/posts/Project/04/6.png)
+![webui](/blog/posts/Project/04/6.png)
 GUI상에서는 `모델명`만 입력하고 다운로드 버튼을 누르면 됩니다.
 
 ## 3. 리뷰봇 레포지토리 준비
@@ -85,7 +85,7 @@ GUI상에서는 `모델명`만 입력하고 다운로드 버튼을 누르면 됩
 
 서버 내 GitLab에 레포지토리를 하나 생성해줍니다. 저는 `mr-reviewer`라는 이름으로 생성했습니다.
 
-![gitlab](/posts/Project/04/7.png)
+![gitlab](/blog/posts/Project/04/7.png)
 
 생성된 레포지토리 내에는 간단하게 `mr_reviewer.py` 파일과 `requirements.txt` 파일을 준비합니다.
 
@@ -387,17 +387,17 @@ sudo systemctl restart gitlab-mr-reviewer.service
 
 이렇게 하면 서버 부팅 시 자동으로 실행되고, 꺼져도 자동으로 재시작됩니다.
 
-![systemd](/posts/Project/04/8.png)
+![systemd](/blog/posts/Project/04/8.png)
 
 ## 결과
 
-![result](/posts/Project/04/deepseek-coder-33b.png)
+![result](/blog/posts/Project/04/deepseek-coder-33b.png)
 - deepseek-coder-33b : 한국어로 작성 시, 가끔 문법에 안 맞거나 한문이 섞여서 나오는 경우가 있음. 영어로 작성 시 가장 작성이 잘 됨. 보안상 문제될 수 있음.
 
-![result](/posts/Project/04/qwen3-32b.png)
+![result](/blog/posts/Project/04/qwen3-32b.png)
 - qwen3-32b : 영문과 한국어가 모두 표출됨. 퀄리티는 나름 준수함.
 
-![result](/posts/Project/04/exaone3.5-32b.png)
+![result](/blog/posts/Project/04/exaone3.5-32b.png)
 - exaone3.5-32b : LG LLM답게 한국어 작성이 가장 잘 됨. 퀄리티는 조금 낮음.
 
 이 외에도 llama, phi4, mistral 등 써봤는데, deepseek-coder-33b나 exaone3.5-32b가 가장 좋았습니다. 
