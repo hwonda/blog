@@ -6,7 +6,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "static": "ts-node --project tsconfig.node.json scripts/generate-feed.ts && ts-node --project tsconfig.node.json scripts/generate-sitemap.ts && ts-node --project tsconfig.node.json scripts/generate-robots.ts"
+    "static": "ts-node --project tsconfig.node.json scripts/generate-feed.ts && ts-node --project tsconfig.node.json scripts/generate-sitemap.ts"
   },
   "dependencies": {
     "@vercel/microfrontends": "^2.0.0",
