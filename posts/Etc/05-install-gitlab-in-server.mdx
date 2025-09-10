@@ -2,7 +2,7 @@
 title: 회사 서버에 npm registry 만들기(2)
 desc: 서버에 Gitlab 만들기
 date: 2025-03-02
-thumbnail: /posts/Etc/05/thumbnail.png
+thumbnail: /blog/posts/Etc/05/thumbnail.png
 ---
 
 [회사 서버에 npm registry를 만들어](http://hwonda.com/blog/Etc/04-npm-registry-with-verdaccio) 버렸으니, `CI/CD`도 하고 싶어졌습니다.
@@ -17,7 +17,7 @@ thumbnail: /posts/Etc/05/thumbnail.png
 ## 실패담 - 다른 서버에서 CI/CD 구축
 
 
-![gitlab-ci-cd](/posts/Etc/05/1.png)
+![gitlab-ci-cd](/blog/posts/Etc/05/1.png)
 다른 동료가 60번 서버에 이미 gitlab을 구축해놔서
 
 > 내 npm registry는 79번 서버지만, 60번 서버에 레포를 만들어서 연결하면 되지 않을까? 어차피 내부망인데…
@@ -175,7 +175,7 @@ run: sidekiq: (pid 377219) 16167s; run: log: (pid 358382) 18039s
 ```bash
 http://10.2.10.79
 ```
-![gitlab-login](/posts/Etc/05/2.png)
+![gitlab-login](/blog/posts/Etc/05/2.png)
 짜잔!
 
 
