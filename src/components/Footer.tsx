@@ -2,19 +2,19 @@ import Image from 'next/image';
 
 const IconList = [
   {
-    icon: '/images/github.svg',
+    icon: '/blog/images/github.svg',
     alt: 'github',
     link: 'https://github.com/hwonda',
   },
   {
-    icon: '/images/portfolio.svg',
+    icon: '/blog/images/portfolio.svg',
     alt: 'portfolio',
-    link: 'https://hwonda.notion.site/11ac2c1e360180eb9b91e05124fc7df4',
+    link: 'https://www.hwonda.com',
   },
   {
-    icon: '/images/linkedin.svg',
+    icon: '/blog/images/linkedin.svg',
     alt: 'linkedin',
-    link: 'https://www.linkedin.com/in/dahwon-ju-bb9892295/',
+    link: 'https://www.linkedin.com/in/hwonda',
   },
 ];
 
@@ -28,7 +28,7 @@ export default function Footer() {
         {
           IconList.map(({ icon, alt, link }) => (
             <button aria-label={alt} type='button' key={alt} className='flex flex-col justify-center items-center opacity-50 hover:opacity-100'>
-              <a href={link}>
+              <a href={link} target='_blank' rel='noopener noreferrer'>
                 <Image src={icon} alt={alt} width={32} height={32} />
               </a>
               <p className='text-impact'>{alt}</p>
