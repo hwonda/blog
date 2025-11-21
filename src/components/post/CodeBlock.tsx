@@ -2,6 +2,7 @@
 
 import React, { useState, ReactNode } from 'react';
 import Image from 'next/image';
+import { Copy } from 'lucide-react';
 
 interface CodeBlockProps {
   children: ReactNode;
@@ -38,9 +39,9 @@ const CodeBlock = ({ children }: CodeBlockProps) => {
       <button
         type='button'
         onClick={handleCopy}
-        className="absolute top-2 right-0 flex justify-center items-center w-auto h-7 rounded-md bg-amber-400 hover:bg-orange-500 text-white p-1 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        className="absolute top-2 right-0 flex justify-center items-center w-auto h-7 rounded-md bg-amber-400 hover:bg-orange-500 text-white p-1 text-sm opacity-70 group-hover:opacity-100 transition-opacity duration-300"
       >
-        {copied ? 'Copied!' : <Image src="/images/copy.svg" alt="" width={20} height={20} />}
+        {copied ? 'Copied!' : <Copy className='w-4 h-4' />}
       </button>
     </div>
   );
