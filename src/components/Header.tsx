@@ -47,26 +47,45 @@ export default function Header({ categoryList }: HeaderProps) {
   }, [isDropdownOpen]);
 
   return (
-    <div className='top-0 left-0 z-10 fixed flex justify-center p-2 w-full h-12 bg-background-opacity backdrop-blur-md'>
-      <div className='flex justify-between items-center w-full max-w-[1200px]'>
-        <div className='flex w-20' ref={dropdownRef}>
+    <div className='fixed top-4 z-50 w-full px-2 sm:px-4 md:px-8 lg:px-10 xl:px-32'>
+      <div className='relative flex items-center justify-between rounded-full py-2 px-5 bg-gray5'>
+        <div
+          className={`from-accent-1/50 via-accent-2/20 to-accent-4/40 absolute inset-0 rounded-full bg-gradient-to-r opacity-0 backdrop-blur-md transition-opacity duration-700 
+            ${isDropdownOpen ? 'opacity-100' : 'opacity-0'
+            }`}
+        ></div>
+
+        {/* 컨텐츠 */}
+        <div className="font-paperlogy relative z-10 flex items-center gap-2 text-base font-medium sm:text-2xl">
           <Dropdown
             categoryList={categoryList}
             mounted={mounted}
-            theme={theme || 'light'}
+            theme={theme || 'dark'}
             toggleDropdown={toggleDropdown}
             isOpen={isDropdownOpen}
           />
-          <SearchInput mounted={mounted} theme={theme || 'light'} />
+          <a href="https://www.hwonda.com/blog" aria-label="블로그 홈으로 이동">
+            <span className="hidden sm:inline">{blogMetadata.name}</span>
+            <span className="sm:hidden">블로그</span>
+          </a>
         </div>
-        <a href='/' className='font-bold text-xl'>
-          {blogMetadata.name}
-        </a>
-        <div className='flex justify-end w-20'>
-          {mounted && theme && (
-            <ThemeSwitch theme={theme} setTheme={setTheme} />
-          )}
-        </div>
+        <nav className="relative z-10 flex items-center gap-2 text-sm sm:text-base">
+          <a
+            href="https://www.hwonda.com"
+            className="color-sub hover:bg-accent-1/20 rounded-full px-1.5 py-1.5 transition-all duration-300 sm:px-3"
+            aria-label="포트폴리오로 이동"
+          >
+            포트폴리오
+          </a>
+          <div className='flex' ref={dropdownRef}>
+            <SearchInput mounted={mounted} theme={theme || 'light'} />
+            <div className='flex justify-end'>
+              {mounted && theme && (
+                <ThemeSwitch theme={theme} setTheme={setTheme} />
+              )}
+            </div>
+          </div>
+        </nav>
       </div>
     </div>
   );
