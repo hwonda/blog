@@ -20,6 +20,12 @@ body {
   --border-color: #e2e8f0;
   --impact-color: #f97316;
 
+  --primary-color: rgb(254, 59, 97);
+  --secondary-color: rgb(236, 69, 141);
+  --tertiary-color: rgb(212, 81, 255);
+  --quaternary-color: rgb(97, 71, 255);
+  --quinary-color: rgb(61, 29, 255);
+
   --text-color: rgb(5, 5, 5);
   --text-secondary-color: rgb(39, 39, 39);
 

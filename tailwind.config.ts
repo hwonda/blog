@@ -27,6 +27,11 @@ const config: Config = {
         'gray3': 'var(--gray3)',
         'gray4': 'var(--gray4)',
         'gray5': 'var(--gray5)',
+        accent1: 'var(--primary-color)',
+        accent2: 'var(--secondary-color)',
+        accent3: 'var(--tertiary-color)',
+        accent4: 'var(--quaternary-color)',
+        accent5: 'var(--quinary-color)',
       },
       fontFamily: {
         pretendard: ['Pretendard Variable', ...fontFamily.sans],

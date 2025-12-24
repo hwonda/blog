@@ -14,12 +14,29 @@ interface HeaderProps {
 
 export default function Header({ categoryList }: HeaderProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    // 초기 스크롤 위치 확인
+    handleScroll();
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const toggleDropdown = () => {
@@ -48,11 +65,11 @@ export default function Header({ categoryList }: HeaderProps) {
 
   return (
     <div className='fixed top-4 z-50 w-full px-2 sm:px-4 md:px-8 lg:px-10 xl:px-32'>
-      <div className='relative flex items-center justify-between rounded-full py-2 px-5 bg-gray5'>
+      <div className={`relative flex items-center justify-between rounded-full py-2 px-5 ${isScrolled ? 'text-white dark:outline dark:outline-gray4' : 'text-main'}`}>
         <div
-          className={`from-accent-1/50 via-accent-2/20 to-accent-4/40 absolute inset-0 rounded-full bg-gradient-to-r opacity-0 backdrop-blur-md transition-opacity duration-700 
-            ${isDropdownOpen ? 'opacity-100' : 'opacity-0'
-            }`}
+          className={`from-accent1 via-accent2 to-accent4 absolute inset-0 rounded-full bg-gradient-to-r opacity-0 backdrop-blur-md transition-opacity duration-700 ${
+            isScrolled ? 'opacity-100' : ''
+          }`}
         ></div>
 
         {/* 컨텐츠 */}
