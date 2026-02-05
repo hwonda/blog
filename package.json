@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && npm run static",
     "start": "next start",
     "lint": "next lint",
     "static": "ts-node --project tsconfig.node.json scripts/generate-feed.ts && ts-node --project tsconfig.node.json scripts/generate-sitemap.ts"

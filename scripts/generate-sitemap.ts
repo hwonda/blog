@@ -31,8 +31,8 @@ export const getSitemapURLs = async (): Promise<SitemapURL[]> => {
       priority: 0.9,
     })),
     // 개별 포스트 페이지
-    ...postLists.map(({ url, date, categoryPublicName }) => ({
-      loc: `${ baseUrl }/blog/${ categoryPublicName }${ url }`,
+    ...postLists.map(({ url, date }) => ({
+      loc: `${ baseUrl }${ url }`,
       lastmod: date.toISOString(),
       changefreq: 'always',
       priority: 0.8,
