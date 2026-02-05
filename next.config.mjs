@@ -4,6 +4,7 @@ import { withMicrofrontends } from '@vercel/microfrontends/next/config';
 const nextConfig = {
   async rewrites() {
     return [
+      { source: '/blog', destination: '/' },
       { source: '/blog/:path*', destination: '/:path*' },
     ]
   },

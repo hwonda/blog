@@ -81,14 +81,14 @@ export default function Header({ categoryList }: HeaderProps) {
             toggleDropdown={toggleDropdown}
             isOpen={isDropdownOpen}
           />
-          <a href="https://www.hwonda.com/blog" aria-label="블로그 홈으로 이동">
+          <a href="/blog" aria-label="블로그 홈으로 이동">
             <span className="hidden sm:inline">{blogMetadata.name}</span>
             <span className="sm:hidden">{'블로그'}</span>
           </a>
         </div>
         <nav className="relative z-10 flex items-center gap-2 text-sm sm:text-base">
           <a
-            href="https://www.hwonda.com"
+            href="/"
             className="color-sub hover:bg-accent-1/20 rounded-full p-1.5 transition-all duration-300 sm:px-3"
             aria-label="포트폴리오로 이동"
           >

@@ -20,7 +20,10 @@
   ],
   "overrides": [
     {
-      "files": ["next.config.mjs"]
+      "files": ["next.config.mjs"],
+      "parserOptions": {
+        "project": null
+      }
     }
   ],
   "rules": {
