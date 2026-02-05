@@ -20,14 +20,13 @@
   ],
   "overrides": [
     {
-      "files": ["next.config.mjs"],
+      "files": ["next.config.mjs"]
     }
   ],
   "rules": {
     "semi": ["warn", "always"],
     "quotes": ["warn", "single"],
     "no-trailing-spaces": "warn",
-    // "no-unused-vars": "warn",
     "tailwindcss/no-custom-classname": "off",
     "tailwindcss/classnames-order": "off",
     "@typescript-eslint/no-unnecessary-condition": "warn",

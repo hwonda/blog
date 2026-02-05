@@ -41,7 +41,7 @@ export default async function RootLayout({
   return (
     <html lang='ko' suppressHydrationWarning>
       <body className={`flex flex-col items-center ${ fontPretendard.variable }`}>
-        <h1 className='sr-only'>주다훤 블로그</h1>
+        <h1 className='sr-only'>{'주다훤 블로그'}</h1>
         <ThemeProvider>
           <SearchProvider>
             <Header categoryList={categoryList} />

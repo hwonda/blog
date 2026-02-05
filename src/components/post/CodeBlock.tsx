@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, ReactNode } from 'react';
-import Image from 'next/image';
 import { Copy } from 'lucide-react';
 
 interface CodeBlockProps {
@@ -41,7 +40,7 @@ const CodeBlock = ({ children }: CodeBlockProps) => {
         onClick={handleCopy}
         className="absolute top-2 right-0 flex justify-center items-center w-auto h-7 rounded-md bg-amber-400 hover:bg-orange-500 text-white p-1 text-sm opacity-70 group-hover:opacity-100 transition-opacity duration-300"
       >
-        {copied ? 'Copied!' : <Copy className='w-4 h-4' />}
+        {copied ? 'Copied!' : <Copy className='size-4' />}
       </button>
     </div>
   );
