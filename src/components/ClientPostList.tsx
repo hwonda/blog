@@ -35,7 +35,7 @@ const PostListHeader = ({ searchResults, pastSearchValue, category }: PostListHe
   };
 
   return (
-    <div className="mb-5 ml-5">
+    <div className="mb-5">
       <strong className="text-xl font-semibold">
         {renderHeaderContent()}
       </strong>

@@ -3,7 +3,7 @@ import './globals.css';
 import ThemeProvider from '@/layouts/ThemeProvider';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { getCategoryDetailList } from '@/utils/categoryUtils';
+// import { getCategoryDetailList } from '@/utils/categoryUtils';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { SearchProvider } from '@/contexts/SearchContext';
 import { fontPretendard } from '@/utils/fontUtils';
@@ -36,7 +36,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const categoryList = await getCategoryDetailList();
+  // const categoryList = await getCategoryDetailList();
 
   return (
     <html lang='ko' suppressHydrationWarning>
@@ -44,7 +44,7 @@ export default async function RootLayout({
         <h1 className='sr-only'>{'주다훤 블로그'}</h1>
         <ThemeProvider>
           <SearchProvider>
-            <Header categoryList={categoryList} />
+            <Header />
             {children}
             <Footer />
           </SearchProvider>
