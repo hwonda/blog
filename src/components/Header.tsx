@@ -16,11 +16,24 @@ export default function Header() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [portfolioPath, setPortfolioPath] = useState('/fe');
   const { theme, setTheme } = useTheme();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
+
+    const params = new URLSearchParams(window.location.search);
+    const from = params.get('from');
+    if (from === 'fe' || from === 'tpm') {
+      sessionStorage.setItem('blog-from', from);
+      setPortfolioPath(`/${ from }`);
+    } else {
+      const stored = sessionStorage.getItem('blog-from');
+      if (stored === 'fe' || stored === 'tpm') {
+        setPortfolioPath(`/${ stored }`);
+      }
+    }
   }, []);
 
   useEffect(() => {
@@ -88,7 +101,7 @@ export default function Header() {
         </div>
         <nav className="relative z-10 flex items-center gap-2 text-sm sm:text-base">
           <a
-            href="/fe"
+            href={portfolioPath}
             className="color-sub hover:bg-accent-1/20 rounded-full p-1.5 transition-all duration-300 sm:px-3"
             aria-label="포트폴리오로 이동"
           >
