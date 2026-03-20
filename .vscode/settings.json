@@ -4,5 +4,24 @@
   "pasteImage.path": "${projectRoot}/public/posts/clipboard/${currentFileNameWithoutExt}",
   "pasteImage.forceUnixStyleSeparator": true,
   "pasteImage.insertPattern": "![${imageFileNameWithoutExt}](${imageFilePath})",
-  "pasteImage.prefix": "/"
+  "pasteImage.prefix": "/",
+  "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.formatOnSave": false
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.formatOnSave": false
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.formatOnSave": false
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.formatOnSave": false
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  }
 }

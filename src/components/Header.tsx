@@ -78,10 +78,10 @@ export default function Header() {
 
   return (
     <div className='fixed top-4 z-50 w-full px-2 sm:px-4 md:px-8 lg:px-10 xl:px-32'>
-      <div className={`relative flex items-center justify-between rounded-full py-2 px-5 ${ isScrolled ? 'text-white' : 'text-main' }`}>
+      <div className={`relative flex items-center justify-between rounded-full py-2 px-5 backdrop-blur-md ${ isScrolled ? 'text-white' : 'text-main' }`}>
         <div
-          className={`from-accent1 via-accent2 to-accent4 absolute inset-0 rounded-full bg-gradient-to-r backdrop-blur-md duration-700 z-10 ${
-            isScrolled ? 'opacity-100' : 'opacity-0'
+          className={`from-accent1 via-accent2 to-accent4 absolute inset-0 rounded-full bg-gradient-to-r duration-700 z-10 ${
+            isScrolled ? 'opacity-80' : 'opacity-0'
           }`}
         />
 
