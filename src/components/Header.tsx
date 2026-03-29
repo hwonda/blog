@@ -25,12 +25,12 @@ export default function Header() {
 
     const params = new URLSearchParams(window.location.search);
     const from = params.get('from');
-    if (from === 'fe' || from === 'tpm') {
+    if (from === 'fe' || from === 'pm') {
       sessionStorage.setItem('blog-from', from);
       setPortfolioPath(`/${ from }`);
     } else {
       const stored = sessionStorage.getItem('blog-from');
-      if (stored === 'fe' || stored === 'tpm') {
+      if (stored === 'fe' || stored === 'pm') {
         setPortfolioPath(`/${ stored }`);
       }
     }
