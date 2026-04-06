@@ -1,15 +1,26 @@
-import { Post } from '@/types';
+export interface SearchDocument {
+  title: string;
+  desc: string;
+  url: string;
+  categoryPath: string;
+  categoryPublicName: string;
+  date: Date;
+  dateString: string;
+  thumbnail: string;
+  readingTimes: number;
+}
 
 export interface PostListHeaderProps {
-  searchResults: Post[];
+  searchResults: SearchDocument[];
   pastSearchValue: string;
   category?: string;
 }
+
 export interface PostGridProps {
-  posts: Post[];
+  posts: SearchDocument[];
 }
 
 export interface ClientPostListProps {
-  initialPosts: Post[];
+  initialPosts: SearchDocument[];
   category?: string;
 }

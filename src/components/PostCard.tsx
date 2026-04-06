@@ -1,10 +1,10 @@
-import { Post } from '@/types';
+import { SearchDocument } from '@/types/search';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Clock3, Calendar } from 'lucide-react';
 
 interface PostCardProps {
-  post: Post;
+  post: SearchDocument;
 }
 
 const PostCard = ({ post }: PostCardProps) => {

@@ -1,11 +1,11 @@
 'use client';
 
 import React, { createContext, useState, useContext, ReactNode } from 'react';
-import { Post } from '@/types';
+import { SearchDocument } from '@/types/search';
 
 interface SearchContextType {
-  searchResults: Post[];
-  setSearchResults: React.Dispatch<React.SetStateAction<Post[]>>;
+  searchResults: SearchDocument[];
+  setSearchResults: React.Dispatch<React.SetStateAction<SearchDocument[]>>;
   searchQuery: string;
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
   pastSearchValue: string;
@@ -15,7 +15,7 @@ interface SearchContextType {
 const SearchContext = createContext<SearchContextType | undefined>(undefined);
 
 export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [searchResults, setSearchResults] = useState<Post[]>([]);
+  const [searchResults, setSearchResults] = useState<SearchDocument[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [pastSearchValue, setPastSearchValue] = useState<string>('');
 

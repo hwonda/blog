@@ -2,7 +2,7 @@
 
 import ThemeSwitch from '@/components/ThemeSwitch';
 // import Dropdown from '@/components/Dropdown';
-// import SearchInput from '@/components/SearchInput';
+import SearchInput from '@/components/SearchInput';
 import { useState, useEffect, useRef } from 'react';
 import { useTheme } from 'next-themes';
 // import { CategoryDetail } from '@/types';
@@ -109,7 +109,7 @@ export default function Header() {
             {'포트폴리오'}
           </a>
           <div className='flex' ref={dropdownRef}>
-            {/* <SearchInput mounted={mounted} theme={theme || 'light'} /> */}
+            <SearchInput mounted={mounted} theme={theme || 'light'} />
             <div className='flex justify-end'>
               {mounted && theme && (
                 <ThemeSwitch theme={theme} setTheme={setTheme} />

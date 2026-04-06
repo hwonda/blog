@@ -35,10 +35,11 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# sitemap, robots
+# sitemap, robots, search index
 /public/sitemap.xml
 /public/robots.txt
 /public/rss/*
+/public/search-index.json
 
 CLAUDE.md
 .claude/*
