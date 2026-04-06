@@ -26,7 +26,7 @@
   --color-accent4: var(--quaternary-color);
   --color-accent5: var(--quinary-color);
 
-  --font-pretendard: 'Pretendard Variable', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-pretendard: 'Pretendard Variable', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans';
 
   --animate-shimmer: shimmer 1.5s infinite;
 
@@ -46,4 +46,8 @@ body {
 
 .not-prose > ul > li > * {
   color: var(--text-secondary-color);
+}
+
+button {
+  cursor: pointer;
 }

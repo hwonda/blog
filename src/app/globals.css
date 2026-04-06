@@ -6,11 +6,11 @@
   --border-color: #e2e8f0;
   --impact-color: #f97316;
 
-  --primary-color: rgba(254, 59, 97, 0.6);
-  --secondary-color: rgba(236, 69, 141, 0.6);
-  --tertiary-color: rgba(212, 81, 255, 0.6);
-  --quaternary-color: rgba(97, 71, 255, 0.6);
-  --quinary-color: rgba(61, 29, 255, 0.6);
+  --primary-color: rgba(254, 59, 97);
+  --secondary-color: rgba(236, 69, 141);
+  --tertiary-color: rgba(212, 81, 255);
+  --quaternary-color: rgba(97, 71, 255);
+  --quinary-color: rgba(61, 29, 255);
 
   --text-color: rgb(5, 5, 5);
   --text-secondary-color: rgb(39, 39, 39);
