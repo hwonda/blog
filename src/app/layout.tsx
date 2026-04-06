@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import './globals.css';
+import './tailwind.css';
 import ThemeProvider from '@/layouts/ThemeProvider';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';

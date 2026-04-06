@@ -28,7 +28,8 @@
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^2.12.1",
-    "@tailwindcss/typography": "github:tailwindcss/typography",
+    "@tailwindcss/postcss": "^4.2.2",
+    "@tailwindcss/typography": "^0.5.16",
     "@types/glob": "^8.1.0",
     "@types/lodash.debounce": "^4.0.9",
     "@types/node": "^20",
@@ -41,11 +42,10 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.16",
-    "eslint-plugin-tailwindcss": "^3.17.5",
+    "eslint-plugin-tailwindcss": "^4.0.0-beta.0",
     "feed": "^4.2.2",
-    "postcss": "^8",
     "prettier": "^3.4.2",
-    "tailwindcss": "^3.4.1",
+    "tailwindcss": "^4.1.11",
     "ts-node": "^10.9.2",
     "typescript": "^6.0.2"
   }

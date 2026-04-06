@@ -1,0 +1,49 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+
+@import "tailwindcss";
+@import "./globals.css";
+@import "./prose.css";
+
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --color-background: var(--background);
+  --color-background-opacity: var(--background-opacity);
+  --color-foreground: var(--foreground);
+  --color-main: var(--text-color);
+  --color-sub: var(--text-secondary-color);
+  --color-impact: var(--impact-color);
+  --color-light: var(--border-color);
+  --color-gray0: var(--gray0);
+  --color-gray1: var(--gray1);
+  --color-gray2: var(--gray2);
+  --color-gray3: var(--gray3);
+  --color-gray4: var(--gray4);
+  --color-gray5: var(--gray5);
+  --color-accent1: var(--primary-color);
+  --color-accent2: var(--secondary-color);
+  --color-accent3: var(--tertiary-color);
+  --color-accent4: var(--quaternary-color);
+  --color-accent5: var(--quinary-color);
+
+  --font-pretendard: 'Pretendard Variable', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+  --animate-shimmer: shimmer 1.5s infinite;
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+}
+
+* {
+  font-family: var(--font-pretendard);
+}
+
+body {
+  background-color: var(--background);
+}
+
+.not-prose > ul > li > * {
+  color: var(--text-secondary-color);
+}
