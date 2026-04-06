@@ -168,3 +168,7 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
   text-decoration-thickness: 1px;
   font-weight: 600;
 }
+
+.prose li {
+  color: var(--text-color)
+}
