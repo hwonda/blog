@@ -21,7 +21,7 @@ export default function Header() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setMounted(true);
+    setMounted(true); // eslint-disable-line react-hooks/set-state-in-effect -- hydration 감지용 의도적 패턴
 
     const params = new URLSearchParams(window.location.search);
     const from = params.get('from');
@@ -94,6 +94,7 @@ export default function Header() {
             toggleDropdown={toggleDropdown}
             isOpen={isDropdownOpen}
           /> */}
+          {/* eslint-disable-next-line @next/next/no-html-link-for-pages -- microfrontend 간 네비게이션 */}
           <a href="/blog" aria-label="블로그 홈으로 이동">
             <span className="hidden sm:inline">{blogMetadata.name}</span>
             <span className="sm:hidden">{'블로그'}</span>

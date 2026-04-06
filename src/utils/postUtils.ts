@@ -107,7 +107,7 @@ export const getAllPostCount = async (): Promise<number> =>
  */
 export const getPostDetail = async (
   category: string,
-  slug: string
+  slug: string,
 ): Promise<Post> => {
   const filePath = `${ ABSOLUTE_POSTS_PATH }/${ category }/${ slug }.mdx`;
   return await parsePost(filePath);
@@ -148,6 +148,6 @@ export async function searchPosts(searchTerm: string): Promise<Post[]> {
   return allPosts.filter((post) =>
     post.title.toLowerCase().includes(searchTerm.toLowerCase())
     || post.desc.toLowerCase().includes(searchTerm.toLowerCase())
-    || post.categoryPublicName.toLowerCase().includes(searchTerm.toLowerCase())
+    || post.categoryPublicName.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 }

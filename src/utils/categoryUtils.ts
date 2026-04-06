@@ -38,7 +38,7 @@ export const getCategoryDetailList = async (): Promise<CategoryDetail[]> => {
       dirName: category === 'all' ? '' : category,
       publicName: category === 'all' ? '모든 포스트' : getCategoryPublicName(category),
       count,
-    })
+    }),
   );
 
   return detailList;
