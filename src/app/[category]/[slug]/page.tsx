@@ -4,13 +4,15 @@ import { getPostPaths } from '@/utils/fileUtils';
 import { parseToc } from '@/utils/postUtils';
 import PostDetailLayout from '@/layouts/PostDetailLayout';
 import { blogMetadata } from '@/constants';
+
 interface SlugProps {
-  params: { category: string; slug: string };
+  params: Promise<{ category: string; slug: string }>;
 }
 
 export const dynamicParams = false;
 
-export async function generateMetadata({ params: { category, slug } }: SlugProps): Promise<Metadata> {
+export async function generateMetadata({ params }: SlugProps): Promise<Metadata> {
+  const { category, slug } = await params;
   const post = await getPostDetail(category, slug);
 
   const title = `${ post.title } | 훤다 블로그`;
@@ -53,7 +55,8 @@ export async function generateStaticParams() {
 }
 
 const PostDetail = async ({ params }: SlugProps) => {
-  const post = await getPostDetail(params.category, params.slug);
+  const { category, slug } = await params;
+  const post = await getPostDetail(category, slug);
   const toc = parseToc(post.content);
 
   return (

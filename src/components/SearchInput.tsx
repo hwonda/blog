@@ -110,7 +110,7 @@ const SearchInput = ({ mounted }: SearchInputProps) => {
         onKeyDown={handleKeyPress}
         placeholder='검색어 입력'
         disabled={isSearching}
-        className={`transition-all duration-300 bg-orange-50 dark:bg-gray-800 border border-impact-color rounded-sm h-8 ${
+        className={`transition-all duration-300 bg-orange-50 dark:bg-gray-800 border border-impact-color rounded-xs h-8 ${
           isExpanded ? 'w-24 p-2 sm:w-36 md:w-48 lg:w-64' : 'w-0 p-0 border-0'
         }`}
       />

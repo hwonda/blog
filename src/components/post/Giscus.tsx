@@ -10,11 +10,11 @@ export default function Giscus() {
   // dark mode 전환 시 giscus theme 변경
   useEffect(() => {
     const iframe = document.querySelector<HTMLIFrameElement>(
-      'iframe.giscus-frame'
+      'iframe.giscus-frame',
     );
     iframe?.contentWindow?.postMessage(
       { giscus: { setConfig: { theme } } },
-      'https://giscus.app'
+      'https://giscus.app',
     );
   }, [theme]);
 
