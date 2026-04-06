@@ -1,4 +1,4 @@
-# 훤다 블로그
+# 주다훤 블로그
 
 프론트엔드를 중심으로 다양한 기술을 탐구하는 MDX 기반 커스텀 기술 블로그
 
@@ -8,12 +8,14 @@
 
 | 분류 | 기술 |
 |------|------|
-| Framework | Next.js 14 (App Router), TypeScript |
+| Framework | Next.js 16, TypeScript |
 | Styling | TailwindCSS |
 | Content | MDX (next-mdx-remote, gray-matter) |
 | State | React Context, Redux |
 | Infra | Vercel, Firebase |
 | CI/CD | GitHub Actions |
+
+26.4.6.에 Next.js 14->16, TypeScript 4->6, TailwindCSS 3->4로 업데이트
 
 ## 주요 기능
 
