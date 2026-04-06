@@ -77,13 +77,8 @@ export default function Header() {
   }, [isDropdownOpen]);
 
   return (
-    <div className='fixed top-4 z-50 w-full px-2 sm:px-4 md:px-8 lg:px-10 xl:px-32'>
-      <div className={`relative flex items-center justify-between rounded-full py-2 px-5 backdrop-blur-md ${ isScrolled ? 'text-white' : 'text-main' }`}>
-        <div
-          className={`from-accent1 via-accent2 to-accent4 absolute inset-0 rounded-full bg-gradient-to-r duration-700 z-10 ${
-            isScrolled ? 'opacity-80' : 'opacity-0'
-          }`}
-        />
+    <div className='fixed top-0 z-50 w-full'>
+      <div className={`relative flex items-center justify-between py-4 px-5 backdrop-blur-md px-2 sm:px-4 md:px-8 lg:px-10 xl:px-32 text-main ${ isScrolled ? 'border-b border-gray5 bg-background' : '' }`}>
 
         {/* 컨텐츠 */}
         <div className="font-paperlogy relative z-10 flex items-center gap-2 text-base font-medium sm:text-2xl">
@@ -96,21 +91,21 @@ export default function Header() {
           /> */}
           {/* eslint-disable-next-line @next/next/no-html-link-for-pages -- microfrontend 간 네비게이션 */}
           <a href="/blog" aria-label="블로그 홈으로 이동">
-            <span className="hidden sm:inline">{blogMetadata.name}</span>
-            <span className="sm:hidden">{'블로그'}</span>
+            <span className="hidden sm:inline">{'HWONDA BLOG'}</span>
+            <span className="sm:hidden">{'HWONDA'}</span>
+          </a>
+          <a
+            href={portfolioPath}
+            className="text-sub hover:bg-gray4 rounded-full p-1.5 transition-all duration-300 sm:px-3 text-base hover:text-accent1"
+            aria-label="포트폴리오로 이동"
+          >
+            {'About'}
           </a>
         </div>
         <nav className="relative z-10 flex items-center gap-2 text-sm sm:text-base">
-          <a
-            href={portfolioPath}
-            className="color-sub hover:bg-accent-1/20 rounded-full p-1.5 transition-all duration-300 sm:px-3"
-            aria-label="포트폴리오로 이동"
-          >
-            {'포트폴리오'}
-          </a>
           <div className='flex' ref={dropdownRef}>
             <SearchInput mounted={mounted} theme={theme || 'light'} />
-            <div className='flex justify-end'>
+            <div className='flex justify-end ml-1'>
               {mounted && theme && (
                 <ThemeSwitch theme={theme} setTheme={setTheme} />
               )}

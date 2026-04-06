@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: SlugProps): Promise<Metadata>
   const { category, slug } = await params;
   const post = await getPostDetail(category, slug);
 
-  const title = `${ post.title } | 훤다 블로그`;
+  const title = `${ post.title } | 주다훤 블로그`;
   const thumbnailPath = `/posts/${ post.categoryPublicName }/${ post.slug }/thumbnail.png`;
 
   return {

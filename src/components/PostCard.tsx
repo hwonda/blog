@@ -10,7 +10,7 @@ interface PostCardProps {
 const PostCard = ({ post }: PostCardProps) => {
   return (
     <Link href={post.url}>
-      <li className='group shadow-md hover:shadow-xl border rounded-xl h-full transition dark:border-cyan-700 dark:hover:border-white flex sm:block'>
+      <li className='group shadow-md hover:shadow-xl border rounded-xl h-full transition hover:border-accent1 flex sm:block'>
         <div className='relative sm:m-2 hidden sm:block sm:text-lg sm:w-[calc(100% - 4rem)] aspect-video overflow-hidden'>
           <Image
             src={post.thumbnail}
@@ -18,12 +18,12 @@ const PostCard = ({ post }: PostCardProps) => {
             fill
             sizes='(max-width: 1290px) 100vw, 700px'
             priority
-            className='rounded-md transition-transform duration-300 ease-in-out group-hover:opacity-80'
+            className='rounded-md transition-transform duration-300 ease-in-out group-hover:scale-105'
           />
         </div>
         <div className='flex flex-col px-2 pb-2 m-2 w-full sm:m-0 sm:w-auto'>
           <span className='font-semibold p-1'>{post.title}</span>
-          <span className='text-sub text-sm p-1 truncate'>
+          <span className='text-sub text-sm p-1 truncate max-w-[300px]'>
             {post.desc}
           </span>
           <div className='flex justify-between p-1 text-sm'>

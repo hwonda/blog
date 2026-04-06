@@ -10,12 +10,12 @@ const PostListHeader = ({ searchResults, pastSearchValue, category }: PostListHe
     if (pastSearchValue) {
       return searchResults.length > 0 ? (
         <span>
-          <span className="impact-color mr-1">{`'${ pastSearchValue }'`}</span>
+          <span className="mr-1">{`'${ pastSearchValue }'`}</span>
           {'에 대한 검색결과'}
         </span>
       ) : (
         <div>
-          <span className="impact-color mr-1">{`'${ pastSearchValue }'`}</span>
+          <span className="mr-1">{`'${ pastSearchValue }'`}</span>
           {'에 대한 검색 결과가 없습니다.'}
           <div className='mt-8 pt-2 border-t border-main'>{'모든 포스트'}</div>
         </div>
@@ -25,7 +25,7 @@ const PostListHeader = ({ searchResults, pastSearchValue, category }: PostListHe
     if (category) {
       return (
         <span>
-          <span className="impact-color mr-1">{category}</span>
+          <span className="mr-1">{category}</span>
           {'에 관한 글들'}
         </span>
       );
@@ -50,7 +50,7 @@ const PostGrid = ({ posts }: PostGridProps) => {
   }
 
   return (
-    <ul className="gap-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+    <ul className="gap-1.5 sm:gap-2 xl:gap-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
       {posts.map((post) => (
         <PostCard key={post.title} post={post} />
       ))}

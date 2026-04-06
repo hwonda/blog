@@ -36,6 +36,7 @@ export default function PostHeader({ post }: PostHeaderProps) {
                 src={post.thumbnail}
                 alt={post.title}
                 fill
+                sizes='(max-width: 800px) 100vw, 800px'
                 priority
                 className='rounded-md'
               />
