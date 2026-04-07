@@ -22,7 +22,7 @@ const PostCard = ({ post, onTagClick }: PostCardProps) => {
           <div className="text-lg font-semibold group-hover:text-accent1 transition-colors">
             {post.title}
           </div>
-          <p className="text-sub text-sm line-clamp-2 flex-1 group-hover:text-accent2 transition-colors">
+          <p className="text-sub text-sm line-clamp-2 flex-1 transition-colors">
             {post.desc}
           </p>
           <div className="flex items-center gap-2 mt-2 text-[13px] text-gray1 flex-wrap">

@@ -15,7 +15,6 @@
   --text-color: rgb(5, 5, 5);
   --text-secondary-color: rgb(39, 39, 39);
 
-  --gray0: rgb(55, 55, 55);
   --gray1: rgb(95, 95, 95);
   --gray2: rgb(120, 120, 120);
   --gray3: rgb(170, 170, 170);
@@ -46,12 +45,11 @@
   --text-color: rgb(251, 251, 251);
   --text-secondary-color: rgb(224, 224, 224);
 
-  --gray0: rgb(200, 200, 200);
-  --gray1: rgb(165, 165, 165);
-  --gray2: rgb(120, 120, 120);
-  --gray3: rgb(80, 80, 80);
-  --gray4: rgb(50, 50, 50);
-  --gray5: rgb(30, 30, 30);
+  --gray1: rgb(205, 205, 205);
+  --gray2: rgb(180, 180, 180);
+  --gray3: rgb(155, 155, 155);
+  --gray4: rgb(130, 130, 130);
+  --gray5: rgb(55, 55, 55);
 
   --tag-bg: rgba(255, 255, 255, 0.1);
   --tag-text: rgb(180, 180, 180);

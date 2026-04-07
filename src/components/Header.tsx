@@ -96,7 +96,7 @@ export default function Header() {
             </a>
             <a
               href={portfolioPath}
-              className="text-sub hover:bg-gray4 rounded-md p-1.5 transition-all duration-300 sm:px-3 text-base hover:text-accent1"
+              className="text-sub hover:bg-gray5 rounded-md p-1.5 transition-all duration-300 sm:px-3 text-base hover:text-accent2"
               aria-label="포트폴리오로 이동"
             >
               {'About'}

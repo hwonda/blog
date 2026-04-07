@@ -27,7 +27,10 @@ const SeriesCarousel = ({ seriesCards }: SeriesCarouselProps) => {
   return (
     <div className="w-full mb-8 px-4 lg:px-0">
       <div className="flex items-center justify-between mb-3">
-        <strong className="text-xl font-semibold">{'시리즈'}</strong>
+        <div className='flex flex-col gap-0.5'>
+          <strong className="text-xl">{'Series'}</strong>
+          <p className='text-sm text-gray1'>{'부담없이 읽는 글 모음집'}</p>
+        </div>
         {seriesCards.length > 2 && (
           <div className="flex gap-1">
             <button
@@ -78,7 +81,7 @@ const SeriesCarousel = ({ seriesCards }: SeriesCarouselProps) => {
                 <div className="font-semibold text-sm truncate group-hover:text-accent1 transition-colors">
                   {card.title}
                 </div>
-                <p className="text-xs text-sub mt-1 line-clamp-2 group-hover:text-accent2 transition-colors">{card.desc}</p>
+                <p className="text-xs text-sub mt-1 line-clamp-2 transition-colors">{card.desc}</p>
                 <div className="flex items-center gap-1 mt-2 text-xs text-gray1">
                   <BookOpen className="size-3" />
                   <span>{card.postCount}{'편'}</span>

@@ -12,15 +12,19 @@ const PostListHeader = ({ searchResults, pastSearchValue, category }: PostListHe
     // 검색어가 있을 때
     if (pastSearchValue) {
       return searchResults.length > 0 ? (
-        <span>
+        <div>
           <span className="mr-1">{`'${ pastSearchValue }'`}</span>
           {'에 대한 검색결과'}
-        </span>
+          <p className='mt-1 text-sm text-gray1'>{'검색결과가 관련도 순으로 정렬됩니다.'}</p>
+        </div>
       ) : (
         <div>
           <span className="mr-1">{`'${ pastSearchValue }'`}</span>
           {'에 대한 검색 결과가 없습니다.'}
-          <div className='mt-8 pt-5 border-t-2 border-gray1'>{'모든 포스트'}</div>
+          <div className='mt-8 pt-5 border-t-2 border-gray1 flex flex-col gap-0.5'>
+            <strong className="text-xl">{'Other posts'}</strong>
+            <p className='text-sm text-gray1'>{'블로그 내 전체 포스트'}</p>
+          </div>
         </div>
       );
     }
@@ -34,14 +38,19 @@ const PostListHeader = ({ searchResults, pastSearchValue, category }: PostListHe
       );
     }
     // 기본
-    return '모든 포스트';
+    return (
+      <div className='flex flex-col gap-0.5'>
+        <strong className="text-xl">{'All posts'}</strong>
+        <p className='text-sm text-gray1'>{'블로그 내 전체 포스트'}</p>
+      </div>
+    );
   };
 
   return (
     <div className="border-b-2 border-gray1 pb-5 px-4 lg:px-0">
-      <strong className="text-xl font-semibold">
+      <div className="text-xl">
         {renderHeaderContent()}
-      </strong>
+      </div>
     </div>
   );
 };
