@@ -62,6 +62,7 @@ async function generateSearchIndex() {
     dateString: post.dateString,
     thumbnail: post.thumbnail,
     readingTimes: post.readingTimes,
+    tags: post.tags,
   }));
 
   const index = lunr(function (this: lunr.Builder) {
@@ -73,6 +74,7 @@ async function generateSearchIndex() {
     this.ref('id');
     this.field('title', { boost: 10 });
     this.field('desc', { boost: 8 });
+    this.field('tags', { boost: 6 });
     this.field('content', { boost: 1 });
 
     posts.forEach((post, idx) => {
@@ -80,6 +82,7 @@ async function generateSearchIndex() {
         id: idx.toString(),
         title: post.title,
         desc: post.desc,
+        tags: post.tags.join(' '),
         content: stripMdx(post.content),
       });
     });

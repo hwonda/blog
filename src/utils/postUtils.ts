@@ -55,8 +55,9 @@ export const parsePostDetail = async (postPath: string) => {
     const grayMatter = data as ParsedPost;
     const dateString = dayjs(grayMatter.date).locale('ko').format('YYYY.MM.DD');
     const readingTimes = Math.ceil(readingTime(content).minutes);
+    const tags = Array.isArray(grayMatter.tags) ? grayMatter.tags : [];
 
-    return { ...grayMatter, dateString, content, readingTimes };
+    return { ...grayMatter, dateString, content, readingTimes, tags };
   } catch (error) {
     console.error(`Error reading file ${ postPath }:`, error);
     throw error;

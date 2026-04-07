@@ -4,6 +4,7 @@ export interface ParsedPost {
   dateString: string;
   desc: string;
   thumbnail: string;
+  tags: string[];
 }
 
 export interface Post extends ParsedPost {

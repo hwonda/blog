@@ -25,6 +25,9 @@
   --color-accent3: var(--tertiary-color);
   --color-accent4: var(--quaternary-color);
   --color-accent5: var(--quinary-color);
+  --color-tag: var(--tag-bg);
+  --color-tag-text: var(--tag-text);
+  --color-tag-hover: var(--tag-hover-bg);
 
   --font-pretendard: 'Pretendard Variable', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans';
 

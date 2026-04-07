@@ -21,6 +21,10 @@
   --gray3: rgb(170, 170, 170);
   --gray4: rgb(230, 230, 230);
   --gray5: rgb(242, 242, 242);
+
+  --tag-bg: rgba(0, 0, 0, 0.06);
+  --tag-text: rgb(80, 80, 80);
+  --tag-hover-bg: rgba(0, 0, 0, 0.12);
 }
 
 .dark {
@@ -42,4 +46,8 @@
   --gray3: rgb(80, 80, 80);
   --gray4: rgb(50, 50, 50);
   --gray5: rgb(30, 30, 30);
+
+  --tag-bg: rgba(255, 255, 255, 0.1);
+  --tag-text: rgb(180, 180, 180);
+  --tag-hover-bg: rgba(255, 255, 255, 0.18);
 }

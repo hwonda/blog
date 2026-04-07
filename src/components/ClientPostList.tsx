@@ -1,8 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import PostCard from '@/components/PostCard';
 import { useSearch } from '@/contexts/SearchContext';
 import { PostListHeaderProps, PostGridProps, ClientPostListProps } from '@/types/search';
+import { X } from 'lucide-react';
 
 const PostListHeader = ({ searchResults, pastSearchValue, category }: PostListHeaderProps) => {
   const renderHeaderContent = () => {
@@ -43,16 +45,19 @@ const PostListHeader = ({ searchResults, pastSearchValue, category }: PostListHe
   );
 };
 
-const PostGrid = ({ posts }: PostGridProps) => {
-  // 포스트가 없을 때
+interface PostGridWithTagProps extends PostGridProps {
+  onTagClick: (tag: string) => void;
+}
+
+const PostGrid = ({ posts, onTagClick }: PostGridWithTagProps) => {
   if (!posts.length) {
     return <div>{'No posts found.'}</div>;
   }
 
   return (
-    <ul className="gap-1.5 sm:gap-2 xl:gap-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+    <ul className="flex flex-col">
       {posts.map((post) => (
-        <PostCard key={post.title} post={post} />
+        <PostCard key={post.url} post={post} onTagClick={onTagClick} />
       ))}
     </ul>
   );
@@ -60,7 +65,16 @@ const PostGrid = ({ posts }: PostGridProps) => {
 
 const ClientPostList = ({ initialPosts, category }: ClientPostListProps) => {
   const { searchResults, pastSearchValue } = useSearch();
-  const postList = searchResults.length > 0 ? searchResults : initialPosts;
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+
+  const baseList = searchResults.length > 0 ? searchResults : initialPosts;
+  const postList = selectedTag
+    ? baseList.filter((post) => post.tags.includes(selectedTag))
+    : baseList;
+
+  const handleTagClick = (tag: string) => {
+    setSelectedTag((prev) => (prev === tag ? null : tag));
+  };
 
   return (
     <>
@@ -69,7 +83,20 @@ const ClientPostList = ({ initialPosts, category }: ClientPostListProps) => {
         pastSearchValue={pastSearchValue}
         category={category}
       />
-      <PostGrid posts={postList} />
+      {selectedTag && (
+        <div className="mb-4 flex items-center gap-2">
+          <span className="text-sm text-sub">{'태그 필터:'}</span>
+          <button
+            type="button"
+            onClick={() => setSelectedTag(null)}
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-accent1 text-white text-sm transition-colors hover:opacity-80"
+          >
+            {selectedTag}
+            <X className="size-3.5" />
+          </button>
+        </div>
+      )}
+      <PostGrid posts={postList} onTagClick={handleTagClick} />
     </>
   );
 };

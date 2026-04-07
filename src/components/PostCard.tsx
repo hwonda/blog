@@ -5,39 +5,65 @@ import { Clock3, Calendar } from 'lucide-react';
 
 interface PostCardProps {
   post: SearchDocument;
+  onTagClick?: (tag: string) => void;
 }
 
-const PostCard = ({ post }: PostCardProps) => {
+const PostCard = ({ post, onTagClick }: PostCardProps) => {
+  const handleTagClick = (e: React.MouseEvent, tag: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onTagClick?.(tag);
+  };
+
   return (
     <Link href={post.url}>
-      <li className='group shadow-md hover:shadow-xl border rounded-xl h-full transition hover:border-accent1 flex sm:block'>
-        <div className='relative sm:m-2 hidden sm:block sm:text-lg sm:w-[calc(100% - 4rem)] aspect-video overflow-hidden'>
-          <Image
-            src={post.thumbnail}
-            alt={post.title}
-            fill
-            sizes='(max-width: 1290px) 100vw, 700px'
-            priority
-            className='rounded-md transition-transform duration-300 ease-in-out group-hover:scale-105'
-          />
+      <li className="group py-4 border-b border-gray4 last:border-b-0 transition">
+        <div className="text-lg font-semibold group-hover:text-accent1 transition-colors">
+          {post.title}
         </div>
-        <div className='flex flex-col px-2 pb-2 m-2 w-full sm:m-0 sm:w-auto'>
-          <span className='font-semibold p-1'>{post.title}</span>
-          <span className='text-sub text-sm p-1 truncate max-w-[300px]'>
+        <div className="flex justify-between gap-4 mt-1.5">
+          <p className="text-sub text-sm line-clamp-2 flex-1">
             {post.desc}
-          </span>
-          <div className='flex justify-between p-1 text-sm'>
-            <span className='text-impact'>{post.categoryPublicName}</span>
-            <div className='flex gap-1 items-center text-[13px]'>
-              <Clock3 className="size-3 text-gray1" />
-              <span className="text-gray1">{post.readingTimes}{'분'}</span>
-              <span className='text-gray3'>{'•'}</span>
-              <Calendar className="size-3 text-gray1" />
-              <span className='text-gray1'>
-                {post.dateString}
-              </span>
+          </p>
+          {post.thumbnail && (
+            <div className="relative w-[160px] h-[120px] shrink-0 overflow-hidden rounded-md hidden sm:block">
+              <Image
+                src={post.thumbnail}
+                alt={post.title}
+                fill
+                sizes="160px"
+                className="object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
+              />
             </div>
+          )}
+        </div>
+        <div className="flex items-center gap-2 mt-2 text-[13px] text-gray1 flex-wrap">
+          <div className="flex items-center gap-1">
+            <Calendar className="size-3" />
+            <span>{post.dateString}</span>
           </div>
+          <span className="text-gray3">{'·'}</span>
+          <div className="flex items-center gap-1">
+            <Clock3 className="size-3" />
+            <span>{post.readingTimes}{'분'}</span>
+          </div>
+          {post.tags.length > 0 && (
+            <>
+              <span className="text-gray3">{'·'}</span>
+              <div className="flex gap-1.5 flex-wrap">
+                {post.tags.map((tag) => (
+                  <button
+                    key={tag}
+                    type="button"
+                    onClick={(e) => handleTagClick(e, tag)}
+                    className="px-2 py-0.5 rounded-full bg-tag text-tag-text text-xs hover:bg-tag-hover transition-colors"
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </li>
     </Link>

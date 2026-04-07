@@ -8,6 +8,7 @@ export interface SearchDocument {
   dateString: string;
   thumbnail: string;
   readingTimes: number;
+  tags: string[];
 }
 
 export interface PostListHeaderProps {

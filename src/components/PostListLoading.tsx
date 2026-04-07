@@ -5,26 +5,29 @@ import { useEffect, useState } from 'react';
 // 스켈레톤 카드 컴포넌트
 const SkeletonPostCard = () => {
   return (
-    <li className='shadow-md border rounded-xl h-full transition flex sm:block'>
-      <div className='relative sm:m-2 hidden sm:block sm:text-lg sm:w-[calc(100% - 4rem)] aspect-video overflow-hidden'>
-        <div className='size-full bg-gray-200 animate-pulse rounded-md' />
+    <li className="py-4 border-b border-gray4 last:border-b-0">
+      <div className="h-6 bg-gray-200 rounded-md w-2/5 mb-2 relative overflow-hidden">
+        <div className="absolute inset-0 size-full bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shimmer" />
       </div>
-      <div className='flex flex-col px-2 pb-2 m-2 w-full sm:m-0 sm:w-auto'>
-        <div className='h-6 bg-gray-200 rounded-md w-3/4 mb-2 relative overflow-hidden'>
-          <div className='absolute inset-0 size-full bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shimmer' />
-        </div>
-        <div className='h-4 bg-gray-200 rounded-md w-full mb-2 relative overflow-hidden'>
-          <div className='absolute inset-0 size-full bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shimmer' />
-        </div>
-        <div className='flex justify-between p-1'>
-          <div className='h-4 bg-gray-200 rounded-md w-1/4 relative overflow-hidden'>
-            <div className='absolute inset-0 size-full bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shimmer' />
+      <div className="flex justify-between gap-4 mt-1.5">
+        <div className="flex-1 space-y-1.5">
+          <div className="h-4 bg-gray-200 rounded-md w-full relative overflow-hidden">
+            <div className="absolute inset-0 size-full bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shimmer" />
           </div>
-          <div className='flex gap-1 items-center'>
-            <div className='h-4 bg-gray-200 rounded-md w-20 relative overflow-hidden'>
-              <div className='absolute inset-0 size-full bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shimmer' />
-            </div>
+          <div className="h-4 bg-gray-200 rounded-md w-3/4 relative overflow-hidden">
+            <div className="absolute inset-0 size-full bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shimmer" />
           </div>
+        </div>
+        <div className="w-[160px] h-[120px] shrink-0 bg-gray-200 rounded-md hidden sm:block relative overflow-hidden">
+          <div className="absolute inset-0 size-full bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shimmer" />
+        </div>
+      </div>
+      <div className="flex items-center gap-2 mt-2">
+        <div className="h-4 bg-gray-200 rounded-md w-24 relative overflow-hidden">
+          <div className="absolute inset-0 size-full bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shimmer" />
+        </div>
+        <div className="h-4 bg-gray-200 rounded-md w-16 relative overflow-hidden">
+          <div className="absolute inset-0 size-full bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shimmer" />
         </div>
       </div>
     </li>
@@ -40,8 +43,8 @@ export const PostListLoading = () => {
           <div className='absolute inset-0 size-full bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shimmer' />
         </div>
       </div>
-      <ul className="gap-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        {Array(9).fill(0).map((_, index) => (
+      <ul className="flex flex-col">
+        {Array(6).fill(0).map((_, index) => (
           <SkeletonPostCard key={index} />
         ))}
       </ul>
