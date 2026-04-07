@@ -19,7 +19,7 @@ const PostListHeader = ({ searchResults, pastSearchValue, category }: PostListHe
         <div>
           <span className="mr-1">{`'${ pastSearchValue }'`}</span>
           {'에 대한 검색 결과가 없습니다.'}
-          <div className='mt-8 pt-2 border-t border-main'>{'모든 포스트'}</div>
+          <div className='mt-8 pt-5 border-t-2 border-gray1'>{'모든 포스트'}</div>
         </div>
       );
     }
@@ -37,7 +37,7 @@ const PostListHeader = ({ searchResults, pastSearchValue, category }: PostListHe
   };
 
   return (
-    <div className="mb-5">
+    <div className="border-b-2 border-gray1 pb-5 px-4 lg:px-0">
       <strong className="text-xl font-semibold">
         {renderHeaderContent()}
       </strong>
@@ -46,7 +46,7 @@ const PostListHeader = ({ searchResults, pastSearchValue, category }: PostListHe
 };
 
 interface PostGridWithTagProps extends PostGridProps {
-  onTagClick: (tag: string) => void;
+  onTagClick: (tag: string)=> void;
 }
 
 const PostGrid = ({ posts, onTagClick }: PostGridWithTagProps) => {
@@ -77,27 +77,29 @@ const ClientPostList = ({ initialPosts, category }: ClientPostListProps) => {
   };
 
   return (
-    <>
-      <PostListHeader
-        searchResults={searchResults}
-        pastSearchValue={pastSearchValue}
-        category={category}
-      />
-      {selectedTag && (
-        <div className="mb-4 flex items-center gap-2">
-          <span className="text-sm text-sub">{'태그 필터:'}</span>
-          <button
-            type="button"
-            onClick={() => setSelectedTag(null)}
-            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-accent1 text-white text-sm transition-colors hover:opacity-80"
-          >
-            {selectedTag}
-            <X className="size-3.5" />
-          </button>
-        </div>
-      )}
-      <PostGrid posts={postList} onTagClick={handleTagClick} />
-    </>
+    <div className='flex justify-center'>
+      <div className='w-full max-w-[800px]'>
+        <PostListHeader
+          searchResults={searchResults}
+          pastSearchValue={pastSearchValue}
+          category={category}
+        />
+        {selectedTag && (
+          <div className="mb-4 flex items-center gap-2">
+            <span className="text-sm text-sub">{'태그 필터:'}</span>
+            <button
+              type="button"
+              onClick={() => setSelectedTag(null)}
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-accent1 text-white text-sm transition-colors hover:opacity-80"
+            >
+              {selectedTag}
+              <X className="size-3.5" />
+            </button>
+          </div>
+        )}
+        <PostGrid posts={postList} onTagClick={handleTagClick} />
+      </div>
+    </div>
   );
 };
 

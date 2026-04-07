@@ -18,8 +18,8 @@ const ProgressBar = () => {
   }, []);
 
   return (
-    <div className='fixed top-0 left-0 z-20 h-1 w-full bg-background-opacity backdrop-blur-md'>
-      <div className='h-1 bg-impact' style={{ width: `${ scrollProgress }%` }} />
+    <div className='fixed top-0 left-0 z-50 h-1 w-full bg-background-opacity backdrop-blur-md'>
+      <div className='h-1 bg-accent2' style={{ width: `${ scrollProgress }%` }} />
     </div>
   );
 };

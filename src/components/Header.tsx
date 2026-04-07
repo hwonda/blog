@@ -79,7 +79,7 @@ export default function Header() {
   return (
     <div className='fixed top-0 z-50 w-full'>
       <div className={`${ isScrolled ? 'border-b border-gray5 bg-background' : '' } flex justify-center`}>
-        <div className="w-full max-w-[800px] relative flex items-center justify-between p-4 backdrop-blur-md text-main">
+        <div className="w-full max-w-[800px] relative flex items-center justify-between py-4 px-4 lg:px-0 backdrop-blur-md text-main">
           {/* 컨텐츠 */}
           <div className="font-paperlogy relative z-10 flex items-center gap-2 text-base font-medium sm:text-2xl">
             {/* <Dropdown
@@ -96,7 +96,7 @@ export default function Header() {
             </a>
             <a
               href={portfolioPath}
-              className="text-sub hover:bg-gray4 rounded-full p-1.5 transition-all duration-300 sm:px-3 text-base hover:text-accent1"
+              className="text-sub hover:bg-gray4 rounded-md p-1.5 transition-all duration-300 sm:px-3 text-base hover:text-accent1"
               aria-label="포트폴리오로 이동"
             >
               {'About'}

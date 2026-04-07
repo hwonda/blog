@@ -15,7 +15,7 @@ const PostListContent = async ({ category }: PostListProps) => {
 
 const PostListLayout = ({ category }: PostListProps) => {
   return (
-    <div className='flex justify-center min-h-screen w-full mt-10 px-2 sm:px-4 md:px-8 lg:px-10 xl:px-32'>
+    <div className='flex justify-center min-h-screen w-full mt-20'>
       <section className='mt-10 w-full'>
         <Suspense fallback={<PostListLoading />}>
           <PostListContent category={category} />
