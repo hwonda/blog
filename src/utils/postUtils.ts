@@ -18,9 +18,26 @@ import {
 export const parsePost = async (postPath: string): Promise<Post> => {
   const postAbstract = parsePostAbstract(postPath);
   const postDetail = await parsePostDetail(postPath);
+
+  // 시리즈 포스트인 경우 시리즈명을 태그에 자동 추가
+  let enrichedTags = postDetail.tags;
+  if ('seriesSlug' in postAbstract && postAbstract.seriesSlug) {
+    try {
+      const indexPath = path.join(
+        ABSOLUTE_POSTS_PATH, 'Series', postAbstract.seriesSlug, 'index.json',
+      );
+      const indexContent = await fs.readFile(indexPath, 'utf8');
+      const seriesMeta = JSON.parse(indexContent);
+      enrichedTags = [...new Set([seriesMeta.title, ...postDetail.tags])];
+    } catch {
+      // index.json 없으면 기존 태그 유지
+    }
+  }
+
   return {
     ...postAbstract,
     ...postDetail,
+    tags: enrichedTags,
   };
 };
 
@@ -35,8 +52,17 @@ export const parsePostAbstract = (postPath: string) => {
     .replace(/\\/g, '/')
     .replace('.mdx', '');
 
-  const [categoryPath, slug] = relativeFilePath.split('/');
+  const segments = relativeFilePath.split('/');
 
+  // 시리즈 포스트: Series/[seriesSlug]/[slug]
+  if (segments.length === 3 && segments[0] === 'Series') {
+    const [, seriesSlug, slug] = segments;
+    const url = `/blog/series/${ seriesSlug }/${ slug }`;
+    const categoryPublicName = getCategoryPublicName('Series');
+    return { url, categoryPath: 'Series', categoryPublicName, slug, seriesSlug };
+  }
+
+  const [categoryPath, slug] = segments;
   const url = `/blog/${ categoryPath }/${ slug }`;
   const categoryPublicName = getCategoryPublicName(categoryPath);
 

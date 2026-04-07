@@ -37,6 +37,12 @@
   --border-color: #2d3748;
   --impact-color: #fb923c;
 
+  --primary-color: rgb(255, 86, 120);
+  --secondary-color: rgb(255, 126, 182);
+  --tertiary-color: rgb(223, 129, 255);
+  --quaternary-color: rgb(122, 102, 255);
+  --quinary-color: rgb(115, 94, 255);
+
   --text-color: rgb(251, 251, 251);
   --text-secondary-color: rgb(224, 224, 224);
 
@@ -50,4 +56,13 @@
   --tag-bg: rgba(255, 255, 255, 0.1);
   --tag-text: rgb(180, 180, 180);
   --tag-hover-bg: rgba(255, 255, 255, 0.18);
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }

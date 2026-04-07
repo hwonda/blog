@@ -4,6 +4,7 @@ import { useState } from 'react';
 import PostCard from '@/components/PostCard';
 import { useSearch } from '@/contexts/SearchContext';
 import { PostListHeaderProps, PostGridProps, ClientPostListProps } from '@/types/search';
+import SeriesCarousel from '@/components/series/SeriesCarousel';
 import { X } from 'lucide-react';
 
 const PostListHeader = ({ searchResults, pastSearchValue, category }: PostListHeaderProps) => {
@@ -63,7 +64,7 @@ const PostGrid = ({ posts, onTagClick }: PostGridWithTagProps) => {
   );
 };
 
-const ClientPostList = ({ initialPosts, category }: ClientPostListProps) => {
+const ClientPostList = ({ initialPosts, category, seriesCards = [] }: ClientPostListProps) => {
   const { searchResults, pastSearchValue } = useSearch();
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
@@ -76,16 +77,19 @@ const ClientPostList = ({ initialPosts, category }: ClientPostListProps) => {
     setSelectedTag((prev) => (prev === tag ? null : tag));
   };
 
+  const showCarousel = seriesCards.length > 0 && !selectedTag && !pastSearchValue;
+
   return (
     <div className='flex justify-center'>
       <div className='w-full max-w-[800px]'>
+        {showCarousel && <SeriesCarousel seriesCards={seriesCards} />}
         <PostListHeader
           searchResults={searchResults}
           pastSearchValue={pastSearchValue}
           category={category}
         />
         {selectedTag && (
-          <div className="mb-4 flex items-center gap-2">
+          <div className="my-4 flex items-center gap-2">
             <span className="text-sm text-sub">{'태그 필터:'}</span>
             <button
               type="button"

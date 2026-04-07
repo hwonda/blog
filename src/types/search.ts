@@ -24,4 +24,5 @@ export interface PostGridProps {
 export interface ClientPostListProps {
   initialPosts: SearchDocument[];
   category?: string;
+  seriesCards?: import('./series').SeriesCard[];
 }
