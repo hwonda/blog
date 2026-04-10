@@ -68,8 +68,8 @@ const SeriesCarousel = ({ seriesCards }: SeriesCarouselProps) => {
                     src={card.thumbnail}
                     alt={card.title}
                     fill
-                    sizes="240px"
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    sizes='240px'
+                    className="object-cover aspect-video group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
               ) : (
@@ -81,7 +81,7 @@ const SeriesCarousel = ({ seriesCards }: SeriesCarouselProps) => {
                 <div className="font-semibold text-sm truncate group-hover:text-accent1 transition-colors">
                   {card.title}
                 </div>
-                <p className="text-xs text-sub mt-1 line-clamp-2 transition-colors">{card.desc}</p>
+                <p className="text-xs text-sub mt-1 line-clamp-2 transition-colors min-h-8">{card.desc}</p>
                 <div className="flex items-center gap-1 mt-2 text-xs text-gray1">
                   <BookOpen className="size-3" />
                   <span>{card.postCount}{'편'}</span>

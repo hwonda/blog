@@ -21,7 +21,7 @@ const SeriesTocPage = ({ series }: SeriesTocPageProps) => {
 
         <div className="mb-8">
           {series.thumbnail ? (
-            <div className="relative w-full aspect-[2.5/1] mb-6 rounded-lg overflow-hidden">
+            <div className="relative w-full aspect-video mb-6 rounded-lg overflow-hidden">
               <Image
                 src={series.thumbnail}
                 alt={series.title}
@@ -32,7 +32,7 @@ const SeriesTocPage = ({ series }: SeriesTocPageProps) => {
               />
             </div>
           ) : (
-            <div className="w-full aspect-[2.5/1] mb-6 rounded-lg bg-gray5 flex items-center justify-center">
+            <div className="w-full aspect-video mb-6 rounded-lg bg-gray5 flex items-center justify-center">
               <BookOpen className="size-16 text-gray2" />
             </div>
           )}
