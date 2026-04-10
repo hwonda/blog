@@ -50,6 +50,7 @@ export async function generateStaticParams() {
   const postPaths: string[] = getPostPaths();
   const paramList = postPaths
     .map((path) => parsePostAbstract(path))
+    .filter((item) => !('seriesSlug' in item))
     .map((item) => ({ category: item.categoryPath, slug: item.slug }));
   return paramList;
 }

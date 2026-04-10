@@ -15,7 +15,6 @@
   --text-color: rgb(5, 5, 5);
   --text-secondary-color: rgb(39, 39, 39);
 
-  --gray0: rgb(55, 55, 55);
   --gray1: rgb(95, 95, 95);
   --gray2: rgb(120, 120, 120);
   --gray3: rgb(170, 170, 170);
@@ -37,17 +36,31 @@
   --border-color: #2d3748;
   --impact-color: #fb923c;
 
+  --primary-color: rgb(255, 86, 120);
+  --secondary-color: rgb(255, 126, 182);
+  --tertiary-color: rgb(223, 129, 255);
+  --quaternary-color: rgb(122, 102, 255);
+  --quinary-color: rgb(115, 94, 255);
+
   --text-color: rgb(251, 251, 251);
   --text-secondary-color: rgb(224, 224, 224);
 
-  --gray0: rgb(200, 200, 200);
-  --gray1: rgb(165, 165, 165);
-  --gray2: rgb(120, 120, 120);
-  --gray3: rgb(80, 80, 80);
-  --gray4: rgb(50, 50, 50);
-  --gray5: rgb(30, 30, 30);
+  --gray1: rgb(205, 205, 205);
+  --gray2: rgb(180, 180, 180);
+  --gray3: rgb(155, 155, 155);
+  --gray4: rgb(130, 130, 130);
+  --gray5: rgb(55, 55, 55);
 
   --tag-bg: rgba(255, 255, 255, 0.1);
   --tag-text: rgb(180, 180, 180);
   --tag-hover-bg: rgba(255, 255, 255, 0.18);
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
