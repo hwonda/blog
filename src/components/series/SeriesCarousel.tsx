@@ -68,7 +68,7 @@ const SeriesCarousel = ({ seriesCards }: SeriesCarouselProps) => {
                     src={card.thumbnail}
                     alt={card.title}
                     fill
-                    sizes='240px'
+                    sizes='1100px'
                     className="object-cover aspect-video group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
