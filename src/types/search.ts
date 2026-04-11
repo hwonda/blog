@@ -15,6 +15,8 @@ export interface PostListHeaderProps {
   searchResults: SearchDocument[];
   pastSearchValue: string;
   category?: string;
+  selectedTag?: string | null;
+  count: number;
 }
 
 export interface PostGridProps {

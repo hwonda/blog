@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSearch } from '@/contexts/SearchContext';
-import { searchPosts } from '@/utils/searchUtils';
 import { Search } from 'lucide-react';
 
 interface SearchInputProps {
@@ -13,44 +12,26 @@ interface SearchInputProps {
 
 const SearchInput = ({ mounted }: SearchInputProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isSearching, setIsSearching] = useState(false);
   const isComposingRef = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const { setSearchResults, searchQuery, setSearchQuery, setPastSearchValue } = useSearch();
+  const { searchQuery, setSearchQuery } = useSearch();
   const router = useRouter();
 
-  const handleSearch = async () => {
-    if (searchQuery.trim() === '') {
-      setSearchResults([]);
-      setPastSearchValue('');
-      return;
-    }
-
-    setIsSearching(true);
-    try {
-      const results = await searchPosts(searchQuery.trim());
-      setPastSearchValue(searchQuery.trim());
-      setSearchResults(results);
-    } catch (error) {
-      console.error('Search error:', error);
-      setSearchResults([]);
-    } finally {
-      setIsSearching(false);
-    }
+  const submitSearch = () => {
+    const trimmed = searchQuery.trim();
+    router.push(trimmed ? `/blog?q=${ encodeURIComponent(trimmed) }` : '/blog');
+    setIsExpanded(false);
+    setSearchQuery('');
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
 
-  const handleKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && !isSearching && !isComposingRef.current) {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && !isComposingRef.current) {
       e.preventDefault();
-      setSearchQuery(searchQuery.trim());
-      await handleSearch();
-      router.push('/blog');
-      setIsExpanded(false);
-      setSearchQuery('');
+      submitSearch();
     }
   };
 
@@ -85,12 +66,12 @@ const SearchInput = ({ mounted }: SearchInputProps) => {
           transition-all duration-500`}
         aria-label='Search'
         onClick={() => {
-          setIsExpanded(!isExpanded);
-          if (isExpanded && searchQuery && !isSearching) {
-            handleSearch();
+          if (isExpanded && searchQuery) {
+            submitSearch();
+          } else {
+            setIsExpanded(!isExpanded);
           }
         }}
-        disabled={isSearching}
       >
         {mounted
           && <Search size={16} />
@@ -106,7 +87,6 @@ const SearchInput = ({ mounted }: SearchInputProps) => {
         onCompositionStart={() => { isComposingRef.current = true; }}
         onCompositionEnd={() => { isComposingRef.current = false; }}
         placeholder='검색어 입력 후 Enter'
-        disabled={isSearching}
         className={`transition-all duration-300 bg-background border border-accent1 rounded-xs h-8 ${
           isExpanded ? 'w-24 p-2 sm:w-36 md:w-48 lg:w-64' : 'w-0 p-0 border-0'
         }`}
