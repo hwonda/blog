@@ -1,16 +1,9 @@
 /* ========== Typography (prose) customizations ========== */
 
-.prose h2 {
-  border-left: 4px solid var(--impact-color);
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem 0 0 0.25rem;
-  background-color: var(--gray5);
-}
-
 .prose h3 {
   margin-top: 1.5rem;
   margin-bottom: 0.75rem;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   color: var(--text-color);
 }
 
@@ -45,17 +38,19 @@
   margin-top: 5rem;
   margin-bottom: 1.5rem;
   color: var(--text-color);
-  font-size: 1.25rem;
+  font-size: 2rem;
 }
 
 .prose :where(a):not(:where([class~="not-prose"],[class~="not-prose"] *)) {
   text-decoration: none;
   position: relative;
-  color: var(--impact-color);
+  color: var(--primary-color);
+  border-bottom: 1px solid var(--primary-color);
 }
 
 .prose :where(a):not(:where([class~="not-prose"],[class~="not-prose"] *)):hover {
-  border-bottom: 1px solid var(--impact-color);
+  color: var(--quaternary-color);
+  border-bottom: 1px solid var(--quaternary-color);
 }
 
 .prose :where(pre code span):not(:where([class~="not-prose"],[class~="not-prose"] *)) {
@@ -152,7 +147,7 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
   position: relative;
   bottom: 1px;
   margin: 0 2px;
-  color: rgb(234, 88, 12);
+  color: var(--primary-color);
   background-color: rgba(135, 131, 120, 0.15);
   padding: 0.2rem 0.4rem;
   overflow-wrap: break-word;

@@ -17,7 +17,7 @@ const SeriesNavMobile = ({ series, currentPostSlug }: SeriesNavMobileProps) => {
   const nextPost = currentIndex < series.posts.length - 1 ? series.posts[currentIndex + 1] : null;
 
   return (
-    <div className="not-prose w-full max-w-[800px] border border-gray3 rounded-lg overflow-hidden my-4 xl:hidden">
+    <div className="not-prose w-full max-w-[800px] border border-gray3 rounded-lg overflow-hidden mt-4 mb-20 xl:hidden">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
