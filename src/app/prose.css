@@ -172,3 +172,7 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
 .prose li {
   color: var(--text-color)
 }
+
+.prose :where(hr):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  border: 1px solid var(--gray5);
+}
