@@ -4,8 +4,8 @@ export interface SearchDocument {
   url: string;
   categoryPath: string;
   categoryPublicName: string;
-  date: Date;
-  dateString: string;
+  createdDate: string;
+  modifiedDate: string | null;
   thumbnail: string;
   readingTimes: number;
   tags: string[];
