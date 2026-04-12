@@ -1,7 +1,7 @@
 import { SearchDocument } from '@/types/search';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Clock3, Calendar } from 'lucide-react';
+import { Clock3 } from 'lucide-react';
 
 interface PostCardProps {
   post: SearchDocument;
@@ -25,32 +25,34 @@ const PostCard = ({ post, onTagClick }: PostCardProps) => {
           <p className="text-sub text-sm line-clamp-2 flex-1 transition-colors">
             {post.desc}
           </p>
-          <div className="flex items-center gap-2 mt-2 text-[13px] text-gray1 flex-wrap">
-            <div className="flex items-center gap-1">
-              <Calendar className="size-3" />
-              <span>{post.dateString}</span>
-            </div>
-            <span className="text-gray3">{'·'}</span>
-            <div className="flex items-center gap-1">
+          <div className="flex flex-col gap-2 mt-2">
+            <div className="flex items-center gap-1 text-[13px] text-gray1">
+              <span>{post.createdDate}</span>
+              <span>{'발행'}</span>
+              <span className="px-0.5 text-gray3">{'·'}</span>
+              {post.modifiedDate && (
+                <>
+                  <span>{post.modifiedDate}</span>
+                  <span>{'수정'}</span>
+                  <span className="px-0.5 text-gray3">{'·'}</span>
+                </>
+              )}
               <Clock3 className="size-3" />
               <span>{post.readingTimes}{'분'}</span>
             </div>
             {post.tags.length > 0 && (
-              <>
-                <span className="text-gray3">{'·'}</span>
-                <div className="flex gap-1.5 flex-wrap">
-                  {post.tags.map((tag) => (
-                    <button
-                      key={tag}
-                      type="button"
-                      onClick={(e) => handleTagClick(e, tag)}
-                      className="px-2 py-0.5 rounded-full bg-tag text-tag-text text-xs hover:bg-tag-hover transition-colors"
-                    >
-                      {tag}
-                    </button>
-                  ))}
-                </div>
-              </>
+              <div className="flex gap-1.5 flex-wrap">
+                {post.tags.map((tag) => (
+                  <button
+                    key={tag}
+                    type="button"
+                    onClick={(e) => handleTagClick(e, tag)}
+                    className="px-2 py-0.5 rounded-full bg-tag text-tag-text text-xs hover:bg-tag-hover transition-colors"
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
             )}
           </div>
         </div>

@@ -60,7 +60,7 @@ async function generateRssFeed() {
           link: blogMetadata.author.contacts.github,
         },
       ],
-      date: new Date(post.date),
+      date: new Date(post.createdDate.replace(/\./g, '-')),
       image: thumbnailUrl,
     });
   });

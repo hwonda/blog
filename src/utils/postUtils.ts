@@ -1,4 +1,4 @@
-import { Post, ParsedPost, TocItem } from '@/types';
+import { Post, PostFrontmatter, TocItem } from '@/types';
 import fs from 'fs/promises';
 import matter from 'gray-matter';
 import dayjs from 'dayjs';
@@ -78,12 +78,24 @@ export const parsePostDetail = async (postPath: string) => {
   try {
     const file = await fs.readFile(postPath, 'utf8');
     const { data, content } = matter(file);
-    const grayMatter = data as ParsedPost;
-    const dateString = dayjs(grayMatter.date).locale('ko').format('YYYY.MM.DD');
+    const frontmatter = data as PostFrontmatter;
+    const createdDate = dayjs(frontmatter.createdDate).locale('ko').format('YYYY.MM.DD');
+    const modifiedDate = frontmatter.modifiedDate
+      ? dayjs(frontmatter.modifiedDate).locale('ko').format('YYYY.MM.DD')
+      : null;
     const readingTimes = Math.ceil(readingTime(content).minutes);
-    const tags = Array.isArray(grayMatter.tags) ? grayMatter.tags : [];
+    const tags = Array.isArray(frontmatter.tags) ? frontmatter.tags : [];
 
-    return { ...grayMatter, dateString, content, readingTimes, tags };
+    return {
+      title: frontmatter.title,
+      desc: frontmatter.desc,
+      thumbnail: frontmatter.thumbnail,
+      createdDate,
+      modifiedDate,
+      content,
+      readingTimes,
+      tags,
+    };
   } catch (error) {
     console.error(`Error reading file ${ postPath }:`, error);
     throw error;
@@ -117,7 +129,7 @@ export const getSortedPostList = async (category?: string): Promise<Post[]> => {
  * @returns 정렬된 포스트 목록
  */
 export const sortPostsByDate = (posts: Post[]) =>
-  posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  posts.sort((a, b) => b.createdDate.localeCompare(a.createdDate));
 
 /**
  * 모든 포스트의 개수를 반환합니다.

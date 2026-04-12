@@ -61,7 +61,7 @@ const SeriesTocPage = ({ series }: SeriesTocPageProps) => {
                   <div className="flex items-center gap-2 mt-2 text-xs text-gray2">
                     <div className="flex items-center gap-1">
                       <Calendar className="size-3" />
-                      <span>{post.dateString}</span>
+                      <span>{post.createdDate}</span>
                     </div>
                     <span className="text-gray3">{'·'}</span>
                     <div className="flex items-center gap-1">

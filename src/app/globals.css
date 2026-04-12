@@ -18,8 +18,8 @@
   --gray1: rgb(95, 95, 95);
   --gray2: rgb(120, 120, 120);
   --gray3: rgb(170, 170, 170);
-  --gray4: rgb(230, 230, 230);
-  --gray5: rgb(242, 242, 242);
+  --gray4: rgb(215, 215, 215);
+  --gray5: rgb(225, 225, 225);
 
   --tag-bg: rgba(0, 0, 0, 0.06);
   --tag-text: rgb(80, 80, 80);
@@ -28,8 +28,8 @@
 
 .dark {
   --foreground: #fff;
-  --background: rgb(17, 17, 17);
-  --background-opacity: rgba(17, 17, 17, 0.8);
+  --background: rgb(24, 24, 24);
+  --background-opacity: rgba(24, 24, 24, 0.8);
   --secondary: hsl(217, 33%, 17%);
   --secondary-foreground: var(--white);
 
@@ -43,13 +43,13 @@
   --quinary-color: rgb(115, 94, 255);
 
   --text-color: rgb(251, 251, 251);
-  --text-secondary-color: rgb(224, 224, 224);
+  --text-secondary-color: rgb(238, 238, 238);
 
   --gray1: rgb(205, 205, 205);
   --gray2: rgb(180, 180, 180);
   --gray3: rgb(155, 155, 155);
   --gray4: rgb(130, 130, 130);
-  --gray5: rgb(55, 55, 55);
+  --gray5: rgb(75, 75, 75);
 
   --tag-bg: rgba(255, 255, 255, 0.1);
   --tag-text: rgb(180, 180, 180);

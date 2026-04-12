@@ -1,7 +1,7 @@
 /* ========== Typography (prose) customizations ========== */
 
 .prose h3 {
-  margin-top: 1.5rem;
+  margin-top: 2.25rem;
   margin-bottom: 0.75rem;
   font-size: 1.5rem;
   color: var(--text-color);
@@ -17,7 +17,7 @@
 }
 
 .prose img {
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   max-height: 600px;
   margin: 0 auto;
 }
@@ -94,13 +94,7 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
   padding-left: 0;
   color: var(--shiki-light);
   background-color: var(--shiki-light-bg);
-  border: 1px solid #e5e7eb;
-}
-
-.dark .prose pre {
-  background-color: var(--shiki-dark-bg);
-  color: var(--shiki-dark);
-  border: 1px solid #374151;
+  border: 1px solid var(--gray4);
 }
 
 .prose pre > code > span {
@@ -126,7 +120,7 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
   font-size: 0.75rem;
   font-weight: 600;
   background-color: var(--background);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--gray4);
   border-bottom: none;
   border-radius: 0.5rem 0.5rem 0 0;
 }
@@ -147,8 +141,8 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
   position: relative;
   bottom: 1px;
   margin: 0 2px;
-  color: var(--primary-color);
-  background-color: rgba(135, 131, 120, 0.15);
+  color: var(--text-color);
+  background-color: var(--gray5);
   padding: 0.2rem 0.4rem;
   overflow-wrap: break-word;
   border-radius: 4px;
@@ -166,6 +160,14 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
 
 .prose li {
   color: var(--text-color)
+}
+
+.prose :where(ul):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  margin-top: 0rem;
+}
+
+.prose :where(ul > li):not(:where([class~="not-prose"], [class~="not-prose"] *))::marker {
+  color: var(--second-color);
 }
 
 .prose :where(hr):not(:where([class~="not-prose"], [class~="not-prose"] *)) {

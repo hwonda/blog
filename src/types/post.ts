@@ -1,7 +1,16 @@
+export interface PostFrontmatter {
+  title: string;
+  createdDate: Date;
+  modifiedDate?: Date;
+  desc: string;
+  thumbnail: string;
+  tags?: string[];
+}
+
 export interface ParsedPost {
   title: string;
-  date: Date;
-  dateString: string;
+  createdDate: string;
+  modifiedDate: string | null;
   desc: string;
   thumbnail: string;
   tags: string[];
