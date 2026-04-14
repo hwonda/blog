@@ -1,7 +1,3 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-
 // 스켈레톤 카드 컴포넌트
 const SkeletonPostCard = () => {
   return (
@@ -57,28 +53,3 @@ export const PostListLoading = () => {
   );
 };
 
-// 10초 지연 로딩 컴포넌트
-interface DelayedLoaderProps {
-  children: React.ReactNode;
-  delayMs?: number;
-}
-
-const DelayedLoader = ({ children, delayMs = 10000 }: DelayedLoaderProps) => {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, delayMs);
-
-    return () => clearTimeout(timer);
-  }, [delayMs]);
-
-  if (isLoading) {
-    return <PostListLoading />;
-  }
-
-  return <>{children}</>;
-};
-
-export default DelayedLoader;
