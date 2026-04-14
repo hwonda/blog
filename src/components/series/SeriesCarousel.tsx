@@ -54,7 +54,7 @@ const SeriesCarousel = ({ seriesCards }: SeriesCarouselProps) => {
       </div>
       <div
         ref={scrollRef}
-        className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 snap-x snap-mandatory"
+        className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory"
       >
         {seriesCards.map((card) => (
           <Link key={card.slug} href={card.url} className="snap-start">
