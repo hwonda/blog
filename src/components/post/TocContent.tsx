@@ -17,7 +17,7 @@ const TocContent = ({ toc }: Props) => {
     const targetId = link.substring(1);
     const targetElement = document.getElementById(targetId);
     if (targetElement) {
-      const yOffset = -50; // 헤더 높이에 따른 오프셋 조정
+      const yOffset = -80; // 헤더 높이에 따른 오프셋 조정
       const y = targetElement.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
