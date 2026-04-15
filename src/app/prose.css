@@ -173,3 +173,24 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
 .prose :where(hr):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
   border: 1px solid var(--gray5);
 }
+
+.prose :where(table):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  color: var(--text-secondary-color);
+}
+
+.prose :where(thead):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  border-color: var(--gray3);
+}
+
+.prose :where(table tr):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  border-color: var(--gray4);
+}
+
+.prose :where(table th):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  color: var(--text-color);
+  padding: 0.5rem;
+}
+
+.prose :where(table td):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  padding: 0.5rem;
+}
