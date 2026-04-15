@@ -2,6 +2,23 @@ import { CategoryDetail } from '@/types';
 import { getPostList } from './postUtils';
 import { sync } from 'glob';
 import { ABSOLUTE_POSTS_PATH } from './fileUtils';
+const categoryDescriptions: Record<string, string> = {
+  'Next': 'Next.js 프레임워크에 대한 학습과 실전 활용 포스트',
+  'React': 'React 라이브러리에 대한 학습과 실전 활용 포스트',
+  'TypeScript': 'TypeScript 학습과 실전 활용 포스트',
+  'Project': '프로젝트 경험과 회고 포스트',
+  'Etc': '개발 관련 기타 포스트',
+  'Series': '시리즈로 연재하는 포스트',
+};
+
+/**
+ * 카테고리 폴더 이름으로 SEO용 설명을 반환합니다.
+ * @param category - 카테고리 폴더 이름
+ * @returns SEO 설명
+ */
+export const getCategoryDescription = (category: string): string =>
+  categoryDescriptions[category] || `${ getCategoryPublicName(category) } 관련 포스트`;
+
 /**
  * 카테고리 폴더 이름을 공용 이름으로 변환합니다.
  * @param dirPath - 카테고리 폴더 경로

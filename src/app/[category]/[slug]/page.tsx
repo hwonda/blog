@@ -16,21 +16,26 @@ export async function generateMetadata({ params }: SlugProps): Promise<Metadata>
   const post = await getPostDetail(category, slug);
 
   const title = `${ post.title } | 주다훤 블로그`;
-  const thumbnailPath = `/posts/${ post.categoryPublicName }/${ post.slug }/thumbnail.png`;
+  const postUrl = `${ blogMetadata.siteUrl }/${ post.categoryPublicName }/${ post.url }`;
+  const thumbnailUrl = `${ blogMetadata.siteUrl }/posts/${ post.categoryPublicName }/${ post.slug }/thumbnail.png`;
 
   return {
     title,
     description: post.desc,
+    keywords: post.tags,
+    alternates: {
+      canonical: postUrl,
+    },
     openGraph: {
       title: title,
       description: post.desc,
-      url: `${ blogMetadata.url }/${ post.categoryPublicName }/${ post.url }`,
+      url: postUrl,
       siteName: blogMetadata.name,
       locale: 'ko_KR',
       type: 'article',
       images: [
         {
-          url: thumbnailPath,
+          url: thumbnailUrl,
           width: 1200,
           height: 630,
           alt: title,
@@ -41,7 +46,7 @@ export async function generateMetadata({ params }: SlugProps): Promise<Metadata>
       card: 'summary_large_image',
       title: title,
       description: post.desc,
-      images: [thumbnailPath],
+      images: [thumbnailUrl],
     },
   };
 }
@@ -60,8 +65,35 @@ const PostDetail = async ({ params }: SlugProps) => {
   const post = await getPostDetail(category, slug);
   const toc = parseToc(post.content);
 
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    'headline': post.title,
+    'description': post.desc,
+    'url': `${ blogMetadata.siteUrl }/${ post.categoryPublicName }/${ post.url }`,
+    'image': `${ blogMetadata.siteUrl }/posts/${ post.categoryPublicName }/${ post.slug }/thumbnail.png`,
+    'datePublished': post.createdDate,
+    'dateModified': post.modifiedDate || post.createdDate,
+    'author': {
+      '@type': 'Person',
+      'name': blogMetadata.author.name,
+      'url': blogMetadata.author.contacts.github,
+    },
+    'publisher': {
+      '@type': 'Person',
+      'name': blogMetadata.author.name,
+    },
+    'keywords': post.tags.join(', '),
+  };
+
   return (
-    <PostDetailLayout post={post} toc={toc} />
+    <>
+      <script
+        type='application/ld+json'
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <PostDetailLayout post={post} toc={toc} />
+    </>
   );
 };
 

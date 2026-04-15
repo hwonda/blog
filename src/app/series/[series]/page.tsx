@@ -19,17 +19,28 @@ export async function generateMetadata({ params }: SeriesPageProps): Promise<Met
   const series = await getSeries(seriesSlug);
   const title = `${ series.title } | ${ blogMetadata.name }`;
 
+  const seriesUrl = `${ blogMetadata.siteUrl }/series/${ seriesSlug }`;
+
   return {
     title,
     description: series.desc,
+    alternates: {
+      canonical: seriesUrl,
+    },
     openGraph: {
       title,
       description: series.desc,
-      url: `${ blogMetadata.url }/blog/series/${ seriesSlug }`,
+      url: seriesUrl,
       siteName: blogMetadata.name,
       locale: 'ko_KR',
       type: 'website',
       images: series.thumbnail ? [{ url: series.thumbnail }] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description: series.desc,
+      images: series.thumbnail ? [series.thumbnail] : [],
     },
   };
 }
