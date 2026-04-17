@@ -2,6 +2,7 @@
 title: React Fiber
 desc: 렌더링 작업을 잘게 쪼개고 우선순위를 매겨 UI가 끊기지 않도록 설계된 React의 재조정 엔진
 createdDate: 2026-04-17
+modifiedDate: 2026-04-17
 thumbnail: '/blog/posts/Series/frontend-handbook/thumbnail.webp'
 tags: ['Frontend', 'Browser', 'JavaScript', 'React', 'Fiber']
 ---
@@ -14,7 +15,7 @@ tags: ['Frontend', 'Browser', 'JavaScript', 'React', 'Fiber']
 React Fiber는 React 16버전부터 도입된 새로운 재조정 엔진이다. 한국어로는 `리액트 파이버`라고 읽는다.
 
 [V-DOM](/blog/series/frontend-handbook/06-virtual-DOM)은 상태가 바뀌면 가상 트리를 비교(Diffing)하고, 
-변경분만 실제 DOM에 **재조정(Reconciliation)** 하는 패턴이었다.
+변경분만 native DOM에 **재조정(Reconciliation)** 하는 패턴이었다.
 그래서 V-DOM에서 재조정은 필수적인 작업인데, 이를 좀 더 효율적으로 그리고 스케줄링이 가능하도록 하기 위해서 나온 것이 Fiber이다.
 
 React 공식 문서에는 Fiber에 대한 내용이 담겨있지 않다. 
@@ -91,12 +92,12 @@ Fiber는 작업을 **Render Phase**와 **Commit Phase**, 두 단계로 나눈다
 
 ### Commit Phase (중단 불가)
 
-- Render Phase에서 계산된 변경 사항을 **실제 DOM에 반영**한다.
+- Render Phase에서 계산된 변경 사항을 **native DOM에 반영**한다.
 - 사용자에게 보이는 화면을 바꾸는 작업이므로, 한 번 시작하면 끝까지 실행된다.
 
 ```bash
-[Render Phase]                    [Commit Phase]
-fiber 트리 생성 → Diffing         실제 DOM 반영
+[Render Phase]                [Commit Phase]
+fiber 트리 생성 → Diffing        native DOM 반영
 (중단 가능, 우선순위 스케줄링)       (중단 불가, 동기 실행)
 ```
 
