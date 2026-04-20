@@ -56,8 +56,6 @@ async function generateSearchIndex() {
     title: post.title,
     desc: post.desc,
     url: post.url,
-    categoryPath: post.categoryPath,
-    categoryPublicName: post.categoryPublicName,
     createdDate: post.createdDate,
     modifiedDate: post.modifiedDate,
     thumbnail: post.thumbnail,

@@ -15,9 +15,6 @@ export const getSitemapURLs = async (): Promise<SitemapURL[]> => {
   const postLists = await getPostList();
   const allSeries = await getAllSeries();
 
-  // 카테고리 목록 추출 (중복 제거)
-  const categories = [...new Set(postLists.map((post) => post.categoryPublicName))];
-
   const urls: SitemapURL[] = [
     {
       loc: `${ baseUrl }/blog`,
@@ -25,13 +22,6 @@ export const getSitemapURLs = async (): Promise<SitemapURL[]> => {
       changefreq: 'always',
       priority: 1.0,
     },
-    // 각 카테고리 페이지 추가
-    ...categories.map((categoryPublicName) => ({
-      loc: `${ baseUrl }/blog/${ categoryPublicName }`,
-      lastmod: new Date().toISOString(),
-      changefreq: 'always',
-      priority: 0.9,
-    })),
     // 시리즈 목차 페이지
     ...allSeries.map((series) => ({
       loc: `${ baseUrl }/blog/series/${ series.slug }`,
@@ -54,7 +44,6 @@ export const getSitemapURLs = async (): Promise<SitemapURL[]> => {
 (async () => {
   const posts = await getSitemapURLs();
 
-  // 사이트맵 XML 생성
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     ${ posts
@@ -69,7 +58,6 @@ export const getSitemapURLs = async (): Promise<SitemapURL[]> => {
     .join('') }
     </urlset>`;
 
-  // 사이트맵 파일 생성
   await fs.writeFile('public/sitemap.xml', sitemap);
   console.log('sitemap.xml generated');
 })();

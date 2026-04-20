@@ -6,18 +6,17 @@ import PostDetailLayout from '@/layouts/PostDetailLayout';
 import { blogMetadata } from '@/constants';
 
 interface SlugProps {
-  params: Promise<{ category: string; slug: string }>;
+  params: Promise<{ slug: string }>;
 }
 
 export const dynamicParams = false;
 
 export async function generateMetadata({ params }: SlugProps): Promise<Metadata> {
-  const { category, slug } = await params;
-  const post = await getPostDetail(category, slug);
+  const { slug } = await params;
+  const post = await getPostDetail(slug);
 
-  const title = `${ post.title } | 주다훤 블로그`;
-  const postUrl = `${ blogMetadata.siteUrl }/${ post.categoryPublicName }/${ post.url }`;
-  const thumbnailUrl = `${ blogMetadata.siteUrl }/posts/${ post.categoryPublicName }/${ post.slug }/thumbnail.png`;
+  const title = `${ post.title } | ${ blogMetadata.name }`;
+  const postUrl = `${ blogMetadata.siteUrl }/${ slug }`;
 
   return {
     title,
@@ -27,42 +26,37 @@ export async function generateMetadata({ params }: SlugProps): Promise<Metadata>
       canonical: postUrl,
     },
     openGraph: {
-      title: title,
+      title,
       description: post.desc,
       url: postUrl,
       siteName: blogMetadata.name,
       locale: 'ko_KR',
       type: 'article',
-      images: [
-        {
-          url: thumbnailUrl,
-          width: 1200,
-          height: 630,
-          alt: title,
-        },
-      ],
+      images: post.thumbnail
+        ? [{ url: `${ blogMetadata.url }${ post.thumbnail }`, width: 1200, height: 630, alt: title }]
+        : [],
     },
     twitter: {
       card: 'summary_large_image',
-      title: title,
+      title,
       description: post.desc,
-      images: [thumbnailUrl],
+      images: post.thumbnail ? [`${ blogMetadata.url }${ post.thumbnail }`] : [],
     },
   };
 }
 
 export async function generateStaticParams() {
-  const postPaths: string[] = getPostPaths();
+  const postPaths = getPostPaths();
   const paramList = postPaths
     .map((path) => parsePostAbstract(path))
     .filter((item) => !('seriesSlug' in item))
-    .map((item) => ({ category: item.categoryPath, slug: item.slug }));
+    .map((item) => ({ slug: item.slug }));
   return paramList;
 }
 
 const PostDetail = async ({ params }: SlugProps) => {
-  const { category, slug } = await params;
-  const post = await getPostDetail(category, slug);
+  const { slug } = await params;
+  const post = await getPostDetail(slug);
   const toc = parseToc(post.content);
 
   const structuredData = {
@@ -70,8 +64,8 @@ const PostDetail = async ({ params }: SlugProps) => {
     '@type': 'BlogPosting',
     'headline': post.title,
     'description': post.desc,
-    'url': `${ blogMetadata.siteUrl }/${ post.categoryPublicName }/${ post.url }`,
-    'image': `${ blogMetadata.siteUrl }/posts/${ post.categoryPublicName }/${ post.slug }/thumbnail.png`,
+    'url': `${ blogMetadata.siteUrl }/${ slug }`,
+    'image': post.thumbnail ? `${ blogMetadata.url }${ post.thumbnail }` : undefined,
     'datePublished': post.createdDate,
     'dateModified': post.modifiedDate || post.createdDate,
     'author': {

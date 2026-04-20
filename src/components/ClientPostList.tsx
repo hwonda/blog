@@ -28,7 +28,7 @@ const PostGrid = ({ posts, onTagClick }: PostGridWithTagProps) => {
   );
 };
 
-const ClientPostList = ({ initialPosts, category, seriesCards = [] }: ClientPostListProps) => {
+const ClientPostList = ({ initialPosts, seriesCards = [] }: ClientPostListProps) => {
   const { searchResults, pastSearchValue, setSearchResults, setPastSearchValue } = useSearch();
   const router = useRouter();
   const pathname = usePathname();
@@ -87,7 +87,6 @@ const ClientPostList = ({ initialPosts, category, seriesCards = [] }: ClientPost
         <PostListHeader
           searchResults={searchResults}
           pastSearchValue={pastSearchValue}
-          category={category}
           selectedTag={selectedTag}
           count={postList.length}
         />

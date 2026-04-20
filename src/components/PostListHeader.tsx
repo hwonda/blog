@@ -38,15 +38,7 @@ const SearchResultHeader = ({ query, hasResults, count }: { query: string; hasRe
   </div>
 );
 
-const CategoryHeader = ({ category, count }: { category: string; count: number }) => (
-  <span>
-    <span className='mr-1'>{category}</span>
-    {'에 관한 글들'}
-    <CountBadge count={count} />
-  </span>
-);
-
-const PostListHeader = ({ searchResults, pastSearchValue, category, selectedTag, count }: PostListHeaderProps) => {
+const PostListHeader = ({ searchResults, pastSearchValue, selectedTag, count }: PostListHeaderProps) => {
   const renderContent = () => {
     if (pastSearchValue) {
       return (
@@ -59,9 +51,6 @@ const PostListHeader = ({ searchResults, pastSearchValue, category, selectedTag,
     }
     if (selectedTag) {
       return <TitleBlock title='Tagged Posts' subtitle='블로그 내 태그 관련 포스트' count={count} />;
-    }
-    if (category) {
-      return <CategoryHeader category={category} count={count} />;
     }
     return <TitleBlock title='All posts' subtitle='블로그 내 전체 포스트' count={count} />;
   };

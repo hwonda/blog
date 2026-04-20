@@ -4,7 +4,6 @@ import matter from 'gray-matter';
 import dayjs from 'dayjs';
 import readingTime from 'reading-time';
 import path from 'path';
-import { getCategoryPublicName } from './categoryUtils';
 import {
   ABSOLUTE_POSTS_PATH,
   getPostPaths,
@@ -12,8 +11,6 @@ import {
 
 /**
  * MDX 파일을 파싱하여 포스트의 요약 정보와 상세 정보를 반환합니다.
- * @param postPath - MDX 파일 경로
- * @returns 포스트 객체
  */
 export const parsePost = async (postPath: string): Promise<Post> => {
   const postAbstract = parsePostAbstract(postPath);
@@ -43,8 +40,6 @@ export const parsePost = async (postPath: string): Promise<Post> => {
 
 /**
  * MDX 파일 경로를 파싱하여 포스트의 요약 정보를 반환합니다.
- * @param postPath - MDX 파일 경로
- * @returns 포스트 요약 정보 객체
  */
 export const parsePostAbstract = (postPath: string) => {
   const relativeFilePath = path
@@ -58,21 +53,18 @@ export const parsePostAbstract = (postPath: string) => {
   if (segments.length === 3 && segments[0] === 'Series') {
     const [, seriesSlug, slug] = segments;
     const url = `/blog/series/${ seriesSlug }/${ slug }`;
-    const categoryPublicName = getCategoryPublicName('Series');
-    return { url, categoryPath: 'Series', categoryPublicName, slug, seriesSlug };
+    return { url, slug, seriesSlug };
   }
 
-  const [categoryPath, slug] = segments;
-  const url = `/blog/${ categoryPath }/${ slug }`;
-  const categoryPublicName = getCategoryPublicName(categoryPath);
+  // 일반 포스트: [slug]
+  const slug = segments[0];
+  const url = `/blog/${ slug }`;
 
-  return { url, categoryPath, categoryPublicName, slug };
+  return { url, slug };
 };
 
 /**
  * MDX 파일을 파싱하여 포스트의 상세 정보를 반환합니다.
- * @param postPath - MDX 파일 경로
- * @returns 포스트 상세 정보 객체
  */
 export const parsePostDetail = async (postPath: string) => {
   try {
@@ -104,58 +96,43 @@ export const parsePostDetail = async (postPath: string) => {
 
 /**
  * 모든 포스트 목록을 조회합니다.
- * @param category - 카테고리 (선택 사항)
- * @returns 포스트 목록
  */
-export const getPostList = async (category?: string): Promise<Post[]> => {
-  const postPaths = getPostPaths(category);
+export const getPostList = async (): Promise<Post[]> => {
+  const postPaths = getPostPaths();
   const posts = await Promise.all(postPaths.map(parsePost));
   return posts;
 };
 
 /**
  * 모든 포스트 목록을 날짜 순으로 정렬하여 조회합니다.
- * @param category - 카테고리 (선택 사항)
- * @returns 정렬된 포스트 목록
  */
-export const getSortedPostList = async (category?: string): Promise<Post[]> => {
-  const posts = await getPostList(category);
+export const getSortedPostList = async (): Promise<Post[]> => {
+  const posts = await getPostList();
   return sortPostsByDate(posts);
 };
 
 /**
  * 포스트 목록을 날짜 순으로 정렬합니다.
- * @param posts - 포스트 목록
- * @returns 정렬된 포스트 목록
  */
 export const sortPostsByDate = (posts: Post[]) =>
   posts.sort((a, b) => b.createdDate.localeCompare(a.createdDate));
 
 /**
  * 모든 포스트의 개수를 반환합니다.
- * @returns 포스트 개수
  */
 export const getAllPostCount = async (): Promise<number> =>
   (await getPostList()).length;
 
 /**
- * 특정 카테고리와 슬러그에 해당하는 포스트의 상세 정보를 조회합니다.
- * @param category - 카테고리 이름
- * @param slug - 포스트 슬러그
- * @returns 포스트 상세 정보
+ * 슬러그에 해당하는 포스트의 상세 정보를 조회합니다.
  */
-export const getPostDetail = async (
-  category: string,
-  slug: string,
-): Promise<Post> => {
-  const filePath = `${ ABSOLUTE_POSTS_PATH }/${ category }/${ slug }.mdx`;
+export const getPostDetail = async (slug: string): Promise<Post> => {
+  const filePath = `${ ABSOLUTE_POSTS_PATH }/${ slug }.mdx`;
   return await parsePost(filePath);
 };
 
 /**
  * MDX 파일의 내용을 파싱하여 목차를 생성합니다.
- * @param content - MDX 파일 내용
- * @returns 목차 아이템 목록
  */
 export const parseToc = (content: string): TocItem[] => {
   const regex = /^(##|###) (.*$)/gim;
@@ -175,4 +152,3 @@ export const parseToc = (content: string): TocItem[] => {
     })) || []
   );
 };
-

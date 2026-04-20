@@ -19,8 +19,6 @@ export interface ParsedPost {
 export interface Post extends ParsedPost {
   url: string;
   slug: string;
-  categoryPath: string;
   content: string;
   readingTimes: number;
-  categoryPublicName: string;
 }
