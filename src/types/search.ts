@@ -12,7 +12,7 @@ export interface SearchDocument {
 export interface PostListHeaderProps {
   searchResults: SearchDocument[];
   pastSearchValue: string;
-  selectedTag?: string | null;
+  selectedTags: string[];
   count: number;
 }
 
@@ -22,5 +22,6 @@ export interface PostGridProps {
 
 export interface ClientPostListProps {
   initialPosts: SearchDocument[];
+  allTags: string[];
   seriesCards?: import('./series').SeriesCard[];
 }

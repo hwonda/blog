@@ -8,9 +8,12 @@ const PostListContent = async () => {
   const initialPosts = await getSortedPostList();
   const seriesCards = await getSeriesCards();
 
+  const allTags = [...new Set(initialPosts.flatMap((post) => post.tags))].sort();
+
   return (
     <ClientPostList
       initialPosts={initialPosts}
+      allTags={allTags}
       seriesCards={seriesCards}
     />
   );
