@@ -2,7 +2,7 @@
 title: type과 interface에 대한 거의 모든 것
 desc: 타입 vs 인터페이스
 createdDate: 2024-08-21
-thumbnail: /blog/posts/TypeScript/typescript.png
+thumbnail: /blog/posts/TypeScript/typescript.webp
 ---
 
 ## 개요
@@ -301,10 +301,10 @@ const user2: UserInterface = {
 ```
 
 - `UserType`에 마우스를 올리면, 해당 타입의 구조를 미리 볼 수 있습니다.
-  ![UserType](/blog/posts/TypeScript/01/1.png)
+  ![UserType](/blog/posts/TypeScript/01/1.webp)
 
 - `UserInterface`에 마우스를 올리면, 그냥 `interface UserInterface`라고만 나옵니다.
-  ![UserInterface](/blog/posts/TypeScript/01/2.png)
+  ![UserInterface](/blog/posts/TypeScript/01/2.webp)
 
 ### 2. 타입 병합 (교차 타입 혹은 확장)
 
@@ -350,10 +350,10 @@ const adminUser2: AdminUserInterface = {
 ```
 
 - `AdminUserType`에 마우스를 올리면, `AdminType`과 `UserType`이 병합된 것을 볼 수 있습니다.
-  ![AdminUserType](/blog/posts/TypeScript/01/3.png)
+  ![AdminUserType](/blog/posts/TypeScript/01/3.webp)
 
 - `AdminUserInterface`에 마우스를 올리면, `AdminUserInterface`만 나옵니다. (병합된 타입을 볼 수 없음)
-  ![AdminUserInterface](/blog/posts/TypeScript/01/4.png)
+  ![AdminUserInterface](/blog/posts/TypeScript/01/4.webp)
 
 ### 3. 타입 병합 심화
 
@@ -396,7 +396,7 @@ const manager: Manager = {
 ```
 
 여기, interface 확장을 3번 정도 거쳐 만들어진 Manager라는 인터페이스가 있습니다. 그런데 한 가지 오류가 있군요.
-![Manager](/blog/posts/TypeScript/01/5.png)
+![Manager](/blog/posts/TypeScript/01/5.webp)
 뭔가 role에 대한 문제가 있어 보이죠? 하지만 error 메세지만 봐서는 잘 모르겠습니다. 일단 ChatGPT 형한테 물어봅니다.
 
 이런… `제네릭<T>`이나 `Omit<T,K>` 유틸리티를 쓰라고 하는데… 뭔지 잘 모르겠습니다. 그냥 추적해볼까 싶습니다. 물론 subordinates에 들어가는 객체에 role을 넣으면 되지만 그건 의도한 동작은 아닙니다.
@@ -432,7 +432,7 @@ interface Person {
 ```
 
 그럼 다시 에러가 뜹니다.
-![Manager](/blog/posts/TypeScript/01/6.png)
+![Manager](/blog/posts/TypeScript/01/6.webp)
 
 아! 마참내..! 찾았습니다. `Manager` 타입에 있어야 할 role이 `Person`에 있어서 에러가 났군요.
 
@@ -505,7 +505,7 @@ const manager: Manager = {
 };
 ```
 
-![Manager](/blog/posts/TypeScript/01/7.png)
+![Manager](/blog/posts/TypeScript/01/7.webp)
 같은 이름의 타입을 사용할 수 없으니(선언 병합 불가), 애초부터 헷갈릴 일은 없고, 해당 error 메세지에 충실하게 Employee 형식에 누락된 `department` 값만 넣으면 해결됩니다.
 
 ```typescript {showLineNumbers}
