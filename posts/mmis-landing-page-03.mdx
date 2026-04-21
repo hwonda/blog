@@ -1,0 +1,280 @@
+---
+title: 2년차 개발자의 모바일 랜딩페이지 제작기(3)
+desc: GaugeChart를 직접 만들었다
+createdDate: 2024-11-11
+thumbnail: /blog/posts/Project/01/thumbnail.webp
+tags: ['project']
+---
+
+## 복습
+- [2년차 개발자의 모바일 랜딩페이지 제작기(1) - 개요](/blog/posts/Project/01-mmis-landing-page)
+- [2년차 개발자의 모바일 랜딩페이지 제작기(2) - 컴포넌트 구조화](/blog/posts/Project/02-mmis-landing-page)
+
+## GaugeChart 구현
+
+> 생각보다 글이 길어졌는데, 대략적으로 훑어만 보시고 **어떤 인사이트** 를 얻었는지 확인해 보세요!
+
+### 기능 개발을 들어가기 전
+
+저는 기능을 개발할 때, **가장 어려운 부분을 먼저 개발** 하는 편입니다. 그래야 제가 책정한 **시간을 넘어서는 부분** 이 있는지 빨리 파악할 수 있거든요.
+(종종 넘기기도 하기 때문에 그런 경우는 빠르게 피드백을 받으려고 합니다.)
+
+![gaugeChart](/blog/posts/Project/03/01.webp)
+
+[이전 글(개요)](/blog/posts/Project/01-mmis-landing-page)에서 얘기한 것처럼, **게이지 차트** 가 랜딩페이지 개발에서 가장 어려운 기능이라 생각하고 2일을 투자하기로 계획했습니다.
+
+가장 어려울 거라 예상한 이유는 다음과 같았습니다.
+
+- 사용하려고 했던 `highchart` 라이브러리의 GaugeChart는 유료버전이라 **svg로 직접 구현** 해야 한다.
+- 막대나 원과 다르게 **원호 그래프 형태** (끊겨 있는 도넛 형태)로 그려야 하기 때문에 **레이아웃이 복잡** 할 것이다.
+- 기존의 30가지 색상으로 구분되는 범례를 **그라데이션** 으로 표현해야 하기 때문에 **색상 처리가 복잡** 할 것이다.
+- 범례의 범위가 일정하지 않고 0.2 ~ 5.0 (m/s)로 다양한 범위를 적용해서 게이지가 이동해야하기 때문에 **범위 처리가 복잡** 할 것이다.
+
+![legend](/blog/posts/Project/03/02.webp)
+
+### GaugeChart template
+우선 GaugeChart.vue를 생성했습니다. 이 컴포넌트는 나중에 맞춤형정보 페이지 내에서도 사용될 예정이라 **component 폴더** 에 두었습니다.
+
+```bash
+mobile
+├── landing
+│   ├── components
+│   │   ├── GaugeChart.vue
+```
+
+`template`은 다음과 같이 구현했습니다. 하나하나 살펴볼 필요는 없이 쓱- 읽어보시는 것을 추천 드립니다.
+
+```vue title="GaugeChart.vue" {showLineNumbers}
+<template>
+  <div>
+    <svg width="250" height="250" viewBox="0 0 210 170" :style="`width: ${props.graphSize}; height: ${props.graphSize}; background-color: white;`">
+      <!-- 그라디언트 정의 -->
+      <defs>
+        <linearGradient :id="`gaugeGradient-${props.id}`" gradientUnits="userSpaceOnUse" :x1="startX" :y1="startY" :x2="activePath.activeX" :y2="activePath.activeY">
+          <stop offset="0%" :stop-color="gaugeStartColor" />
+          <stop offset="60%" :stop-color="gaugeEndColor" />
+          <stop offset="100%" :stop-color="gaugeEndColor" />
+        </linearGradient>
+      </defs>
+
+      <g transform="rotate(-90, 100, 100)">
+        <!-- Background circle -->
+        <path :d="`M ${startX} ${startY} A ${radius} ${radius} 0 1 1 ${endX} ${endY}`" stroke="#e5e5e5" fill="none" stroke-width="20" stroke-linecap="round" />
+        <!-- Gauge arc with gradient -->
+        <path :d="activePath.path" :stroke="`url(#gaugeGradient-${props.id})`" fill="none" stroke-width="20" stroke-linecap="round" />
+        <!-- Ticks and labels -->
+        <g v-for="tick in ticks" :key="tick.angle">
+          <line
+            :x1="pointX(tick.angle, 15)"
+            :y1="pointY(tick.angle, 15)"
+            :x2="pointX(tick.angle, 20)"
+            :y2="pointY(tick.angle, 20)"
+            stroke="#b5b5b5"
+            stroke-width="3"
+            stroke-linecap="round"
+          />
+          <text
+            v-if="tick.label"
+            :x="pointX(tick.angle, 30)"
+            :y="pointY(tick.angle, 30)"
+            text-anchor="middle"
+            alignment-baseline="middle"
+            font-size="12"
+            font-weight="600"
+            fill="#b5b5b5"
+            :transform="`rotate(90,${pointX(tick.angle, 30)}, ${pointY(tick.angle, 30)})`"
+          >{{ tick.label }}</text>
+        </g>
+      </g>
+      <image
+        v-if="props.currentWindDirection"
+        href="@/assets/mobile/ico/ico_wind_directio3.png"
+        alt="풍향_이미지"
+        x="88"
+        y="45"
+        width="24"
+        height="24"
+        :transform="`rotate(${props.currentWindDirection + 180}, 100, 57)`"
+      />
+      <text x="100" y="120" text-anchor="middle" fill="#333" font-size="60" font-family="'NanumSquare'">
+        {{ props.currentWindSpeed ?? '-' }}
+      </text>
+      <text x="100" y="140" text-anchor="middle" fill="#C3CED7" font-size="18">
+        m/s
+      </text>
+      <text x="100" y="165" text-anchor="middle" fill="#333" font-size="22">
+        풍속
+      </text>
+    </svg>
+  </div>
+</template>
+```
+
+1. **SVG 및 레이아웃** : 중앙에 배치된 SVG로, `props.graphSize`를 통해 크기를 설정할 수 있습니다. 
+2. **그라디언트 설정** : 바람 속도에 따라 색상이 변화하도록 **gaugeStartColor** 와 **gaugeEndColor**가 동적으로 설정됩니다. 
+기존에 사용하던 범례의 색상인 **wsLegend 배열** 을 사용하여 **속도 구간에 따라 색상을 선택** 합니다. 
+**범례의 색상을 강조하기 위해 60 ~ 100% 구간에 범례 색상을 고정시켜놓고, 0 ~ 60% 구간에만 그라데이션을 적용했습니다.**
+3. **게이지 아크** : **activePath** 는 현재 풍속(currentWindSpeed)에 따라 아크의 끝점을 계산하며, 속도 비율에 따라 적절한 각도로 표시됩니다. 
+`fill="none" stroke-width="20"`으로 설정하여 게이지 자체가 색이 칠해지는 게 아니라 stoke(선)이 칠해지도록 했습니다. 
+`stroke-linecap="round"`로 둥글게 처리할 때, 도넛 모양으로 만들기 위함입니다.
+4. **이미지 및 텍스트** : svg 내에 `<image>`와 `<text>`를 통해 풍향 이미지와 풍속을 표시합니다.
+svg 태그 밖에서 이미지나 텍스트를 넣는 경우, **position** 을 잡기 매우 힘들어집니다. 특히 모바일과 같이 **반응형** 에서는 더욱 어려워집니다.
+
+### 주요 로직
+
+1. props
+
+```typescript {showLineNumbers} {2}
+const props = defineProps<{
+  currentWindSpeed: number
+  valueType?: string
+  graphSize?: string
+  currentWindDirection?: number
+  id?: string
+}>()
+```
+`currentWindSpeed`인 **풍향값** 외엔 전부 선택적으로 받습니다.
+
+2. 기본 설정, 각도 계산
+
+```typescript {showLineNumbers}
+const radius = 80
+const maxWindSpeed = 60
+
+const startAngle = -120
+const endAngle = 120
+const totalAngle = endAngle - startAngle
+
+const pointX = (angle: number, adjustment = 0) => 100 + (radius + adjustment) * Math.cos(angle)
+const pointY = (angle: number, adjustment = 0) => 100 + (radius + adjustment) * Math.sin(angle)
+```
+**startAngle** 과 **endAngle** 은 **시작/끝 각도** 를 의미합니다. 게이지 차트 완성본에서 본 것처럼, background가 되는 회색 도넛은 **-120도부터 120도** 까지 표현될 예정입니다.
+**pointX, pointY** 은 좌표 계산 함수인데, 입력 각도와 조정 값(adjustment)에 따라 X, Y 좌표를 계산합니다. 범례에서 본 것처럼 틱의 간격이 일정하지 않기 때문에 **조정 값** 을 넣어서 계산합니다.
+
+3. 게이지의 시작과 끝 좌표 계산
+
+```typescript {showLineNumbers}
+const startRadians = startAngle * Math.PI / 180
+const startX = pointX(startRadians)
+const startY = pointY(startRadians)
+const endRadians = endAngle * Math.PI / 180
+const endX = pointX(endRadians)
+const endY = pointY(endRadians)
+```
+
+4. 게이지의 활성화된 부분 계산
+
+```typescript {showLineNumbers} {26}
+const activePath = computed(() => {
+  let ratio = 0
+  let activeAngle = 0
+  if (props.valueType === 'normal') {
+    // 가중치 미적용
+    ratio = props.currentWindSpeed / maxWindSpeed
+    activeAngle = startAngle + (ratio * totalAngle)
+  } else {
+    // 가중치 적용
+    let stepIndex = windSpeedSteps.findIndex(step => props.currentWindSpeed <= step)
+    if (stepIndex === -1) stepIndex = windSpeedSteps.length - 1 // 최대값 처리
+    const lowerBound = windSpeedSteps[stepIndex - 1] || 0
+    const upperBound = windSpeedSteps[stepIndex]
+
+    ratio = (props.currentWindSpeed - lowerBound) / (upperBound - lowerBound)
+    activeAngle = startAngle + ((stepIndex - 1 + ratio) / (windSpeedSteps.length - 1)) * totalAngle
+  }
+  const activeRadians = activeAngle * Math.PI / 180
+  let activeX = pointX(activeRadians)
+  let activeY = pointY(activeRadians)
+  if (isNaN(activeX)) activeX = startX
+  if (isNaN(activeY)) activeY = startY
+  const largeArcFlag = activeRadians - startRadians <= Math.PI ? 0 : 1
+
+  const path = `M ${startX} ${startY} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${activeX} ${activeY}`
+  return { activeX, activeY, path }
+})
+```
+props로 받은 **valueType** 이 **normal** 이면 가중치를 적용하지 않아 **틱 간격이 일정** 합니다.
+
+최종 계산된 **activeX, activeY** 를 사용하여 **path를 생성** 하여, **시작 좌표(startX, startY)에서 끝 좌표(activeX, activeY)까지 원호를 그립니다.**
+
+5. 눈금 및 레이블 계산
+```typescript {showLineNumbers} {9,10}
+const ticks = computed(() => {
+  const tickValues = [0, 1, 3.5, 6, 10, 35, 60]
+  const labelValues = [0, 3.5, 10, 60]
+
+  return tickValues.map((value) => {
+    const stepIndex = windSpeedSteps.indexOf(value)
+    const angle = startAngle + (stepIndex / (windSpeedSteps.length - 1)) * totalAngle
+    return {
+      angle: angle * Math.PI / 180,
+      label: labelValues.includes(value) ? value.toString() : null
+    }
+  })
+})
+```
+**tickValues 배열** 의 각 값을 사용하여 눈금을 표시할 위치와 각도를 계산합니다. 
+**labelValues** 에 포함된 값([0, 3.5, 10, 60])에는 눈금 옆에 레이블이 추가됩니다.
+
+각 눈금에 대한 각도(angle)와 레이블 텍스트(label)를 반환하여 **사용자에게 직관적으로 풍속 범위를 표시** 합니다.
+
+6. 게이지 그라데이션 색상 계산
+```typescript {showLineNumbers}
+const gaugeStartColor = computed(() => {
+  const endColor = gaugeEndColor.value
+  if (!endColor) return '#FFFFFF' // 기본값으로 흰색 반환
+  return getGradientColor(endColor)
+})
+
+const gaugeEndColor = computed(() => {
+  const currentLegend = wsLegend.find(legend =>
+    props.currentWindSpeed >= legend.min && props.currentWindSpeed < legend.max
+  )
+  return currentLegend?.clr
+})
+```
+
+기존 범례 색상인 **wsLegend 배열** 에서 **currentWindSpeed** 가 속한 구간을 찾아 해당 구간의 색상(clr)을 반환합니다. 
+이를 통해 풍속에 따라 색상이 변화하도록 합니다.
+
+`getGradientColor` 함수는 직접 구현한 함수로, **rgb 색상을 hsl로 변환** 하고 **채도(saturation)와 명도(lightness)를 조정** 하여 그라데이션 효과를 적용합니다.
+
+### 마무리, 결과물
+
+현재의 GaugeChart는 디자인 초안과 다른 점이 몇 개 있습니다. 표시된 **틱의 갯수** 가 줄어들었고, **풍향 이미지** 가 추가됐습니다.
+이 부분은 **'범례가 너무 많아서 사용자가 혼란스러워할 수 있으니 줄이자'** 라는 의견과 **'풍향을 표시해달라'** 라는 고객사(기상청)의 요청으로 인해 변경된 부분입니다.
+이렇게 프론트엔드는 **디자인 초안과 다르게 요구사항이 추가** 되는 경우가 많습니다.
+
+실제로 GaugeChart를 구현하는 데 **2일** , 디자인 초안과 다르게 요구사항이 추가되어 **0.5일** 이 더 소요되었습니다.
+
+<div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2rem'}}>
+  <div>![figma](/blog/posts/Project/03/03.webp)</div>
+  <div>![component](/blog/posts/Project/03/04.webp)</div>
+  <div>![component](/blog/posts/Project/03/05.webp)</div>
+</div>
+
+## 인사이트
+
+> 복잡한 기능일수록 **구조화** 를 먼저 하고 구현을 시작하자
+
+GaugeChart는 그라데이션 처리, 틱 간격 계산, 비례에 따른 원호 계산 등 복잡한 요소들이 많았습니다. 
+
+우선 **컴포넌트를 작은 단위로 나누고 로직을 분리함** 으로써 예상보다 효율적으로 구현할 수 있었습니다.
+복잡한 기능일수록 **초기에 구조를 잘 설계하고 컴포넌트화** 해서 관리하는 것이 개발 시간을 줄이고, 디버깅을 수월하게 만들어 줍니다.
+
+> 최적화된 SVG 사용과 **직접 구현** 의 중요성
+
+고성능이나 유연성이 필요한 경우, **라이브러리 의존 없이 직접 SVG를 구현하는 것이 유리** 할 때가 있습니다. 
+
+기능이 단순히 시각화에 그치지 않고 다양한 설정(색상, 비율, 각도 조절 등)을 필요로 할 때 특히 효과적입니다.
+SVG를 직접 다룰 때는 크기와 위치 조정이 중요하며, 반응형 디자인을 고려한 상대적인 위치 및 크기 설정이 필요합니다.
+
+(저는 물론 쓰려던 라이브러리가 유료라서 그랬지만, 실제로 만들고 나면 내가 원하는 대로 커스터마이징이 가능하고 뿌듯하죠..!)
+
+> **프로토타이핑** 과 **협업** 의 중요성
+
+기상청과 협업하면서 요구사항이 변경되었고, 디자인이 수정되었습니다. 
+이 과정에서 **초기에 빠르게 프로토타입을 만들어 피드백을 받는 것** 이 큰 도움이 되었습니다. 
+
+특히 디자인 요구 사항이 많이 변경될 수 있는 프로젝트에서는 유연하고 빠르게 반응할 수 있는 인라인 스타일과 프로토타이핑이 큰 장점이 됩니다.
+이런 경우 빠른 피드백을 통해 **개발 방향성** 을 확인하는 것이 중요하며, 이를 위해 (tailwindcss와 같은 도구나) 인라인 스타일을 적극 활용하는 것이 유용합니다.

@@ -1,0 +1,104 @@
+---
+title: 2년차 개발자의 모바일 랜딩페이지 제작기(2)
+desc: 컴포넌트를 구조화한다
+createdDate: 2024-11-10
+thumbnail: /blog/posts/Project/01/thumbnail.webp
+tags: ['project']
+---
+
+## 복습
+- [2년차 개발자의 모바일 랜딩페이지 제작기(1) - 개요](/blog/posts/Project/01-mmis-landing-page)
+
+## 미리 알면 좋은 내용
+1. vue.js 3의 [Composition API](https://ko.vuejs.org/guide/typescript/composition-api.html)를 사용했습니다. 
+특히 [script setup](https://ko.vuejs.org/api/sfc-script-setup.html)을 사용했습니다.
+2. **인라인 스타일** 을 사용했습니다. 저는 개발단계에서는 **빠른 프로토타이핑과 디버깅** 이 가능한 인라인 스타일을 선호합니다. 
+같은 이유로 [tailwindcss](https://tailwindcss.com/)를 좋아합니다.
+다만 불필요한 경우, 블로그 글의 **코드 가독성** 을 위해 인라인 스타일을 지워서 작성했습니다.
+3. 기상청 프로젝트는 워낙 UI가 다양하고 기능이 많아 **컴포넌트 재사용이 참 어려운** 프로젝트입니다. 
+그래서 **컴포넌트를 최대한 작게, 그래서 보기 편하고 디버깅이 쉽게** 만드는 데 노력했습니다.
+
+## 기능 개발 준비
+
+### 컴포넌트 나누기
+
+먼저 디자이너로부터 **Figma 파일** 을 받아 개략적으로 **컴포넌트** 를 나누었습니다.
+
+<div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5rem'}}>
+  <div>![figma](/blog/posts/Project/02/01.webp)</div>
+  <div>![component](/blog/posts/Project/02/02.webp)</div>
+</div>
+컴포넌트를 **section을 기준** 으로 나누었습니다. 그리고 section 내에서 재사용 되는 부분들(예를 들어, 단기예보의 탭 등)은 파일 정리 후 만들 예정입니다.
+이렇게 나눈 컴포넌트를 기반으로 파일을 정리해 줍니다. (Header.vue는 이전 컴포넌트를 재사용할 것이기 때문에, 새로 만들지 않았습니다.)
+```bash title="프로젝트 구조"
+mobile
+├── landing
+│   ├── DashBoardView.vue
+│   ├── Footer.vue
+│   ├── ForecastView.vue
+│   ├── GISLayerView.vue
+│   ├── GISMapView.vue
+│   ├── LandingPage.vue
+│   ├── components
+│   │   ├── 더 작은 컴포넌트.vue
+│   │   ├──
+│   │   ├──
+│   │   └──
+│   └──types.ts
+```
+
+### 부모 컴포넌트(LandingPage.vue) 세팅
+
+LandingPage.vue는 **전체적인 레이아웃을 담당하는 컴포넌트** 입니다.
+**mobile 레이아웃** 에서 LandingPage는 모달형태로 가장 상단에 표출하기 위해 **컨텐츠들의 최상단** 에 위치하고 있습니다.
+
+그리고 isLandingOpen이 true일 때 랜딩페이지가 열리도록 설정했습니다.
+
+```vue title="Main.vue" {showLineNumbers} {8,9,10,16}
+<template>
+  <div id="wrap">
+    <div id="header" class="header">
+      <Issue />
+      <Header />
+    </div>
+    <div id="container">
+      <LandingPage 
+        v-if="isLandingOpen"
+      />
+      <!-- 다른 컴포넌트들... -->
+    </div>
+  </div>
+</template>
+<script setup lang='ts'>
+import LandingPage from '@/views/mobile/landing/LandingPage.vue'
+// 다른 로직들...
+</script>
+```
+
+LandingPage(부모 컴포넌트) 안에는 **DashboardVie, GISMapView, ForecastView, GISLayerView, Footer** (자식 컴포넌트들)이 포함돼 있습니다.
+
+```vue title="LandingPage.vue" {showLineNumbers} {4,9,10,11,12}
+<template>
+  <div id="main-landing" class="landing">
+    <div>
+      <DashboardView />
+      <button type="button" @click="openAdditional" aria-label="맞춤형 정보창 열기">
+        <p>상세보기</p>
+        <img src="@/assets/mobile/ico/ico_arrow_right.png" alt="상세보기로 이동하는 화살표">
+      </button>
+      <GISMapView @close-landing-page="emit('close-landing-page')" />
+      <ForecastView />
+      <GISLayerView @select-landing-menu="handleClickLandingMenu" />
+      <Footer/>
+    </div>
+  </div>
+</template>
+<script setup lang="ts">
+import DashboardView from './DashboardView.vue'
+import GISMapView from './GISMapView.vue'
+import ForecastView from './ForecastView.vue'
+import GISLayerView from './GISLayerView.vue'
+import Footer from './Footer.vue'
+// 다른 로직들...
+</script>
+```

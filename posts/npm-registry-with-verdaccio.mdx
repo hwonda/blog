@@ -1,0 +1,289 @@
+---
+title: 회사 서버에 npm registry 만들기(1)
+desc: 서버에 Verdaccio를 설치하고 설정하는 법
+createdDate: 2025-02-28
+thumbnail: /blog/posts/Etc/04/thumbnail.webp
+tags: ['etc']
+---
+
+## 개요
+
+
+현재 사내 프로젝트는 대부분 지도 기반입니다. 
+![npm-registry](/blog/posts/Etc/04/1.webp)
+
+이러한 프로젝트에서는 Time Slider, 범례, 지도 툴바 등과 같은 특수 기능이 반복적으로 필요합니다. 
+그러나 매 프로젝트마다 새롭게 개발해야 하는 비효율적인 상황이 이어지고 있습니다. 
+이로 인해 생산성이 저하되고 있어, 이를 개선할 방법을 고민하게 되었습니다.
+
+동료들이 공통 UI 컴포넌트를 더 편리하게, 고민 없이 활용할 수 있도록 하기 위해, `NPM Registry` 배포를 고려했습니다.
+
+특히, 사내 서비스가 이전에는 `Vue`, `Thymeleaf`, `VanillaJS` 등 다양한 기술 스택을 사용하다가, 
+작년 말부터 `React` 및 `React Native`로 기술 방향을 통일하면서, 이를 결정하게 된 배경도 큽니다. 
+이러한 기술 통일은 공통 UI 컴포넌트의 재사용성을 높이는 데 기여할 것입니다.
+
+## Npm Registry
+
+![npm-registry](/blog/posts/Etc/04/3.webp)
+
+`NPM Registry`는 `Node.js` 패키지를 관리하고 배포하는 중앙 저장소입니다.
+개발자는 직접 만든 라이브러리나 모듈을 `NPM Registry`에 업로드할 수 있으며, 다른 개발자는 이를 다운로드하여 쉽게 사용할 수 있습니다.
+
+대표적인 NPM Registry로는 **[공식 NPM Registry](https://registry.npmjs.org/)**가 있으며, 우리가 흔히 사용하는 `react`, `lodash`, `axios` 같은 라이브러리들도 모두 이곳에 등록되어 있습니다.
+
+## Verdaccio
+
+![npm-registry](/blog/posts/Etc/04/4.webp)
+`Verdaccio`는 오픈 소스 프로젝트로, 개인 또는 팀이 자체적인 NPM Registry를 설정할 수 있도록 돕는 도구입니다.
+이를 통해 NPM의 공식 저장소를 사용하지 않고, 회사 내부에서만 사용할 수 있는 자체적인 NPM Registry를 구축할 수 있습니다.
+이렇게 하면 외부 공개 없이 사내에서만 사용하는 공통 UI 컴포넌트, 라이브러리 등을 보다 안전하게 관리할 수 있습니다.
+
+저는 사내 서버관리자와 상의 후, Verdaccio 서버(79번)와 gitlab 서버(60번)을 두어 사용하기로 했습니다.
+
+## 진행할 것
+
+1. Verdaccio 구성 및 설정(Docker 컨테이너)
+2. NPM Registry 설정
+3. 패키지 생성 및 사용
+
+## 1. Verdaccio 구성 및 설정(Docker 컨테이너)
+
+Docker 컨테이너를 사용하여 Verdaccio를 구성하고 설정합니다. Docker는 애플리케이션을 컨테이너라는 단위로 패키징하여 배포할 수 있는 플랫폼입니다. 이를 통해 환경에 구애받지 않고 일관된 설정을 유지할 수 있습니다.
+
+### 1) 서버 접속(ssh)
+
+windows 환경에서 진행하였으며, 서버는 ubuntu 22.04 LTS 입니다.
+
+```bash
+ssh id@10.2.10.79
+```
+
+그리고 상위 디렉토리로 이동합니다.
+
+```bash
+cd /
+```
+
+### 2) 도커 설치
+
+해당 서버에 Docker가 설치되어 있지 않다면, 다음 명령어를 입력하여 설치합니다. Docker는 리눅스 기반의 컨테이너 기술로, 애플리케이션을 격리된 환경에서 실행할 수 있게 해줍니다.
+
+```bash
+sudo apt update
+sudo apt install docker.io
+sudo systemctl start docker
+sudo systemctl enable docker
+```
+- docker 버전 확인
+
+```bash
+docker --version
+```
+
+- docker compose 설치
+
+```bash
+sudo apt install docker-compose
+```
+
+- docker compose 버전 확인
+
+```bash
+docker-compose --version
+```
+
+### 3) 디렉토리 구조 만들기
+
+해당 서버 루트 디렉토리에 `verdaccio` 디렉토리를 만들고, 그 안에 다음 명령어를 입력하여 디렉토리 구조를 만듭니다. 이 때 보통 `var` 디렉토리를 사용하는데, 이 디렉토리가 없다면 생성합니다. `var` 디렉토리는 시스템에서 가변 데이터를 저장하는 데 사용됩니다.
+
+```bash
+mkdir -p var/lib/verdaccio
+```
+
+우리가 만들 Verdaccio 레지스트리는 다음과 같은 디렉토리 구조를 가져야 합니다.
+
+
+```bash
+/var/verdaccio/
+├── docker-compose.yml
+├── config/
+│   ├── config.yaml
+│   └── htpasswd
+├── storage/
+└── plugins/
+```
+
+여기서 `docker-compose.yml`, `config/config.yaml`, `storage/`, `plugins/` 디렉토리를 만들고, 파일 권한 설정도 해줘야 합니다.
+
+- 우선 docker-compose.yml 파일을 만듭니다.
+
+```bash
+touch docker-compose.yml
+```
+그리고 nano 또는 vim 등의 텍스트 편집기를 사용하여 다음 내용을 입력합니다.
+
+```bash title="docker-compose.yml"
+version: '3'
+
+services:
+  verdaccio:
+    image: verdaccio/verdaccio  # docker에서 verdaccio 이미지 가져옴
+    container_name: verdaccio
+    ports:
+      - "4873:4873"
+    volumes:
+    # 컨테이너와 호스트 시스템 간의 데이터 저장소와 설정 파일을 연결
+      - /var/verdaccio/storage:/verdaccio/storage
+      - /var/verdaccio/config:/verdaccio/conf
+    restart: always
+```
+
+- config 디렉토리에 config.yaml 파일을 만듭니다. 이 파일은 Verdaccio의 설정을 정의하는 파일로, 저장소 경로, 인증 방식, 패키지 접근 권한 등을 설정할 수 있습니다.
+
+```bash
+touch config/config.yaml
+```
+
+그리고 nano 또는 vim 등의 텍스트 편집기를 사용하여 다음 내용을 입력합니다.
+
+```bash title="config/config.yaml"
+storage: /verdaccio/storage
+
+auth:
+  htpasswd:
+    file: /verdaccio/conf/htpasswd
+    max_users: 1000
+
+uplinks:
+  npmjs:
+    url: https://registry.npmjs.org/
+    timeout: 30s
+    max_fails: 3
+    fail_timeout: 10m
+
+packages:
+  '@*/*':
+    access: $all
+    publish: $authenticated
+    proxy: npmjs
+
+  '**':
+    access: $all
+    publish: $authenticated
+    proxy: npmjs
+
+log:
+  type: stdout
+  format: pretty
+  level: http
+
+listen: 0.0.0.0:4873
+
+middlewares:
+  audit:
+    enabled: true
+```
+
+- 마지막으로 파일 권한 설정을 합니다.
+
+```bash
+# 권한 설정 (verdaccio는 내부적으로 verdaccio 사용자를 사용)
+sudo chown -R 10001:65533 /var/verdaccio/storage
+sudo chown -R 10001:65533 /var/verdaccio/config
+sudo chown 10001:65533 /var/verdaccio/config/htpasswd
+sudo chmod 644 /var/verdaccio/config/htpasswd
+
+# 적절한 권한 부여
+sudo chmod -R 755 /var/verdaccio
+sudo chmod 755 /var/verdaccio/config
+sudo chmod 755 /var/verdaccio/storage
+
+sudo chown 10001:65533 /var/verdaccio/config/config.yaml
+sudo chmod 644 /var/verdaccio/config/config.yaml
+```
+
+- 그리고 컨테이너를 시작합니다.
+
+```bash title="컨테이너 시작"
+docker-compose up -d
+```
+
+- 이제 컨테이너가 시작되었으며, 다음 명령어를 입력하여 컨테이너 상태를 확인합니다.
+
+```bash title="컨테이너 상태 확인"
+docker exec -it verdaccio ls -la /verdaccio
+```
+
+```bash title="컨테이너 로그 확인"
+docker logs verdaccio
+```
+
+- Verdaccio 확인(4873 포트)
+
+크롬에 `서버주소:4873` 을 입력하여 접속합니다.
+
+![서버주소:4873](/blog/posts/Etc/04/5.webp)
+
+## 2. Verdaccio 구성 및 설정
+
+Verdaccio가 잘 설치됐다면, 내 PC에서 패키지를 관리할 수 있도록 설정해야 합니다. 이 과정에서는 Verdaccio를 통해 패키지를 설치하고 관리하는 방법을 설명합니다.
+
+Verdaccio는 npm install 명령어를 사용하여 패키지를 설치할 때, 내부적으로 해당 레지스트리를 먼저 참조합니다.
+
+예를 들어, `react`라는 패키지가 Verdaccio 서버에도 있고, npmjs에도 있다고 할 때, `npm install react` 명령어를 입력하면, Verdaccio 서버에 있는 `react` 패키지를 먼저 참조합니다.
+
+만약 Verdaccio 서버에 패키지가 없다면, npmjs에서 패키지를 다운로드 받습니다.
+
+이러한 동작을 위해서는 다음과 같은 설정이 필요합니다.
+
+1. User 추가 
+
+```bash
+npm adduser --registry http://10.2.10.79:4873
+```
+- id, pw, email 입력 후 확인하는 명령어
+```bash
+npm whoami --registry http://10.2.10.79:4873
+```
+> id 가 나오면 잘 등록된 겁니다.
+
+2. 사용할 npm 레지스트리 주소 설정(하면 안 됨)
+
+사용할 npm 레지스트리 주소를 강제하는 방법이 있습니다.
+
+```bash
+npm config set registry http://10.2.10.79:4873
+```
+- 확인하는 명령어
+```bash
+npm config get registry
+```
+> http://10.2.10.79:4873 가 나오면 잘 설정된 겁니다.
+
+그런데 이렇게 npm 레지스트리 주소를 강제하면 안 됩니다.
+
+## 트러블 슈팅
+
+이런 식으로 만들면, `package-lock.json`의 모든 `resolved URL`이 내부 `Verdaccio` 서버로 변경됩니다. 따라서 기존의 `npm.js.org`에서 받아야 할 패키지도 Verdaccio 서버에서만 찾으려고 시도하면서 문제가 생깁니다. 이를 방지하기 위해 프로젝트 루트에 `.npmrc` 파일을 만들어 특정 패키지에 대해서만 Verdaccio를 사용하도록 설정합니다.
+
+1. 프로젝트 루트에 `.npmrc` 파일 생성
+
+```bash
+echo "@koast:registry=http://10.2.10.79:4873" > .npmrc
+```
+
+2. 설정 확인
+```bash
+cat .npmrc
+```
+> 결과: @koast:registry=http://10.2.10.79:4873
+
+3. npm 설치 (기존 package-lock.json, node_modules 삭제 후 진행)
+```bash
+npm install
+```
+
+`package-lock.json`을 다시 한 번 확인해보면, 원하는 레지스트리만 verdaccio 서버로 설정된 것을 확인할 수 있습니다.
+
+![npm-install](/blog/posts/Etc/04/2.webp)
+

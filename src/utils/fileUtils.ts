@@ -1,19 +1,16 @@
 import path from 'path';
 import { sync } from 'glob';
 
-// 상수 파일 분리
 export const POSTS_BASE_PATH = path.join(process.cwd(), 'posts');
 export const ABSOLUTE_POSTS_PATH = POSTS_BASE_PATH;
 
 /**
- * 특정 카테고리 또는 모든 카테고리의 MDX 파일 경로를 조회합니다.
- * @param category - 카테고리 (선택 사항)
- * @returns MDX 파일 경로 목록
+ * 모든 MDX 파일 경로를 조회합니다.
+ * posts/*.mdx (일반 포스트) + posts/Series/**\/*.mdx (시리즈 포스트)
  */
-export const getPostPaths = (category?: string): string[] => {
-  const folder = category || '**';
-  const pattern = path.join(ABSOLUTE_POSTS_PATH, folder, '**', '*.mdx');
-  const normalizedPattern = pattern.replace(/\\/g, '/');
+export const getPostPaths = (): string[] => {
+  const rootPattern = path.join(ABSOLUTE_POSTS_PATH, '*.mdx').replace(/\\/g, '/');
+  const seriesPattern = path.join(ABSOLUTE_POSTS_PATH, 'Series', '**', '*.mdx').replace(/\\/g, '/');
 
-  return sync(normalizedPattern);
+  return [...sync(rootPattern), ...sync(seriesPattern)];
 };

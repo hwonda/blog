@@ -1,0 +1,182 @@
+---
+title: Cursor AI 좀 더 똑똑하게 쓰기
+desc: Cursor Rules & Tips
+createdDate: 2025-04-17
+thumbnail: /posts/clipboard/07-cursor-tips-and-rules/250419-164113.webp
+---
+
+> 회사 이사님의 요청으로 Cursor AI에 대해 사내교육을 진행했습니다.
+
+지난 2년간 Copilot보다 1달간 써본 Cursor는 비교가 안될 정도로 좋았습니다.
+
+`Copilot`은 맥락을 이해 못하거나 버그 투성이의 코드를 자주 뽑아내는 반면, `Cursor`는 훨씬 높은 수준의 퀄리티를 제공해주었습니다.
+또한 지속적인 업데이트를 통해 점점 더 강력한 기능들을 제공하고 있습니다.
+
+이번 포스트에서는 교육에서 진행했던 Cursor 설정, 단축키, 그리고 좀 더 똑똑하게 쓰는 방법을 정리해보았습니다.
+
+## Cursor 개념과 설치
+
+### Cursor AI란?
+
+[Cursor AI](https://www.cursor.com/)는 코드 작성을 돕는 AI 프로그램입니다.
+
+VScode를 그대로 fork해서 만든 코딩 에디터(IDE)입니다. GPT, Claude, DeepSeek 등의 대형 LLM을 활용해 코드 작성, 수정, 완성(auto-completion) 등을 도와주는 AI 페어 프로그래머 역할을 합니다.
+
+### 설치 방법
+![250419-164510](/posts/clipboard/07-cursor-tips-and-rules/250419-164510.webp)
+
+1. 공식 사이트 [cursor.com](https://www.cursor.com/)에 접속해 Download 버튼을 클릭하면 OS에 맞는 인스톨러 다운로드
+2. 다운로드한 인스톨러 파일(.exe)을 실행하고 안내에 따라 설치 완료 
+3. 설치 후 Cursor 아이콘이 바탕화면 또는 시작 메뉴에 생성됨
+4. 처음 Cursor를 실행하면 회원가입/로그인 화면이 나올 수 있음
+5. 첫 실행 시 나오는 설정에서, VSCode 익숙도에 따라 단축키 레이아웃을 선택하고, AI가 사용할 언어(한국어, 영어, 기타...) 등을 지정
+
+## Cursor 단축키
+
+| 분류 | 단축키 | 기능 |
+| --- | --- | --- |
+| 전역기능 |  `Ctrl + Shift + P` | 명령 팔레트 열기 (Cursor/VSCode 명령 검색) |
+| 전역기능 |  `Ctrl + ,` | 설정 열기 (기본 VSCode 설정 창) |
+| 전역기능 |  `Ctrl + Shift + J` | **Cursor 설정 열기 (AI 모델, Rules 등 Cursor 전용 설정)** |
+| 전역기능 |  `Ctrl + .` | 모드 메뉴 토글 (Ask/Agent/Manual 모드 전환 메뉴 표시) |
+| 에디터 편집 기능 |  `Ctrl + K` | **코드에 AI 지시 (Composer/Inline Edit) – 선택한 코드에 지시 입력 창 열기** |
+| 에디터 편집 기능 |  `Tab` | AI 자동완성 수락 – 회색 글씨로 제안되는 코드를 확정하여 입력 |
+| 에디터 편집 기능 |  `Ctrl + →` | 다음 단어까지 자동완성 수락 – 긴 제안 중 일부만 받아들이기 |   
+| 채팅 관련 기능 |  `Ctrl + L` | **AI 채팅 패널 토글 – 우측에 AI 대화 패널 열기/닫기** |
+| 채팅 관련 기능 |  `Shift + Enter` | 줄바꿈 |
+| 채팅 관련 기능 |  `Ctrl + Enter` | 모든 변경 사항 수락 – AI가 제안한 코드 변경을 한 번에 적용 |
+| 채팅 관련 기능 |  `Ctrl + Backspace` | 모든 변경 거부 – AI 제안 적용 취소 |
+| 채팅 관련 기능 |  `Ctrl + Shift+ i` | **새로운 채팅 패널 생성** |
+
+Mac의 경우 `Ctrl` 키 대신 `Command` 키를 사용합니다.
+
+
+### 단축키 변경하기
+
+![250419-170156](/posts/clipboard/07-cursor-tips-and-rules/250419-170156.webp)
+
+Cursor에서 `Ctrl + Shift + P` 를 누르고, `shortcut`을 친 뒤  `Preferences: Open Keyboard Shortcuts`를 들어가면 단축키를 custom하게 변경할 수 있음
+
+![250419-170233](/posts/clipboard/07-cursor-tips-and-rules/250419-170233.webp)
+
+## Cursor Rules
+
+오늘의 하이라이트는 [Cursor Rules](https://docs.cursor.com/context/rules)입니다.
+
+![250419-171606](/posts/clipboard/07-cursor-tips-and-rules/250419-171606.webp)
+
+새로운 채팅 패널을 열 때마다, Cursor는 이전 프롬프트를 기억하지 못합니다. 참 슬프죠...
+
+이럴 때 `Cursor Rules`을 사용하면 됩니다.
+
+Cursor Rules는 전역으로 설정하는 유저 규칙(User Rules)과 프로젝트별로 설정하는 프로젝트 규칙(Project Rules)으로 나뉩니다.
+
+### 1. User Rules(전역)
+
+![250419-171851](/posts/clipboard/07-cursor-tips-and-rules/250419-171851.webp)
+
+1. `Ctrl + Shift + J` 를 눌러서 Cursor Settings에 진입
+2. Rules 에 들어가서 User Rules에 내가 원하는 전역 Rules 타이핑 (예: Always respond in Korean)
+3. 보통 자동으로 바로 적용되지만, 가끔 바로 적용 안될 때가 있음. Cursor 껐다 켜기 (Ctrl + Shift +  P -> ‘Reload Window’)
+
+### 2. Project Rules(프로젝트)
+
+![250419-172015](/posts/clipboard/07-cursor-tips-and-rules/250419-172015.webp)
+
+1. `Ctrl + Shift + J` 를 눌러서 Cursor Settings에 진입
+2. Rules - Project Rules 에서 `+ Add new rule` 클릭
+
+![250419-172034](/posts/clipboard/07-cursor-tips-and-rules/250419-172034.webp)
+
+3. 상단에 Rule 이름을 정하라는 팝업이 나옴
+4. 원하는 이름을 타이핑 후 엔터 (ex. my-custom-rule)
+
+![250419-172108](/posts/clipboard/07-cursor-tips-and-rules/250419-172108.webp)
+
+5. 자동으로 프로젝트 루트에 .cursor/rules 가 생기고, 내가 지정한 이름의 mdc 파일(ex. my-custom-rule.mdc)이 생성됨
+
+![250419-172136](/posts/clipboard/07-cursor-tips-and-rules/250419-172136.webp)
+
+6. mdc 파일의 Rule Types는 다음과 같음
+  - `Always (항상 적용)` 
+  
+    이 옵션을 선택하면 규칙이 모든 채팅과 명령(Ctrl+K)에 항상 적용됩니다. 주로 프로젝트 전체에 걸쳐 지속적으로 유지되어야 할 중요한 규칙에 적합합니다.
+  - `Auto Attached (자동 첨부)` 
+  
+    규칙이 특정 파일 패턴이나 조건과 일치할 때 자동으로 활성화됩니다. 예: 특정 확장자 파일이나 특정 폴더 내 파일에서만 규칙을 활성화할 때 사용합니다.
+  - `Agent Requested (AI 요청 시)` 
+  
+    AI 모델이 필요하다고 판단하여 명시적으로 요청할 때만 규칙이 활성화됩니다. 이는 AI가 특정 맥락에서만 필요하다고 판단한 규칙에 적합합니다.
+  - `Manual (수동 적용)` 
+
+    사용자가 수동으로 규칙을 선택할 때만 활성화됩니다. 필요할 때만 특정 규칙을 임시로 적용할 때 사용하기 좋습니다.
+
+
+## 기타 설정
+
+### 1. Cursor 모드
+
+![250419-165815](/posts/clipboard/07-cursor-tips-and-rules/250419-165815.webp)
+
+`Ctrl + L` 을 누르면 우측에 채팅 패널이 열리는데, 여기서 Cursor 모드를 선택할 수 있습니다.
+Default는 Agent 모드이고, 이 모드는 가장 강력한 모드입니다. 다만 많이 사용할 경우 Ask나 Manual 모드보다 좀 더 토큰을 많이 소모합니다.
+
+![250419-165838](/posts/clipboard/07-cursor-tips-and-rules/250419-165838.webp)
+
+### 2. AI 모델 선택
+
+![250419-170347](/posts/clipboard/07-cursor-tips-and-rules/250419-170347.webp)
+
+`Ctrl + Shift + J` 를 누르면 위와 같이 Cursor 설정 창이 열리는데, Models 메뉴에서 사용할 AI 모델을 선택할 수 있습니다.
+
+![250419-170434](/posts/clipboard/07-cursor-tips-and-rules/250419-170434.webp)
+
+그리고 Chat 패널에 커서를 두고 `Ctrl + /`를 누르면 자동으로 모델이 바뀝니다.
+
+여기서 AI 모델에 마우스 오버 시, **Auto-select** 옵션이 자동으로 활성화 되어 있는데, 이는 비활성화하는 것이 좋습니다.
+내가 원하는 AI 모델을 사용하는 게 아니라 Cursor가 자동으로 선택해 버리기 때문입니다.
+
+![250419-170703](/posts/clipboard/07-cursor-tips-and-rules/250419-170703.webp)
+
+### 3. MCP
+
+![250419-171232](/posts/clipboard/07-cursor-tips-and-rules/250419-171232.webp)
+
+설정에서 요즘 핫한 MCP(Multi Context Protocol)를 쉽게 추가할 수 있습니다. 
+`+ Add new global MCP server`를 누르면 새로운 `json` 파일이 생성되고, 이 곳에 원하는 MCP 서버를 추가하기만 하면 Cursor Agent가 사용합니다.
+
+요즘 핫한 주제인만큼, 다음 포스트에서 좀 더 자세히 다뤄보도록 하겠습니다.
+
+## 추가 꿀팁 및 주의사항
+
+### 꿀팁
+
+1. Cursor Rule나 MCP 관련한 커뮤니티 참고해서 더 잘 쓰자! 
+   - [cursor directory](https://cursor.directory/) : 커서 룰&MCP 커뮤니티
+   - [awesome cursorrules](https://github.com/PatrickJS/awesome-cursorrules) : 커서 룰 예시 github
+2. Chat에서 @로 할 수 있는 것들
+   - `@web` 채팅/composer에서 최신 정보를 얻도록 함 (Agent 모드에서는 자동으로 web 참조되므로 안써도 됨)
+   - `@git` 변경 사항을 참조하기 위해 사용합니다. 예를 들어 커밋을 @로 지정하고 AI에게 검토를 요청
+   - `@<link>` AI가 답변하기 전에 먼저 링크를 방문하도록 요청
+3. 모델의 전략적 교체를 활용하자. 예를 들어 GPT-4o은 계획에, Claude 3.7은 실행에 사용
+
+
+### 주의사항
+
+1. 요구사항은 명확히
+
+	예를 들어, 패키지 매니저를 명시하지 않으면 npm을 사용하는 환경에서 yarn을 사용할 수도 있음
+2. Vibe Coding 경계
+
+	작은 단위로 문제를 정의하고, 변경사항은 본인 및 동료 리뷰와 교차검증을 진행해야 함
+3. Rules와 프롬프트를 정교하게 사용하기
+
+	사내 컨벤션과 프레임워크(라이브러리) Best practice를 커서가
+	따라갈 수 있도록 규칙과 프롬프트를 정교하게 쓸 것
+4. Cursor와 별개로 공부는 더 열심히
+
+	Cursor가 작성하는 코드는 100% 신뢰성을 가진 코드가 아님
+	최소한 만들어진 코드를 Cursor에게 “이 코드가 어떻게 동작하는지 설명해줘!"라고 다시 물어봐서 확실히 이해하고, 불필요한 부분은 리팩토링하도록 해야 함. 그러려면 본인 개발지식 필요.
+
+
+

@@ -34,8 +34,9 @@ export const getSeriesMetadata = async (seriesSlug: string): Promise<SeriesMetad
 export const getSeriesPosts = async (seriesSlug: string): Promise<Post[]> => {
   const seriesDir = path.join(seriesBasePath, seriesSlug);
   const pattern = path.join(seriesDir, '*.mdx').replace(/\\/g, '/');
-  const mdxFiles = sync(pattern).sort();
-  return Promise.all(mdxFiles.map(parsePost));
+  const mdxFiles = sync(pattern);
+  const posts = await Promise.all(mdxFiles.map(parsePost));
+  return posts.sort((a, b) => a.createdDate.localeCompare(b.createdDate));
 };
 
 /**

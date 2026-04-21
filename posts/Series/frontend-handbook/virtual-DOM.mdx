@@ -1,0 +1,113 @@
+---
+title: virtual DOM
+desc: native DOM 조작의 비용을 줄이기 위해 메모리에 가상의 DOM을 두고 변경 사항만 반영하는 패턴
+createdDate: 2026-04-15
+modifiedDate: 2026-04-17
+thumbnail: '/blog/posts/Series/frontend-handbook/thumbnail.webp'
+tags: ['Browser', 'JavaScript', 'virtual DOM', 'React']
+---
+
+> virtual DOM은 native DOM을 직접 조작하는 대신, 메모리에 가상의 DOM을 두고 변경된 부분만 native DOM에 반영하는 패턴입니다.
+
+## virtual DOM(가상 돔)
+
+**virtual DOM** 은 **native DOM(실제 돔)의 가벼운 복사본을 메모리에 올려두고, 변경이 생기면 그 차이만 native DOM에 반영하는 패턴**이다.
+영어로는 주로 풀 네임 `virtual DOM`으로 표현하고, 한국어로는 `가상 돔`, `버추얼 돔`이라고도 읽는다.
+
+Meta사의 React가 이 개념을 대중화했고, 지금은 프론트엔드에서 가장 널리 쓰이는 렌더링 전략 중 하나다.
+
+native DOM은 브라우저가 관리하는 실제 문서 객체 구조이다.
+virtual DOM은 UI의 이상적인(또는 가상적인) 표현을 메모리에 저장해두고, native DOM과 동기화하는 프로그래밍 개념이자 패턴이다.
+
+그런데 왜 이런 방식이 필요해졌을까?
+
+
+## DOM 직접 조작의 문제
+
+[이전 글](/blog/series/frontend-handbook/render-tree)에서 살펴봤듯이, DOM이 변경되면 브라우저는 렌더 트리를 다시 구성하고 `Layout → Paint → Composite` 과정을 거친다.
+
+요소 하나를 바꿀 때는 별 문제가 없다.
+하지만 현대 웹 애플리케이션은 상태(`state`)가 바뀔 때마다 화면 여러 곳이 동시에 변경된다.
+
+```javascript title="dom-manipulation.js"
+// 리스트 아이템 1,000개를 하나씩 DOM에 추가하면?
+for (let i = 0; i < 1000; i++) {
+  const li = document.createElement('li');
+  li.textContent = `Item ${i}`;
+  list.appendChild(li); // 매번 Reflow 발생 가능
+}
+```
+
+이렇게 DOM을 직접, 자주, 여러 번 조작하면 `Reflow`와 `Repaint`가 반복되면서 성능이 떨어진다.
+
+> 집을 리모델링할 때, 벽지를 바꿀 때마다 매번 가구를 전부 빼고 다시 들이는 것과 같다. 바꿀 부분만 정리해서 한 번에 작업하는 게 훨씬 효율적이다.
+
+virtual DOM은 바로 이 **"한 번에 모아서 처리"** 를 가능하게 하는 구조다.
+
+
+## virtual DOM의 동작 원리
+
+virtual DOM은 native DOM이 아니라 **일반 자바스크립트 객체**다.
+native DOM 노드를 만드는 것보다 JS 객체를 만드는 것이 훨씬 가볍기 때문이다.
+이렇게 만들어진 JS 객체는 메모리에 올려두고 사용하는데, 여기서 메모리는 보통 브라우저 환경에서 사용하기 때문에 `RAM` 위의 힙 메모리다.
+
+```javascript title="virtual-dom-object.js"
+// native DOM이 아닌 JS 객체로 표현한 가상 트리
+const vNode = {
+  type: 'div',
+  props: { className: 'container' },
+  children: [
+    { type: 'h1', props: {}, children: ['Hello'] },
+    { type: 'p', props: {}, children: ['World'] },
+  ],
+};
+```
+
+이 가벼운 객체를 활용해서, virtual DOM은 다음과 같은 흐름으로 동작한다.
+
+```bash
+상태 변경 → 새 가상 트리 생성 → 이전 트리와 비교(Diffing) → 변경분만 native DOM에 반영(Reconciliation)
+```
+
+| 단계 | 대상 | 설명 |
+|------|------|------|
+| 가상 트리 생성 | 메모리 | 새로운 UI 상태를 JS 객체로 표현 |
+| Diffing(비교) | 메모리 | 이전 트리와 새 트리의 차이를 계산 |
+| Reconciliation(재조정) | native DOM | 변경된 부분만 DOM에 반영 |
+
+이 과정에서 React는 트리 비교 비용을 줄이기 위해 두 가지 가정을 둔다.
+
+1. **타입이 다르면 하위 트리를 통째로 교체**한다.
+2. **`key` prop으로 같은 요소를 식별**한다.
+
+> keys should be **stable, predictable, and unique.**
+
+결과적으로 DOM 조작 횟수를 최소화하고, Reflow/Repaint 비용을 줄일 수 있다.
+
+
+## virtual DOM은 빠른가?
+
+여기서 흔한 오해 하나를 짚고 넘어가자.
+
+> virtual DOM이 native DOM보다 빠르다
+
+이 말은 **정확하지 않다.**
+
+virtual DOM은 결국 native DOM을 조작해야 한다. 가상 트리를 만들고 비교하는 과정 자체도 비용이다.
+최적화된 직접 DOM 조작보다 virtual DOM이 더 빠를 수는 없다.
+
+그렇다면 왜 쓰는 걸까?
+
+핵심은 **"충분히 빠르면서도 선언적 UI를 가능하게 한다"** 는 점이다.
+
+| 접근 방식 | 성능 | 개발 경험 |
+|-----------|------|-----------|
+| 직접 DOM 조작 | 최적화하면 가장 빠름 | 명령적, 복잡도 높음 |
+| virtual DOM | 충분히 빠름 | 선언적, 상태만 관리하면 됨 |
+
+개발자가 **"상태가 바뀌면 UI가 어떻게 보여야 하는지"만 선언**하면, 
+native DOM을 어떻게 효율적으로 업데이트할지는 virtual DOM이 **알아서 처리**해 준다.
+
+> Svelte처럼 virtual DOM 없이 컴파일 타임에 최적화된 DOM 조작 코드를 생성하는 프레임워크도 있다. "virtual DOM이 유일한 답은 아니다"는 점도 알아두면 좋다.
+
+

@@ -1,0 +1,257 @@
+---
+title: Vercel Blob에 프로젝트 이미지 마이그레이션하기
+desc: /public 대신 Vercel Blob을 사용해 이미지를 관리하는 방법
+createdDate: 2026-03-23
+thumbnail: /blog/posts/Etc/08/thumbnail-blob.webp
+tags: ['etc']
+---
+
+## 개요
+
+
+![vercel-blob](/blog/posts/Etc/08/0.webp)
+
+포트폴리오 사이트에 프로젝트 스크린샷이 곧 200개를 돌파합니다. 
+
+앞으로 쓸 것을 생각하면 3~400장은 될 것 같습니다. 
+
+이미지들은 전부 `public/projects/`에 넣어두고 있었는데, 전부 git에 포함되어 repo와 배포 자산이 같이 무거워졌습니다.
+게다가 `/public`은 `max-age=0`이라 캐싱도 잘 안되는 구조죠...
+
+이걸 해결하기 위해 **Vercel Blob**으로 이미지를 마이그레이션하기로 했습니다.
+Vercel Blob을 쓰면:
+
+- 이미지가 **Vercel CDN**에서 제공되어 로딩 속도가 빨라진다(캐싱 최적화)
+- **git 저장소**가 가벼워진다
+
+이번 글에서는 Vercel Blob Store 연결부터 업로드 스크립트 작성, 소스코드 URL 교체까지 전 과정을 정리해 보았습니다.
+
+## Vercel Blob이란?
+
+[Vercel Blob](https://vercel.com/docs/vercel-blob)은 Vercel에서 제공하는 오픈 소스 스토리지 솔루션으로, 
+이미지, 비디오, 오디오 등 다양한 파일을 저장하고 제공할 수 있습니다.
+클라우드 저장소라고 생각하면 될 것 같고, 무료 저장 공간으로 1GB를 제공하기 때문에 한 개 프로젝트용으론 충분합니다.
+
+upload 방식은 3가지로 `Server Upload`, `Client Upload`, `SDK` 3가지가 있습니다.
+
+- `Server Upload`: Vercel Funtion(API Route) 환경에서 `Client -> Server -> Blob` 순으로 런타임에 업로드하는 방식
+- `Client Upload`: 브라우저에서 직접 Blob으로 업로드하는 방식
+- `SDK`: 로컬에서 Node.js 환경에서 일회성으로 또는 빌드 시 업로드하는 방식
+
+> Vercel에서 `Server Upload`는 파일 크기 `4.5MB` 이상일 때를 권장합니다.
+
+## Vercel Blob Store 생성
+
+어떤 Upload 방식을 사용할지 결정하기 전에, Vercel Blob Store를 생성해야 합니다.
+
+1. [vercel.com](https://vercel.com) > **Storage** > **Create Database** > **Blob**
+![create-blob](/blog/posts/Etc/08/2.blob.webp)
+2. Store 이름을 입력하고 생성(Region: `Seoul`, Access: `Public`으로 설정)
+![make-blob](/blog/posts/Etc/08/3.make-blob.webp)
+3. 생성된 Store를 프로젝트에 **Connect**
+![create-blob](/blog/posts/Etc/08/4.connect.webp)
+
+
+## Client Upload 방식
+
+Client Upload 방식은 브라우저에서 직접 Blob으로 업로드하는 방식입니다.
+
+Terminal에서 `vercel link` 명령어를 입력하여 프로젝트에 연결합니다.
+```bash title="Terminal"
+vercel link
+```
+![vercel-blob-store](/blog/posts/Etc/08/5.connect-terminal.webp)
+
+연결하면 `BLOB_READ_WRITE_TOKEN` 환경변수가 프로젝트에 자동으로 주입됩니다. 그리고 브라우저에서 바로 업로드하면 됩니다.
+
+![vercel-blob-upload](/blog/posts/Etc/08/client-upload.webp)
+
+
+## SDK 방식
+
+저는 프로젝트 이미지 전체를 일괄적으로 올리기 위해 SDK 방식을 사용하겠습니다.
+
+### 1. Vercel Blob Store 연결
+
+로컬 `.env`에 `BLOB_READ_WRITE_TOKEN`을 추가해야 합니다.
+
+```bash title=".env"
+BLOB_READ_WRITE_TOKEN="vercel_blob_rw_xxxxx..."
+```
+
+---
+
+### 2. 패키지 설치
+
+```bash
+npm install @vercel/blob dotenv
+```
+
+- `@vercel/blob`: Vercel Blob API 클라이언트
+- `dotenv`: `.env` 파일의 환경변수를 로컬에서 읽기 위해 필요
+
+---
+
+### 3. 업로드 스크립트 작성
+
+`scripts/upload-to-blob.ts`를 만듭니다. 핵심 포인트별로 나눠서 설명하겠습니다.
+
+- 기본 설정
+
+```typescript title="scripts/upload-to-blob.ts" {showLineNumbers} {7}
+import { put } from '@vercel/blob';
+import { config } from 'dotenv';
+import {
+  existsSync, mkdirSync, readdirSync,
+  readFileSync, statSync, writeFileSync,
+} from 'fs';
+import { join, relative } from 'path';
+
+// .env 파일의 환경변수를 process.env로 로드
+// 로컬 실행 시 BLOB_READ_WRITE_TOKEN을 읽기 위해 필요
+config();
+
+const PUBLIC_DIR = join(process.cwd(), 'public', 'projects');
+const OUTPUT_DIR = join(process.cwd(), 'scripts', 'blob-mappings');
+```
+
+- 이미지 파일 수집
+
+디렉토리를 재귀적으로 순회하면서 이미지 확장자에 해당하는 파일만 골라냅니다.
+
+```typescript title="scripts/upload-to-blob.ts" {showLineNumbers} {1}
+const IMAGE_EXTENSIONS = ['.webp', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.avif'];
+
+function getImageFiles(dir: string): string[] {
+  const files: string[] = [];
+  for (const entry of readdirSync(dir)) {
+    const fullPath = join(dir, entry);
+    if (statSync(fullPath).isDirectory()) {
+      files.push(...getImageFiles(fullPath));
+    } else if (IMAGE_EXTENSIONS.some((ext) => entry.toLowerCase().endsWith(ext))) {
+      files.push(fullPath);
+    }
+  }
+  return files;
+}
+```
+
+- 업로드 로직
+
+여기가 핵심입니다. 한 번에 5개씩 병렬로 업로드하고, 결과를 JSON 매핑 파일로 저장합니다.
+
+```typescript title="scripts/upload-to-blob.ts" {showLineNumbers} {8, 16, 17}
+async function uploadFiles(projectName?: string) {
+  const token = process.env.BLOB_READ_WRITE_TOKEN;
+
+  // 인자가 있으면 특정 프로젝트만, 없으면 전체 업로드
+  const targetDir = projectName ? join(PUBLIC_DIR, projectName) : PUBLIC_DIR;
+
+  const files = getImageFiles(targetDir);
+  const mapping: Record<string, string> = {};
+
+  // 한 번에 5개씩 병렬 업로드 (Rate Limit 방지)
+  const concurrency = 5;
+
+  for (let i = 0; i < files.length; i += concurrency) {
+    const batch = files.slice(i, i + concurrency);
+    const results = await Promise.all(
+      batch.map(async (filePath) => {
+        // 로컬 절대경로를 blob 저장소의 경로명으로 변환
+        // 예: /Users/.../public/projects/diki/0.webp -> projects/diki/0.webp
+        const relativePath = `projects/${relative(PUBLIC_DIR, filePath)}`;
+        const fileBuffer = readFileSync(filePath);
+
+        const blob = await put(relativePath, fileBuffer, {
+          access: 'public',
+          token,
+          addRandomSuffix: false,
+        });
+
+        return { oldUrl: `/${relativePath}`, newUrl: blob.url };
+      }),
+    );
+
+    for (const { oldUrl, newUrl } of results) {
+      mapping[oldUrl] = newUrl;
+    }
+  }
+}
+```
+
+여기서 짚고 넘어갈 부분이 두 가지 있습니다.
+
+- addRandomSuffix: false가 중요한 이유
+
+`put` 옵션의 `addRandomSuffix` 기본값은 `true`입니다. 이 경우 파일명 뒤에 랜덤 문자열이 붙어서 `0-abc123.webp` 같은 URL이 생성됩니다.
+
+문제는 같은 파일을 다시 업로드할 때 **덮어쓰기가 되지 않고 새 파일이 생긴다**는 것이죠.
+`false`로 설정하면 경로가 곧 고유 식별자가 되어, 같은 경로로 다시 업로드하면 덮어쓰기가 됩니다.
+
+- 병렬 처리를 5개로 제한한 이유
+
+100개가 넘는 파일을 전부 동시에 `Promise.all`로 보내면 네트워크나 API Rate Limit에 걸릴 수 있습니다.
+5개씩 나눠서 보내면 안정적으로 처리되면서도 충분히 빠릅니다.
+
+---
+
+### 4. 실행
+
+```bash
+# 특정 프로젝트만
+npx tsx scripts/upload-to-blob.ts diki
+
+# 전체 프로젝트
+npx tsx scripts/upload-to-blob.ts
+```
+
+실행하면 이런 로그가 나옵니다:
+
+```bash
+Found 58 images in diki
+
+[1/58] /projects/diki/0.webp -> https://xxxxx.public.blob.vercel-storage.com/projects/diki/0.webp
+[2/58] /projects/diki/1.webp -> https://xxxxx.public.blob.vercel-storage.com/projects/diki/1.webp
+...
+
+Mapping saved to scripts/blob-mappings/diki.json
+Total uploaded: 58 files
+```
+
+---
+
+### 5. 소스코드 URL 교체
+
+constants.ts에 Blob Storage base URL을 추가하여 url 부분에 붙여서 사용합니다.
+
+```javascript title="constants.ts"
+// Vercel Blob Storage base URL
+export const blobUrl =
+  'https://hhpukqiys1mbtscs.public.blob.vercel-storage.com';
+```
+
+이 매핑을 참고해서 프로젝트 설정 파일의 이미지 URL을 교체하면 됩니다.
+
+```typescript title="/diki.ts" {showLineNumbers} {4, 7}
+import { blobUrl } from '@/constants';
+
+// Before
+{ url: '/projects/diki/0.webp', caption: '랜딩페이지' },
+
+// After
+{ url: `${blobUrl}/diki/0.webp`, caption: '랜딩페이지' },
+```
+
+---
+
+### 6. (선택) 로컬 이미지 삭제
+
+blob으로 옮긴 이미지는 `public/projects/diki/`에서 삭제해도 됩니다.
+
+---
+
+## 주의할 점
+
+- `.env`는 git에 커밋하지 말 것. 토큰이 포함되어 있으므로 `.gitignore`에 포함되어 있는지 확인
+- Vercel에 배포할 때는 Blob Store를 프로젝트에 연결해두면 `BLOB_READ_WRITE_TOKEN`이 자동 주입되므로 별도 설정 불필요
+- Vercel Blob **무료 플랜 기준 1GB** 용량 제한이 있으니, 이미지 용량이 큰 경우 확인 필요

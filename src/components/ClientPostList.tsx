@@ -1,14 +1,14 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useCallback, useMemo } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import PostCard from '@/components/PostCard';
 import PostListHeader from '@/components/PostListHeader';
+import TagFilter from '@/components/TagFilter';
 import { useSearch } from '@/contexts/SearchContext';
 import { PostGridProps, ClientPostListProps } from '@/types/search';
 import SeriesCarousel from '@/components/series/SeriesCarousel';
 import { searchPosts } from '@/utils/searchUtils';
-import { X } from 'lucide-react';
 
 interface PostGridWithTagProps extends PostGridProps {
   onTagClick: (tag: string)=> void;
@@ -28,13 +28,17 @@ const PostGrid = ({ posts, onTagClick }: PostGridWithTagProps) => {
   );
 };
 
-const ClientPostList = ({ initialPosts, category, seriesCards = [] }: ClientPostListProps) => {
+const ClientPostList = ({ initialPosts, allTags, seriesCards = [] }: ClientPostListProps) => {
   const { searchResults, pastSearchValue, setSearchResults, setPastSearchValue } = useSearch();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const selectedTag = searchParams.get('tag');
+  const tagsParam = searchParams.get('tags') ?? '';
+  const selectedTags = useMemo(
+    () => tagsParam.split(',').filter(Boolean),
+    [tagsParam],
+  );
   const q = searchParams.get('q') ?? '';
 
   useEffect(() => {
@@ -62,48 +66,47 @@ const ClientPostList = ({ initialPosts, category, seriesCards = [] }: ClientPost
   }, [q, setSearchResults, setPastSearchValue]);
 
   const baseList = searchResults.length > 0 ? searchResults : initialPosts;
-  const postList = selectedTag
-    ? baseList.filter((post) => post.tags.includes(selectedTag))
+  const postList = selectedTags.length > 0
+    ? baseList.filter((post) => selectedTags.some((tag) => post.tags.includes(tag)))
     : baseList;
 
-  const updateTagParam = (nextTag: string | null) => {
+  const updateTagsParam = useCallback((nextTags: string[]) => {
     const params = new URLSearchParams(searchParams.toString());
-    if (nextTag) params.set('tag', nextTag);
-    else params.delete('tag');
+    if (nextTags.length > 0) params.set('tags', nextTags.join(','));
+    else params.delete('tags');
     const qs = params.toString();
     router.push(qs ? `${ pathname }?${ qs }` : pathname, { scroll: false });
-  };
+  }, [searchParams, router, pathname]);
 
-  const handleTagClick = (tag: string) => {
-    updateTagParam(selectedTag === tag ? null : tag);
-  };
+  const handleTagClick = useCallback((tag: string) => {
+    const next = selectedTags.includes(tag)
+      ? selectedTags.filter((t) => t !== tag)
+      : [...selectedTags, tag];
+    updateTagsParam(next);
+  }, [selectedTags, updateTagsParam]);
 
-  const showCarousel = seriesCards.length > 0 && !selectedTag && !pastSearchValue;
+  const handleTagReset = useCallback(() => {
+    updateTagsParam([]);
+  }, [updateTagsParam]);
+
+  const showCarousel = seriesCards.length > 0 && selectedTags.length === 0 && !pastSearchValue;
 
   return (
     <div className='flex justify-center'>
       <div className='w-full max-w-[800px]'>
         {showCarousel && <SeriesCarousel seriesCards={seriesCards} />}
+        <TagFilter
+          allTags={allTags}
+          selectedTags={selectedTags}
+          onTagClick={handleTagClick}
+          onReset={handleTagReset}
+        />
         <PostListHeader
           searchResults={searchResults}
           pastSearchValue={pastSearchValue}
-          category={category}
-          selectedTag={selectedTag}
+          selectedTags={selectedTags}
           count={postList.length}
         />
-        {selectedTag && (
-          <div className="my-4 flex items-center gap-2">
-            <span className="text-sm text-sub">{'태그 필터:'}</span>
-            <button
-              type="button"
-              onClick={() => updateTagParam(null)}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-accent1 text-white text-sm transition-colors hover:opacity-80"
-            >
-              {selectedTag}
-              <X className="size-3.5" />
-            </button>
-          </div>
-        )}
         <PostGrid posts={postList} onTagClick={handleTagClick} />
       </div>
     </div>
