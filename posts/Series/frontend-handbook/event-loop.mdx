@@ -1,0 +1,178 @@
+---
+title: Event Loop
+desc:  Call Stack이 비어있을 때, Task Queue에서 작업을 꺼내 실행하는 메커니즘
+createdDate: 2026-04-23
+thumbnail: '/blog/posts/Series/frontend-handbook/thumbnail.webp'
+tags: ['Frontend', 'Browser', 'JavaScript', 'Event Loop']
+---
+
+> Event Loop는 콜 스택이 비어있을 때 태스크 큐에서 작업을 꺼내 실행하는 메커니즘으로,
+> 싱글 스레드인 자바스크립트가 비동기 작업을 처리할 수 있게 해주는 핵심 구조입니다.
+
+## Event Loop
+
+자바스크립트는 **싱글 스레드** 언어다. 한 번에 하나의 작업만 실행할 수 있다.
+
+하지만 다음 코드를 실행해보면 어떻게 될까?
+
+```javascript title="async-example.js"
+console.log('1');
+setTimeout(() => console.log('2'), 0);
+console.log('3');
+
+// 출력: 1 → 3 → 2
+```
+
+`setTimeout`을 0ms로 설정했는데도 `'2'`가 마지막에 출력된다.
+싱글 스레드라면서, 어떻게 `'3'`을 먼저 실행하고 `'2'`를 나중에 처리할 수 있는 걸까?
+
+이걸 가능하게 하는 것이 **Event Loop(이벤트 루프)** 다.
+
+브라우저 환경에서는 비동기 작업을 처리할 수 있는데, 이는 브라우저가 비동기 작업을 대신 처리하고, 
+`Event Loop`가 콜 스택이 비었을 때 큐에 대기 중인 작업을 가져와 실행해 주기 때문이다.
+`Event Loop`는 한국어로 `이벤트 루프`라고 부른다.
+
+## 구성 요소
+
+Event Loop를 이해하려면 먼저 네 가지 구성 요소를 알아야 한다.
+
+![Event Loop](/blog/posts/Series/frontend-handbook/event-Loop/event-loop.webp)
+[출처](https://dev.to/lydiahallie/javascript-visualized-promises-async-await-5gke#syntax%20)
+
+### 1. Call Stack(콜 스택)
+
+자바스크립트 엔진이 **현재 실행 중인 함수**를 쌓아두는 곳이다.
+함수가 호출되면 스택에 쌓이고(push), 실행이 끝나면 빠진다(pop).
+
+```javascript title="call-stack.js"
+function a() { b(); }
+function b() { c(); }
+function c() { console.log('hello'); }
+a();
+```
+
+```bash title="call-stack"
+[c]        ← 가장 나중에 들어와서 가장 먼저 실행
+[b]
+[a]
+──────
+Call Stack
+```
+
+콜 스택이 비어야 다음 작업을 가져올 수 있다.
+**콜 스택이 비어 있지 않으면, 어떤 비동기 콜백도 실행되지 않는다.**
+
+### 2. Web APIs
+
+`setTimeout`, `fetch`, `addEventListener` 같은 비동기 작업은 자바스크립트 엔진이 아니라 **브라우저(Web APIs)** 가 처리한다.
+
+자바스크립트 엔진은 이런 작업을 브라우저에 위임하고, 콜 스택에서 바로 빠진다.
+브라우저가 작업을 완료하면 콜백을 **매크로태스크 큐**에 넣어준다.
+
+### 3. Microtask Queue(마이크로태스크 큐)
+
+`Promise.then`, `queueMicrotask`, `MutationObserver`의 콜백이 대기하는 큐다.
+
+매크로태스크 큐보다 **우선순위가 높다.**
+이벤트 루프는 현재 실행 중인 태스크가 끝나고 콜 스택이 비면, 먼저 마이크로태스크 큐를 모두 비운다. 
+
+### 4. Macrotask Queue(매크로태스크 큐)
+
+> 보통 Task Queue라고 부르지만, 이벤트 루프의 동작 순서를 이해하기 위해 Macrotask Queue라고 부른다.
+
+Web APIs가 완료한 콜백이 **대기하는 줄**이다.
+`setTimeout`, `setInterval`, `I/O`, `UI 이벤트` 등의 콜백이 여기에 쌓인다.
+예를 들어 `setTimeout`을 1000ms로 설정했다면, `setTimeout`함수는 브라우저(Web API)에 등록이 되고 1000ms 후에 콜백이 매크로태스크 큐에 등록된다.
+
+Event Loop는 콜 스택이 비어 있을 때, 매크로태스크 큐에서 **하나씩** 꺼내서 콜 스택에 올린다.
+
+## Event Loop의 동작
+
+이제 전체 흐름을 정리하자.
+
+![Tasks](/blog/posts/Series/frontend-handbook/event-Loop/tasks.webp)
+[출처](https://dev.to/lydiahallie/javascript-visualized-promises-async-await-5gke#syntax%20)
+(아래 내용과 상관 없이, 실행 순서를 이해하기 위해 추가한 이미지)
+
+```bash title="event-loop"
+1. 콜 스택에서 현재 작업 실행
+2. 콜 스택이 비었는가?
+   ├── 마이크로태스크 큐에 작업이 있으면 → 전부 실행
+   └── 마이크로태스크 큐가 비었으면 → 태스크 큐에서 하나 꺼내 실행
+3. 필요하면 렌더링(Layout → Paint)
+4. 1번으로 돌아간다
+```
+
+이 과정이 **무한히 반복**된다. 그래서 "루프"다.
+
+### 실행 순서 예제
+
+```javascript title="event-loop-order.js"
+console.log('1');
+
+setTimeout(() => {
+  console.log('2');
+}, 0);
+
+Promise.resolve().then(() => {
+  console.log('3');
+});
+
+console.log('4');
+
+// 출력: 1 → 4 → 3 → 2
+```
+
+| 순서 | 코드 | 위치 |
+|------|------|------|
+| 1 | `console.log('1')` | 콜 스택 (즉시 실행) |
+| 2 | `setTimeout` 콜백 등록 | Web APIs → 매크로태스크 큐 |
+| 3 | `Promise.then` 콜백 등록 | 마이크로태스크 큐 |
+| 4 | `console.log('4')` | 콜 스택 (즉시 실행) |
+| 5 | `console.log('3')` | 마이크로태스크 큐 → 콜 스택 |
+| 6 | `console.log('2')` | 매크로태스크 큐 → 콜 스택 |
+
+**마이크로태스크(`Promise`)가 태스크(`setTimeout`)보다 먼저 실행**된다는 점이 핵심이다.
+
+
+## 렌더링과 Event Loop
+
+브라우저는 보통 **1초에 60프레임**(60fps)을 목표로 화면을 그린다.
+한 프레임당 약 **16.6ms**의 시간이 주어진다.
+
+이 16.6ms 안에 자바스크립트 실행, 스타일 계산, 레이아웃, 페인트가 모두 끝나야 한다.
+
+```bash title="frame-budget"
+|<───────────── 16.6ms ─────────────>|
+[ JS 실행 ][ Style ][ Layout ][ Paint ]
+```
+
+만약 콜 스택의 작업이 16.6ms를 넘기면?
+브라우저는 그 프레임의 렌더링을 건너뛴다. 사용자에게는 **화면이 멈춘 것**처럼 보인다.
+
+[이전 글](/blog/series/frontend-handbook/React-Fiber)에서 Fiber가 작업을 잘게 쪼개는 이유가 바로 이것이다.
+각 fiber 작업을 16ms 안에 끝내고 콜 스택을 비워야, 브라우저가 렌더링할 틈을 확보할 수 있다.
+
+### requestAnimationFrame
+
+`requestAnimationFrame`(rAF)은 **다음 렌더링 직전에** 콜백을 실행해 달라고 브라우저에 요청하는 API다.
+
+```bash title="raf-timing"
+[태스크] → [마이크로태스크 전부] → [rAF 콜백] → [Style → Layout → Paint]
+```
+
+애니메이션이나 DOM 측정처럼 렌더링과 타이밍을 맞춰야 하는 작업에 적합하다.
+`setTimeout`으로 애니메이션을 구현하면 프레임과 어긋나서 버벅일 수 있지만, `rAF`는 브라우저의 렌더링 주기에 정확히 맞춰 실행된다.
+
+
+## 우선순위 정리
+
+| 우선순위 | 큐 | 예시 |
+|----------|-------------|------|
+| 1 | 콜 스택 | 동기 코드 |
+| 2 | 마이크로태스크 큐 | `Promise.then`, `queueMicrotask` |
+| 3 | rAF 콜백 | `requestAnimationFrame` |
+| 4 | 매크로태스크 큐 | `setTimeout`, `setInterval`, 이벤트 핸들러 |
+
+> Event Loop는 항상 **콜 스택 → 마이크로태스크 → (렌더링) → 매크로태스크** 순서로 동작한다.
+> 마이크로태스크는 큐가 빌 때까지 전부 실행되고, 매크로태스크는 한 번에 하나씩 실행된다.
