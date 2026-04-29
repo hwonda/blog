@@ -11,8 +11,8 @@ interface SeriesNavProps {
 
 const SeriesNav = ({ series, currentPostSlug }: SeriesNavProps) => {
   const currentIndex = series.posts.findIndex((p) => p.slug === currentPostSlug);
-  const prevPost = currentIndex > 0 ? series.posts[currentIndex - 1] : null;
-  const nextPost = currentIndex < series.posts.length - 1 ? series.posts[currentIndex + 1] : null;
+  const prevPost = currentIndex < series.posts.length - 1 ? series.posts[currentIndex + 1] : null;
+  const nextPost = currentIndex > 0 ? series.posts[currentIndex - 1] : null;
 
   return (
     <div className="not-prose w-52">
@@ -46,7 +46,7 @@ const SeriesNav = ({ series, currentPostSlug }: SeriesNavProps) => {
                         : 'text-gray1 hover:text-accent2'
                     }`}
                   >
-                    {`${ String(i + 1).padStart(2, '0') }. ${ post.title }`}
+                    {`${ String(series.posts.length - i).padStart(2, '0') }. ${ post.title }`}
                   </span>
                 </div>
               </Link>

@@ -36,7 +36,7 @@ export const getSeriesPosts = async (seriesSlug: string): Promise<Post[]> => {
   const pattern = path.join(seriesDir, '*.mdx').replace(/\\/g, '/');
   const mdxFiles = sync(pattern);
   const posts = await Promise.all(mdxFiles.map(parsePost));
-  return posts.sort((a, b) => a.createdDate.localeCompare(b.createdDate));
+  return posts.sort((a, b) => b.createdDate.localeCompare(a.createdDate));
 };
 
 /**

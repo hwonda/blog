@@ -51,7 +51,7 @@ const SeriesTocPage = ({ series }: SeriesTocPageProps) => {
                 className="group flex items-start gap-4 py-4 border-b border-gray3 hover:bg-gray5/50 transition-colors px-2"
               >
                 <span className="text-lg font-bold text-gray2 w-8 shrink-0 -mt-0.5">
-                  {String(index + 1).padStart(2, '0')}
+                  {String(series.posts.length - index).padStart(2, '0')}
                 </span>
                 <div className="flex-1">
                   <div className="font-semibold group-hover:text-accent1 transition-colors">
