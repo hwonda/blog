@@ -1,0 +1,343 @@
+---
+title: Closure
+desc: 함수가 선언된 환경을 기억하고, 그 환경의 변수에 접근할 수 있게 해주는 메커니즘
+createdDate: 2026-05-01
+thumbnail: '/blog/posts/Series/frontend-handbook/thumbnail.webp'
+tags: ['Frontend', 'JavaScript', 'Closure', 'Scope']
+---
+
+> Closure는 함수가 선언된 렉시컬 환경을 기억하고,
+> 그 환경 밖에서 실행되더라도 원래 환경의 변수에 접근할 수 있게 해주는 메커니즘입니다.
+
+## Closure(클로저)
+
+Closure는 함수가 선언된 환경을 기억하고, 그 환경의 변수에 접근할 수 있게 해주는 메커니즘이다.
+영어로 '닫힘', '폐쇄'라는 뜻이고, 
+한국어로는 `클로저`라고 읽는다.
+
+함수 안에서 바깥 변수를 자유롭게 가져다 쓰는 코드는 자바스크립트에서 너무나 흔하다.
+그런데 한 가지 이상한 상황이 있다. 바깥 함수의 실행이 이미 끝나서 콜 스택에서 사라졌는데도,
+**안쪽 함수가 여전히 그 변수에 접근할 수 있다는 것이다.**
+
+```javascript title="outer-variable.js"
+function outer() {
+  const message = 'hello';
+  function inner() {
+    console.log(message);
+  }
+  return inner;
+}
+
+const fn = outer();
+fn(); // 'hello'
+```
+
+`outer`는 `inner`를 반환하고 실행이 끝났다. 콜 스택에서도 빠졌다.
+그런데 `fn()`을 호출하면 `message`에 여전히 접근할 수 있다.
+함수가 끝났으면 그 안의 변수도 사라져야 하는 거 아닌가? 이걸 가능하게 하는 것이 **Closure(클로저)** 다.
+
+[MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures)에서는 클로저를 이렇게 정의한다.
+
+> A closure is the combination of a function bundled together (enclosed) with references to its surrounding state (the lexical environment).
+
+즉, `함수 + 그 함수가 선언된 렉시컬 환경`을 합쳐서 클로저라고 부른다.
+함수가 만들어질 때 주변 환경을 '닫아서(close over)' 함께 기억한다는 의미에서 이런 이름이 붙었다.
+클로저가 어떻게 이런 동작을 할 수 있는지 이해하려면, 먼저 **실행 컨텍스트**와 **렉시컬 환경**이라는 두 가지 개념을 알아야 한다.
+
+
+## 실행 컨텍스트(Execution Context)
+
+**실행 컨텍스트(Execution Context)** 는 자바스크립트 코드가 실행되는 환경 정보를 담은 객체다.
+[ECMAScript 명세](https://tc39.es/ecma262/multipage/executable-code-and-execution-contexts.html)에서는
+'실행 중인 코드의 진행 상태를 추적하기 위해 사용되는 명세 장치(specification device)'라고 정의한다.
+쉽게 말해, 자바스크립트 엔진이 코드를 실행할 때 **'지금 어떤 코드를 실행 중이고, 어떤 변수를 쓸 수 있는지'를 기록해 두는 곳**이다.
+우리가 함수를 호출하면 그 함수만의 실행 컨텍스트가 만들어지고, 함수가 끝나면 사라진다.
+
+실행 컨텍스트는 크게 세 종류가 있다.
+
+| 종류 | 생성 시점 | 설명 |
+|------|-----------|------|
+| Global Execution Context | 스크립트 시작 | 전역 코드 실행 시 생성, 하나만 존재 |
+| Function Execution Context | 함수 호출 | 함수가 호출될 때마다 새로 생성 |
+| Eval Execution Context | `eval()` 호출 | `eval` 내부 코드 실행 시 생성 (실무에서 거의 안 씀) |
+
+### 콜 스택과의 관계
+
+실행 컨텍스트는 **콜 스택(Call Stack)** 에 쌓인다.
+[이전 글](/blog/series/frontend-handbook/event-loop)에서 콜 스택을 '현재 실행 중인 함수를 쌓아두는 곳'이라고 설명했는데,
+정확히 말하면 콜 스택에 쌓이는 것은 **실행 컨텍스트**다.
+함수가 호출될 때마다 새 실행 컨텍스트가 생성되어 스택 꼭대기에 올라가고, 실행이 끝나면 빠져나온다.
+
+```javascript title="execution-context-stack.js"
+function a() {
+  b();
+}
+function b() {
+  console.log('hello');
+}
+a();
+```
+
+```bash title="call-stack"
+[b의 실행 컨텍스트]      ← 가장 나중에 들어와서 가장 먼저 실행
+[a의 실행 컨텍스트]
+[전역 실행 컨텍스트]
+───────────────────
+Call Stack
+```
+
+위 코드에서 `a()`를 호출하면 a의 실행 컨텍스트가 쌓이고, `a` 안에서 `b()`를 호출하면 b의 실행 컨텍스트가 그 위에 쌓인다.
+`b`가 끝나면 스택에서 빠지고, `a`가 끝나면 역시 빠진다.
+여기서 중요한 건, 실행 컨텍스트가 스택에서 빠졌다고 해서 그 안의 **렉시컬 환경**까지 바로 사라지는 건 아니라는 점이다. 이것이 클로저의 핵심이다.
+
+
+## 렉시컬 환경(Lexical Environment)
+
+실행 컨텍스트 안에는 **렉시컬 환경(Lexical Environment)** 이라는 구조가 있다.
+[ECMAScript 명세](https://tc39.es/ecma262/multipage/executable-code-and-execution-contexts.html)에 따르면,
+렉시컬 환경은 **식별자(변수명)와 값의 매핑을 관리하는 구조**다.
+'이 스코프 안에는 어떤 변수들이 있고, 각각 어떤 값을 가지고 있는지'를 기록해 두는 사전이라고 생각하면 된다.
+이 구조는 두 가지로 구성된다.
+
+| 구성 요소 | 역할 |
+|-----------|------|
+| **Environment Record** | 현재 스코프의 변수, 함수 선언 등을 저장 |
+| **outer 참조** | 바깥 렉시컬 환경을 가리키는 참조 |
+
+핵심은 **outer 참조**다. 이 참조가 연쇄적으로 이어지면서 **스코프 체인(Scope Chain)** 이 만들어진다.
+변수를 찾을 때 현재 Environment Record에 없으면 outer를 따라 한 단계 바깥으로 올라가고,
+거기에도 없으면 또 바깥으로 올라간다. 전역까지 올라가도 못 찾으면 `ReferenceError`가 발생한다.
+
+```javascript title="scope-chain.js"
+const global = 'A';
+
+function outer() {
+  const outerVar = 'B';
+
+  function inner() {
+    const innerVar = 'C';
+    console.log(innerVar); // 'C' — 현재 스코프
+    console.log(outerVar); // 'B' — outer 참조를 따라 한 단계 위
+    console.log(global);   // 'A' — outer 참조를 따라 두 단계 위
+  }
+
+  inner();
+}
+
+outer();
+```
+
+위 코드에서 `inner` 함수가 `outerVar`를 참조할 때, 자바스크립트 엔진은 먼저 inner의 Environment Record를 확인한다.
+거기에 `outerVar`가 없으니 outer 참조를 따라 `outer`의 렉시컬 환경으로 올라가고, 거기서 `outerVar`를 찾는다.
+이 탐색 과정을 도식화하면 다음과 같다.
+
+```bash title="lexical-environment-chain"
+inner의 렉시컬 환경
+├── Environment Record: { innerVar: 'C' }
+└── outer → outer의 렉시컬 환경
+             ├── Environment Record: { outerVar: 'B' }
+             └── outer → 전역 렉시컬 환경
+                          ├── Environment Record: { global: 'A' }
+                          └── outer → null
+```
+
+[javascript.info](https://javascript.info/closure)에서는 이 구조를 이렇게 설명한다.
+
+> Every running function, code block, and the script as a whole have an internal (hidden) associated object known as the **Lexical Environment**.
+
+여기서 **렉시컬(lexical)** 이라는 단어가 중요하다.
+렉시컬은 '코드가 작성된 위치'를 의미한다. 즉, **함수가 어디서 호출되었는지가 아니라 어디서 선언되었는지**에 따라 스코프가 결정된다.
+런타임에 동적으로 바뀌는 것이 아니라 코드를 작성하는 시점에 이미 확정되어 있기 때문에,
+이를 **렉시컬 스코핑(Lexical Scoping)** 또는 **정적 스코핑(Static Scoping)** 이라고 부른다.
+
+
+## 클로저의 동작 원리
+
+실행 컨텍스트와 렉시컬 환경을 이해했으니, 이제 클로저가 어떻게 작동하는지 구체적으로 살펴보자.
+[ECMAScript 명세](https://tc39.es/ecma262/multipage/executable-code-and-execution-contexts.html)에 따르면,
+함수가 생성될 때 내부 슬롯 **`[[Environment]]`** 에 **자신이 생성된 시점의 렉시컬 환경**이 저장된다.
+이 참조는 함수가 어디서 호출되든, 심지어 생성된 스코프가 콜 스택에서 사라진 뒤에도 유지된다.
+바로 이 `[[Environment]]` 슬롯이 클로저의 비밀이다.
+
+처음에 봤던 예제를 단계별로 따라가 보자.
+
+```javascript title="closure-step-by-step.js" {showLineNumbers}
+function outer() {
+  const message = 'hello';
+  function inner() {
+    console.log(message);
+  }
+  return inner;
+}
+
+const fn = outer();
+fn(); // 'hello'
+```
+
+**1단계 — `outer()` 호출**
+
+`outer`가 호출되면 새로운 실행 컨텍스트가 생성되고, 그 안에 렉시컬 환경이 만들어진다.
+이 렉시컬 환경의 Environment Record에 `message: 'hello'`와 `inner: function`이 등록된다.
+아직까지는 평범한 함수 호출과 다를 게 없다.
+
+```bash title="step-1"
+outer의 렉시컬 환경
+├── Environment Record: { message: 'hello', inner: function }
+└── outer → 전역 렉시컬 환경
+```
+
+**2단계 — `inner` 함수 생성**
+
+`outer` 내부에서 `inner` 함수가 만들어지는 순간, `inner.[[Environment]]`에 **outer의 렉시컬 환경**이 저장된다.
+이 시점에서 `inner`는 자신이 태어난 환경을 기억하게 된다.
+아직 `inner`가 호출된 것은 아니고, 단지 함수 객체가 생성되면서 환경 정보를 품고 있는 상태다.
+
+**3단계 — `outer()` 실행 종료**
+
+`outer`는 `inner`를 반환하고 실행이 끝난다. `outer`의 실행 컨텍스트는 콜 스택에서 빠진다.
+하지만 `inner.[[Environment]]`가 outer의 렉시컬 환경을 여전히 참조하고 있기 때문에,
+자바스크립트 엔진의 가비지 컬렉터는 이 환경을 회수하지 않는다. 참조가 살아 있으면 메모리에서 지울 수 없기 때문이다.
+
+**4단계 — `fn()` 호출**
+
+`fn`(= `inner`)이 호출되면 새로운 실행 컨텍스트가 만들어진다.
+이때 outer 참조를 설정할 때 `fn.[[Environment]]`를 사용하는데, 이것은 **outer의 렉시컬 환경**을 가리킨다.
+그래서 `message`를 outer의 렉시컬 환경에서 찾을 수 있는 것이다.
+
+```bash title="step-4"
+fn(inner)의 렉시컬 환경
+├── Environment Record: { }  ← 자체 변수 없음
+└── outer → outer의 렉시컬 환경 (여전히 살아 있음)
+             └── { message: 'hello' }
+```
+
+이것이 클로저의 전부다.
+[Kyle Simpson](https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/scope-closures/ch7.md)은
+'Closure is observed when a function uses variable(s) from outer scope(s) even while running in a scope where those variable(s) wouldn't be accessible'라고 정의한다.
+함수가 자신의 렉시컬 스코프 밖에서 실행될 때, 여전히 원래 스코프의 변수에 접근할 수 있다면 — 그것이 클로저다.
+
+
+## 클로저 활용과 함정
+
+### 데이터 은닉
+
+자바스크립트에는 `private` 키워드가 없다(클래스 `#` 문법 제외).
+하지만 클로저를 이용하면 외부에서 직접 접근할 수 없는 변수를 만들 수 있다.
+함수 내부에 변수를 선언하고, 그 변수에 접근할 수 있는 메서드만 밖으로 반환하는 방식이다.
+
+```javascript title="data-hiding.js" {showLineNumbers} {2, 4, 5}
+function createCounter() {
+  let count = 0; // 외부에서 직접 접근 불가
+  return {
+    increment() { count++; },
+    getCount() { return count; },
+  };
+}
+
+const counter = createCounter();
+counter.increment();
+counter.increment();
+console.log(counter.getCount()); // 2
+console.log(counter.count);      // undefined — 직접 접근 불가
+```
+
+`count`는 `createCounter`의 렉시컬 환경에만 존재한다.
+반환된 `increment`와 `getCount`만이 클로저를 통해 `count`에 접근할 수 있으므로,
+외부에서는 이 메서드를 통해서만 값을 읽거나 변경할 수 있다.
+[MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures)에서도 이 패턴을 'emulating private methods with closures'로 소개하고 있다.
+
+### 팩토리 함수
+
+클로저를 이용하면 설정값을 기억하는 함수를 찍어낼 수 있다.
+외부 함수의 매개변수가 클로저에 캡처되기 때문에, 호출할 때마다 서로 다른 설정을 가진 함수를 생성할 수 있다.
+
+```javascript title="factory.js" {showLineNumbers} { 3}
+function createMultiplier(x) {
+  return function (y) {
+    return x * y; // x는 클로저로 기억됨
+  };
+}
+
+const double = createMultiplier(2);
+const triple = createMultiplier(3);
+
+console.log(double(5));  // 10
+console.log(triple(5));  // 15
+```
+
+`double`과 `triple`은 각각 독립된 렉시컬 환경을 가진다.
+`double`의 `[[Environment]]`에는 `x: 2`가, `triple`의 `[[Environment]]`에는 `x: 3`이 저장되어 있다.
+같은 함수에서 만들어졌지만, `createMultiplier`가 호출될 때마다 새로운 렉시컬 환경이 생성되기 때문에 서로 간섭하지 않는다.
+
+### 루프 클로저 문제
+
+클로저에서 가장 유명한 함정이다. 면접에서도 자주 등장하는 주제이니 반드시 이해하고 넘어가자.
+
+```javascript title="loop-closure-problem.js' {showLineNumbers} {2}
+for (var i = 0; i < 3; i++) {
+  setTimeout(() => console.log(i), 100);
+}
+// 예상: 0, 1, 2
+// 실제: 3, 3, 3
+```
+
+왜 0, 1, 2가 아니라 3, 3, 3이 출력될까?
+`var`는 블록 스코프가 아닌 **함수 스코프**이기 때문에, 루프 전체에서 `i`는 하나의 변수다.
+세 개의 `setTimeout` 콜백은 모두 **같은 `i`를 클로저로 참조**하고 있다.
+[Dr. Axel Rauschmayer](https://2ality.com/2013/05/quirk-closures.html)는 이를
+'inadvertent sharing of variables via closures(클로저를 통한 의도치 않은 변수 공유)'라고 부른다.
+
+여기서 핵심은, [javascript.info](https://javascript.info/closure)에서 설명하듯이 클로저가 변수의 **값을 복사하는 것이 아니라 참조를 유지**한다는 점이다.
+콜백이 실행되는 시점에는 루프가 이미 끝나서 `i`는 `3`이 된 상태이므로, 세 콜백 모두 `3`을 출력하게 된다.
+
+해결 방법은 간단하다. `var`를 `let`으로 바꾸면 된다.
+
+```javascript title="loop-closure-fix.js" {showLineNumbers} {1}
+for (let i = 0; i < 3; i++) {
+  setTimeout(() => console.log(i), 100);
+}
+// 출력: 0, 1, 2
+```
+
+`let`은 **블록 스코프**이므로, 반복마다 새로운 렉시컬 환경이 만들어진다.
+각 콜백은 자신만의 `i`를 참조하게 되어 의도한 대로 동작한다.
+`let` 이전에는 IIFE(즉시 실행 함수)로 매 반복마다 새 스코프를 만들어 해결했지만, ES6 이후로는 `let`이 표준적인 해법이다.
+
+### 메모리 주의점
+
+클로저가 외부 렉시컬 환경을 참조하고 있는 한, 가비지 컬렉터는 그 환경을 회수하지 않는다.
+대부분의 경우 문제가 되지 않지만, 대용량 데이터를 참조하는 클로저가 장시간 유지되면 메모리 누수로 이어질 수 있다.
+실제로 누수가 발생하는 대표적인 경로는 다음과 같다.
+
+- 해제하지 않은 **이벤트 리스너** — 리스너 콜백이 클로저로 외부 변수를 캡처한 채 DOM에 계속 등록되어 있는 경우
+- 클리어하지 않은 **타이머** — `setInterval` 콜백이 클로저를 통해 큰 객체를 참조하고 있는 경우
+- 모듈 레벨 변수나 **캐시**에 클로저를 저장한 뒤 정리하지 않는 경우
+
+핵심은 클로저 자체가 문제가 아니라, **클로저를 참조하고 있는 retention 경로**가 문제라는 점이다.
+누수를 방지하려면 더 이상 필요 없는 이벤트 리스너는 `removeEventListener`로 해제하고,
+타이머는 `clearInterval`/`clearTimeout`으로 정리하며,
+클로저 안에서 불필요하게 큰 객체를 캡처하지 않도록 스코프를 좁게 유지하는 것이 중요하다.
+
+
+## 정리
+
+| 개념 | 한 줄 요약 |
+|------|-----------|
+| **실행 컨텍스트** | 코드 실행에 필요한 환경 정보를 담은 객체, 콜 스택에 쌓인다 |
+| **렉시컬 환경** | 변수-값 매핑(Environment Record) + 바깥 환경 참조(outer)로 구성 |
+| **스코프 체인** | outer 참조가 연쇄적으로 이어져 변수를 탐색하는 경로 |
+| **[[Environment]]** | 함수 생성 시 렉시컬 환경을 저장하는 내부 슬롯 |
+| **클로저** | 함수 + [[Environment]]에 저장된 렉시컬 환경의 조합 |
+
+클로저는 마법이 아니다.
+실행 컨텍스트가 만들어질 때 렉시컬 환경이 구성되고, 함수가 생성될 때 `[[Environment]]`에 그 환경이 저장되며,
+그 참조가 살아 있는 한 가비지 컬렉터가 환경을 회수하지 않는다.
+이 세 가지 규칙이 맞물려서 클로저라는 동작이 자연스럽게 발생하는 것이다.
+
+[이전 글](/blog/series/frontend-handbook/event-loop)에서 콜 스택과 비동기 실행을 살펴봤다면,
+이번 글에서는 그 콜 스택에 쌓이는 **실행 컨텍스트의 내부 구조**와,
+함수가 자신의 환경을 기억하는 **클로저의 원리**까지 이어서 살펴본 셈이다.
+클로저를 제대로 이해하면, 스코프 관련 버그를 예방하고 더 견고한 코드를 작성하는 데 큰 도움이 될 것이다.
+
+> 자바스크립트에서 모든 함수는 태어날 때 자신의 환경을 기억한다.
+> 그래서 사실, 모든 함수는 클로저다.
