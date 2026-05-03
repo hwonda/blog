@@ -1,0 +1,176 @@
+---
+title: Hoisting
+desc: 선언이 끌어올려지는 것처럼 동작하는 자바스크립트의 변수·함수 처리 방식
+createdDate: 2026-05-03
+thumbnail: '/blog/posts/Series/frontend-handbook/thumbnail.webp'
+tags: ['JavaScript', 'Hoisting', 'Scope']
+---
+
+> Hoisting은 변수와 함수의 선언이 코드의 최상단으로 끌어올려진 것처럼 동작하는 자바스크립트의 처리 방식입니다.
+
+## Hoisting(호이스팅)
+
+**Hoisting**은 영어로 '끌어올리다(hoist)'에서 온 단어다.
+한국어로는 `호이스팅`이라고 읽으며, 자바스크립트에서 변수나 함수의 **선언이 해당 스코프의 최상단으로 끌어올려진 것처럼** 동작하는 현상을 말한다.
+
+```javascript title="hoisting-example.js"
+console.log(x); // undefined (에러가 아니다)
+var x = 10;
+console.log(x); // 10
+```
+
+위 코드에서 `x`를 선언하기 전에 참조했는데도 `ReferenceError`가 발생하지 않는다.
+이는 **자바스크립트 엔진**이 코드를 실행하기 전에 **컴파일(파싱) 단계**에서 모든 선언을 먼저 처리하기 때문이다.
+실제로 코드가 물리적으로 이동하는 것은 아니지만, 선언이 먼저 메모리에 등록되므로 마치 위로 끌어올려진 것처럼 동작한다.
+
+[ECMAScript 명세](https://tc39.es/ecma262/multipage/executable-code-and-execution-contexts.html)에서는 이를
+실행 컨텍스트가 생성될 때 **렉시컬 환경의 `Environment Record`(현재 스코프에 선언된 변수·함수의 식별자와 그 값을 저장하는 자료 구조)에 식별자를 등록하는 과정**으로 설명한다.
+[이전 글(Closure)](/blog/series/frontend-handbook/closure)에서 살펴본 `렉시컬 환경`이 바로 이 호이스팅의 무대다.
+코드가 한 줄씩 실행되기 전에, 해당 스코프의 Environment Record에 선언들이 먼저 자리를 잡는 것이다.
+
+
+## var, let, const
+
+자바스크립트에는 변수를 선언하는 키워드가 세 가지 있다.
+ES5까지는 `var`만 존재했고, ES6(2015)에서 `let`과 `const`가 도입되었다.
+이 세 키워드는 **스코프**, **호이스팅 동작**, **재선언·재할당 가능 여부**에서 차이를 보인다.
+
+### 스코프 차이
+
+`var`는 **함수 스코프(function scope)** 를 따른다. 함수 내 어디서 선언하든 함수 전체에서 접근 가능하다.
+반면 `let`과 `const`는 **블록 스코프(block scope)** 를 따른다. `{}`로 감싸진 블록 안에서만 유효하다.
+
+```javascript title="scope-difference.js" {showLineNumbers} {3, 7}
+function example() {
+  if (true) {
+    var a = 1;   // 함수 스코프 → 함수 전체에서 접근 가능
+    let b = 2;   // 블록 스코프 → if 블록 안에서만 유효
+    const c = 3; // 블록 스코프 → if 블록 안에서만 유효
+  }
+  console.log(a); // 1
+  console.log(b); // ReferenceError
+  console.log(c); // ReferenceError
+}
+```
+
+[Closure](/blog/series/frontend-handbook/closure)의 루프 클로저 문제가 바로 이 스코프 차이에서 비롯된다.
+`var`로 선언한 루프 변수는 함수 스코프이므로 루프 전체에서 하나의 변수를 공유하지만,
+`let`으로 선언하면 반복마다 새로운 블록 스코프가 생성되어 각 콜백이 독립된 변수를 참조하게 된다.
+
+### 재선언과 재할당
+
+| 키워드 | 재선언 | 재할당 |
+|--------|--------|--------|
+| `var` | 가능 | 가능 |
+| `let` | 불가 | 가능 |
+| `const` | 불가 | 불가 |
+
+`var`는 같은 스코프에서 동일한 이름으로 여러 번 선언해도 에러가 발생하지 않는다.
+이는 의도치 않은 변수 덮어쓰기로 이어질 수 있어서, `let`과 `const`에서는 재선언을 금지했다.
+`const`는 여기에 더해 재할당까지 금지한다. 다만 `const`로 선언한 객체나 배열의 **내부 속성**은 변경 가능하다는 점에 주의하자.
+
+```javascript title="const-mutation.js"
+const obj = { name: 'Kim' };
+obj.name = 'Lee'; // 가능 — 객체 내부 속성 변경
+obj = {};         // TypeError — 참조 자체를 바꾸는 재할당은 불가
+```
+
+
+## TDZ(Temporal Dead Zone)
+
+`let`과 `const`도 호이스팅이 된다. 선언이 Environment Record에 등록되는 것은 `var`와 동일하다.
+차이는 **초기화 시점**에 있다.
+
+- `var`: 호이스팅 시 `undefined`로 **즉시 초기화**된다. 그래서 선언 전에 접근하면 `undefined`가 반환된다.
+- `let`/`const`: 호이스팅은 되지만 **초기화가 지연**된다. 선언문에 도달할 때까지 초기화되지 않은 상태로 남는다.
+
+이 초기화되지 않은 구간을 **TDZ(Temporal Dead Zone, 일시적 사각지대)** 라고 부른다.
+TDZ 안에서 해당 변수에 접근하면 `ReferenceError`가 발생한다.
+
+```javascript title="tdz.js" {showLineNumbers} {1, 5}
+console.log(a); // undefined — var는 즉시 초기화
+console.log(b); // ReferenceError — TDZ 안
+
+var a = 1;
+let b = 2; // 이 줄에 도달해야 b가 초기화됨
+```
+
+TDZ는 시간(temporal) 기반이지 위치 기반이 아니다.
+코드의 물리적 위치가 아니라 **실행 흐름상 선언문에 도달했는지 여부**로 결정된다.
+
+```javascript title="tdz-temporal.js" {showLineNumbers} {2, 6}
+function check() {
+  console.log(x); // ReferenceError — TDZ
+  let x = 10;
+}
+
+// 물리적으로 아래에 있지만 실행 시점에는 문제없음
+function safe() {
+  let x = 10;
+  console.log(x); // 10
+}
+```
+
+TDZ가 존재하는 이유는 명확하다.
+변수를 선언하기 전에 사용하는 것은 대부분 프로그래머의 실수이므로, 이를 조기에 잡아내기 위함이다.
+`var`의 `undefined` 초기화는 이런 실수를 은폐하지만, `let`/`const`의 TDZ는 즉시 에러로 알려준다.
+
+
+## 함수 호이스팅
+
+함수에도 호이스팅이 적용되지만, **함수 선언문**과 **함수 표현식**의 동작이 다르다.
+
+### 함수 선언문(Function Declaration)
+
+함수 선언문은 선언과 함께 **함수 본문 전체가 호이스팅**된다.
+그래서 선언 위치보다 위에서 호출해도 정상적으로 동작한다.
+
+```javascript title="function-declaration.js" {showLineNumbers} {1}
+greet(); // 'hello' — 선언 전에 호출 가능
+
+function greet() {
+  console.log('hello');
+}
+```
+
+### 함수 표현식(Function Expression)
+
+함수 표현식은 변수에 함수를 할당하는 형태이므로, **변수의 호이스팅 규칙**을 따른다.
+`var`로 선언했다면 변수만 `undefined`로 호이스팅되고, 함수 본문은 올라가지 않는다.
+`let`/`const`로 선언했다면 TDZ에 의해 접근 자체가 불가능하다.
+
+```javascript title="function-expression.js" {showLineNumbers} {1, 2}
+hello();   // TypeError — undefined는 함수가 아님
+goodbye(); // ReferenceError — TDZ
+
+var hello = function () { console.log('hello'); };
+const goodbye = function () { console.log('goodbye'); };
+```
+
+`var hello`는 호이스팅되어 `undefined`로 초기화되지만, 함수가 할당되는 것은 해당 줄이 실행될 때다.
+`undefined`를 호출하려고 하니 `TypeError: hello is not a function`이 발생한다.
+화살표 함수(`() => {}`)도 함수 표현식이므로 동일하게 동작한다.
+
+| 구분 | 호이스팅 대상 | 선언 전 호출 |
+|------|-------------|-------------|
+| 함수 선언문 | 함수 전체 (이름 + 본문) | 가능 |
+| 함수 표현식 (`var`) | 변수만 (`undefined`) | TypeError |
+| 함수 표현식 (`let`/`const`) | 변수만 (초기화 안 됨) | ReferenceError |
+
+
+## 정리
+
+| | `var` | `let` | `const` |
+|------|-------|-------|---------|
+| **스코프** | 함수 스코프 | 블록 스코프 | 블록 스코프 |
+| **호이스팅** | O (`undefined` 초기화) | O (초기화 지연) | O (초기화 지연) |
+| **TDZ** | 없음 | 있음 | 있음 |
+| **재선언** | 가능 | 불가 | 불가 |
+| **재할당** | 가능 | 가능 | 불가 |
+
+세 키워드 모두 호이스팅이 발생하지만, 초기화 시점과 스코프 범위가 다르다.
+`var`는 선언과 동시에 `undefined`로 초기화되어 TDZ 없이 접근 가능하고,
+`let`/`const`는 선언만 등록되고 초기화가 지연되어 TDZ 구간에서 접근 시 에러가 발생한다.
+
+현대 자바스크립트에서는 `const`를 기본으로 사용하고, 재할당이 필요한 경우에만 `let`을 사용하는 것이 권장된다.
+`var`는 함수 스코프와 재선언 허용으로 인해 예측하기 어려운 버그를 만들 수 있으므로 사용을 피하는 것이 좋다.
