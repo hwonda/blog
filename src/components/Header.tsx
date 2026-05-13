@@ -8,7 +8,7 @@ import { useTheme } from 'next-themes';
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [portfolioPath, setPortfolioPath] = useState('/fe');
+  // const [portfolioPath, setPortfolioPath] = useState('/fe');
   const { theme, setTheme } = useTheme();
 
   useEffect(() => {
@@ -18,11 +18,11 @@ export default function Header() {
     const from = params.get('from');
     if (from === 'fe' || from === 'pm') {
       sessionStorage.setItem('blog-from', from);
-      setPortfolioPath(`/${ from }`);
+      // setPortfolioPath(`/${ from }`);
     } else {
       const stored = sessionStorage.getItem('blog-from');
       if (stored === 'fe' || stored === 'pm') {
-        setPortfolioPath(`/${ stored }`);
+        // setPortfolioPath(`/${ stored }`);
       }
     }
   }, []);
@@ -48,13 +48,13 @@ export default function Header() {
               <span className="hidden sm:inline">{'HWONDA BLOG'}</span>
               <span className="sm:hidden">{'HWONDA'}</span>
             </a>
-            <a
+            {/* <a
               href={portfolioPath}
               className="text-sub hover:bg-gray5 rounded-md p-1.5 transition-all duration-300 sm:px-3 text-base hover:text-accent2"
               aria-label="포트폴리오로 이동"
             >
               {'About'}
-            </a>
+            </a> */}
           </div>
           <nav className="relative z-10 flex items-center gap-2 text-sm sm:text-base">
             <div className='flex'>
