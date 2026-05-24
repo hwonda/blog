@@ -1,0 +1,221 @@
+---
+title: this
+desc: 호출 방식에 따라 달라지는 자바스크립트의 this
+createdDate: 2026-05-25
+thumbnail: '/blog/posts/Series/frontend-handbook/thumbnail.webp'
+tags: ['JavaScript', 'this', 'Scope']
+---
+
+> this는 함수가 호출되는 방식에 따라 가리키는 대상이 달라지는 키워드입니다.
+
+## this
+
+**this**는 자바스크립트에서 **"지금 이 코드를 실행하고 있는 주체가 누구인지"를 가리키는 키워드**다.
+한국어로는 그대로 `디스`라고 읽는다.
+
+대부분의 언어에서 `this`는 항상 자기 자신(인스턴스)을 가리킨다.
+하지만 자바스크립트에서는 **함수를 어떻게 호출했느냐**에 따라 `this`가 달라진다.
+[Closure](/blog/series/frontend-handbook/closure)에서 스코프는 선언 위치로 정해진다고 했는데, `this`는 그 반대로 호출 시점에 정해진다.
+
+```javascript title="this-changes.js" {showLineNumbers}
+const obj = {
+  name: 'Ju',
+  greet() {
+    console.log(this.name);
+  },
+};
+
+obj.greet();          // 'Ju'
+const fn = obj.greet;
+fn();                 // undefined
+```
+
+같은 함수인데 `obj.greet()`으로 호출하면 `this`는 `obj`이고, 변수에 담아서 호출하면 `this`가 사라진다.
+
+
+## 호출 방식별 바인딩 규칙
+
+### 기본 바인딩
+
+함수를 그냥 단독으로 호출하면 `this`는 전역 객체(`window`)를 가리킨다.
+단, `'use strict'` 모드에서는 `undefined`가 된다.
+`import`/`export`를 쓰는 모듈 환경은 자동으로 strict mode이므로, 실제 프로젝트에서는 대부분 `undefined`다.
+
+```javascript title="default-binding.js"
+function showThis() {
+  console.log(this);
+}
+showThis(); // window (일반 모드) / undefined (strict mode)
+```
+
+### 메서드 호출
+
+객체의 메서드로 호출하면 `this`는 **점(`.`) 앞에 있는 객체**다.
+
+```javascript title="method-binding.js" {showLineNumbers} {7, 10}
+const user = {
+  name: 'Lee',
+  greet() {
+    console.log(this.name); // this = user
+  },
+};
+user.greet(); // 'Lee'
+
+const admin = { name: 'Park', greet: user.greet };
+admin.greet(); // 'Park' — 점 앞이 admin이니까 this = admin
+```
+
+같은 함수라도 누가 호출했느냐에 따라 `this`가 달라진다.
+
+### 명시적 바인딩 (call, apply, bind)
+
+`this`를 직접 지정하고 싶을 때 쓰는 메서드다.
+
+```javascript title="explicit-binding.js" {showLineNumbers} {7, 8, 10}
+function greet(greeting) {
+  console.log(`${ greeting }, ${ this.name }`);
+}
+
+const user = { name: 'Ju' };
+
+greet.call(user, 'Hello');     // 'Hello, Ju' — 즉시 호출
+greet.apply(user, ['Hello']);  // 'Hello, Ju' — 즉시 호출 (인자를 배열로)
+
+const bound = greet.bind(user, 'Hello'); // 새 함수 반환
+bound(); // 'Hello, Ju'
+```
+
+`call`과 `apply`는 함수를 바로 호출하면서 `this`를 지정한다. 둘의 차이는 인자를 낱개로 넘기느냐, 배열로 넘기느냐뿐이다.
+
+`bind`는 `this`가 고정된 새 함수를 만들어 반환한다.
+
+상대적으로 `bind`가 다른 두 메서드보다 많이 쓰이는데, 이벤트 핸들러처럼 **나중에 실행될 함수의 `this`가 바뀌지 않게 할 때** 유용하기 때문이다.
+
+## 화살표 함수의 this
+
+### 자체 this가 없다
+
+화살표 함수(`() => {}`)는 위의 규칙을 따르지 않는다.
+화살표 함수에는 **자체 `this`가 없고**, 자신이 만들어진 바깥 스코프의 `this`를 그대로 가져다 쓴다.
+
+```javascript title="arrow-this.js" {showLineNumbers} {5}
+const obj = {
+  name: 'Ju',
+  greetLater() {
+    setTimeout(() => {
+      console.log(this.name); // 'Ju' — 바깥 함수(greetLater)의 this를 그대로 사용
+    }, 100);
+  },
+};
+obj.greetLater();
+```
+
+`setTimeout`에 일반 함수를 넣었다면 `this`가 `window`(또는 `undefined`)가 되어 `name`을 찾을 수 없다.
+화살표 함수는 자체 `this`를 만들지 않기 때문에 바깥의 `this`가 유지된다.
+ES6 이전에는 이를 위해 `const self = this`나 `.bind(this)`를 썼지만, 화살표 함수 덕분에 더 이상 필요 없다.
+
+### 주의할 점
+
+화살표 함수의 `this`는 `call`, `apply`, `bind`로도 바꿀 수 없다. 이미 선언 시점에 고정되기 때문이다.
+또한 객체의 메서드를 화살표 함수로 정의하면 `this`가 객체를 가리키지 않는다.
+
+```javascript title="arrow-pitfall.js" {showLineNumbers} {4}
+const obj = {
+  name: 'Ju',
+  greet: () => {
+    console.log(this.name); // undefined — this가 obj가 아니라 바깥 스코프(전역)
+  },
+};
+obj.greet();
+```
+
+객체 리터럴의 `{}`는 스코프를 만들지 않기 때문에, `this`가 `obj`를 건너뛰고 바깥으로 올라간다.
+**메서드에는 일반 함수를, 콜백에는 화살표 함수를** 쓰는 것이 기본 원칙이다.
+
+
+## 최신 프론트엔드
+
+예전에는 이벤트 핸들러나 콜백에서 `this`를 잃어버리는 일이 많았기 때문에 `bind`를 자주 썼다.
+
+```javascript title="old-react-binding.js" {showLineNumbers} {5}
+class Counter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { count: 0 };
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    this.setState({ count: this.state.count + 1 });
+  }
+
+  render() {
+    return <button onClick={this.handleClick}>+</button>;
+  }
+}
+```
+
+하지만 지금은 화살표 함수와 클래스 필드 문법 덕분에 직접 bind를 쓰는 일이 줄었다.
+
+```javascript title="new-react-binding.js" {showLineNumbers} {5}
+class Counter extends React.Component {
+  state = { count: 0 };
+
+  handleClick = () => {
+    this.setState({ count: this.state.count + 1 });
+  };
+
+  render() {
+    return <button onClick={this.handleClick}>+</button>;
+  }
+}
+```
+
+`handleClick = () => {}`는 인스턴스에 화살표 함수를 할당하는 방식이다.
+화살표 함수는 자체 this를 만들지 않기 때문에, 생성될 때의 this, 즉 컴포넌트 인스턴스를 그대로 기억한다.
+
+함수형 컴포넌트에서는 상황이 더 단순하다.
+`this`를 거의 쓰지 않고, 상태와 로직을 클로저로 다룬다.
+
+```javascript title="new-react-functional-binding.js" {showLineNumbers} {5}
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  const handleClick = () => {
+    setCount(count + 1);
+  };
+
+  return <button onClick={handleClick}>+</button>;
+}
+```
+
+여기서 `handleClick`은 바깥 스코프의 `count`와 `setCount`를 기억한다.
+즉, `this`를 직접 바인딩하기보다 클로저로 필요한 값을 참조하는 방식이다.
+
+그래서 최신 프론트엔드에서는 call, apply, bind를 직접 쓰는 일이 예전보다 줄었다.
+특히 apply는 스프레드 문법으로 대체되는 경우가 많다.
+
+```javascript title="new-react-functional-binding.js" {showLineNumbers}
+Math.max.apply(null, numbers);
+Math.max(...numbers);
+```
+
+정리하면, 요즘 코드는 `this`를 직접 조작하기보다 화살표 함수, 클래스 필드, 클로저로 `this` 의존을 줄이는 방향으로 작성된다.
+그래도 라이브러리 코드나 레거시 클래스 컴포넌트를 읽을 때는 `call`, `apply`, `bind`의 차이를 알고 있어야 한다.
+
+
+## 정리
+
+| 우선순위 | 규칙 | this |
+|----------|------|------|
+| 1 | **new** | 새로 만든 인스턴스 |
+| 2 | **call / apply / bind** | 직접 지정한 객체 |
+| 3 | **메서드 호출** | 점(`.`) 앞의 객체 |
+| 4 | **단독 호출** | `window` 또는 `undefined` |
+| 예외 | **화살표 함수** | 바깥 스코프의 this (변경 불가) |
+
+여러 규칙이 겹칠 때는 우선순위가 높은 쪽이 이긴다.
+화살표 함수는 이 우선순위와 무관하게, 어떤 방법으로도 `this`를 바꿀 수 없다.
+
+일반 함수의 `this`는 호출 방식에 따라 바뀌고, 화살표 함수의 `this`는 선언 위치에 따라 고정된다.
+이 차이 하나만 기억하면 `this` 관련 버그 대부분을 예방할 수 있다.
