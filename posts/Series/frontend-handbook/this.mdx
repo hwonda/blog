@@ -1,21 +1,21 @@
 ---
 title: this
-desc: 호출 방식에 따라 달라지는 자바스크립트의 this
+desc: 함수가 실행되는 순간의 실행 주체를 가리키는 키워드
 createdDate: 2026-05-25
 thumbnail: '/blog/posts/Series/frontend-handbook/thumbnail.webp'
 tags: ['JavaScript', 'this', 'Scope']
 ---
 
-> this는 함수가 호출되는 방식에 따라 가리키는 대상이 달라지는 키워드입니다.
+> this는 함수가 어디서 선언됐는지가 아니라, 어떻게 호출됐는지에 따라 달라진 실행 주체를 가리키는 기워드입니다.
 
 ## this
 
 **this**는 자바스크립트에서 **"지금 이 코드를 실행하고 있는 주체가 누구인지"를 가리키는 키워드**다.
-한국어로는 그대로 `디스`라고 읽는다.
+한국어로는 `디스`라고 읽는다.
 
 대부분의 언어에서 `this`는 항상 자기 자신(인스턴스)을 가리킨다.
 하지만 자바스크립트에서는 **함수를 어떻게 호출했느냐**에 따라 `this`가 달라진다.
-[Closure](/blog/series/frontend-handbook/closure)에서 스코프는 선언 위치로 정해진다고 했는데, `this`는 그 반대로 호출 시점에 정해진다.
+[Closure](/blog/series/frontend-handbook/closure)에서 스코프는 선언 위치로 정해진다고 했는데, `this`는 그 반대로 **호출 시점**에 정해진다.
 
 ```javascript title="this-changes.js" {showLineNumbers}
 const obj = {
